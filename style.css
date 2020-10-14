@@ -1,0 +1,27 @@
+body {
+  max-width: 1024px;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+}
+
+img {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+footer {
+  font-style: italic;
+  color: grey;
+  border-top: 1px solid grey;
+  padding: 30px;
+}
+
+h2 {
+  background-color: darkslategrey;
+  padding-left: 10px;
+  color: white;
+}
