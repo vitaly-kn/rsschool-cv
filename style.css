@@ -1,0 +1,41 @@
+body {
+  font-family: sans-serif;
+  background-color: lightgray;
+  color: #333;
+  background-color: #eee;
+  line-height: 1.6;
+}
+header {
+  text-align: center;
+}
+
+figure {
+  background-color: white;
+  padding: 24px;
+}
+
+img {
+  max-width: 100%;
+}
+
+article {
+  max-width: 640px;
+  margin: auto;
+}
+
+h3 {
+  text-align: center;
+  margin: 50px 0;
+}
+
+li {
+  margin: 16px 0;
+}
+
+.italic {
+  font-style: oblique;
+}
+
+.bold {
+  font-weight: bold;
+}
