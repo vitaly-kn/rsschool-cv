@@ -1,39 +1,44 @@
-body {
+.global-text {
   font-family: sans-serif;
   background-color: lightgray;
   color: #333;
   background-color: #eee;
   line-height: 1.6;
 }
-header {
+.header-text {
   text-align: center;
 }
 
-#img-div {
+.img-div {
   background-color: white;
-  padding: 24px;
+  padding: 10px;
+  margin: 0;
 }
 
-img {
+.image {
   max-width: 100%;
 }
 
-article {
-  max-width: 640px;
+.article-text {
+  max-width: 590px;
   margin: auto;
 }
 
-h3 {
+.chapter-text {
   text-align: center;
   margin: 50px 0;
 }
 
-li {
+.list-text {
   margin: 16px 0;
+  text-align: left;
 }
 
-.italic {
+.blockquote-text {
   font-style: oblique;
+  max-width: 545px;
+  margin: 0 auto 50px auto;
+  text-align: left;
 }
 
 .bold {
