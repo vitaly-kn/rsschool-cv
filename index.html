@@ -6,12 +6,13 @@
     <link rel="stylesheet" href="./style.css" />
     <title>Singolo</title>
   </head>
-  <body id="home">
+  <body>
+    <script src="./script.js"></script>
     <header class="header">
       <div class="header-container">
         <h1>SINGOLO<span class="mark1">*</span></h1>
         <ul class="horizontal-list">
-          <li class="navmenu-item"><a class="navmenu-item-link" href="#home">HOME</a></li>
+          <li class="navmenu-item"><a class="navmenu-item-link navmenu-item-link-selected" href="#home">HOME</a></li>
           <li class="navmenu-item"><a class="navmenu-item-link" href="#services">SERVICES</a></li>
           <li class="navmenu-item"><a class="navmenu-item-link" href="#portfolio">PORTFOLIO</a></li>
           <li class="navmenu-item"><a class="navmenu-item-link" href="#about">ABOUT</a></li>
@@ -20,7 +21,7 @@
       </div>
     </header>
     <main>
-      <div class="slider">
+      <div class="slider" id="home">
         <div class="slider-container">
           <img
             src="./assets/img/arrow-left.png"
@@ -145,7 +146,7 @@
             eget lacinia odio sem nec elit.
           </p>
           <ul class="horizontal-list">
-            <li class="portfolio-menu-item selected">All</li>
+            <li class="portfolio-menu-item portfolio-menu-item-selected">All</li>
             <li class="portfolio-menu-item">Web Design</li>
             <li class="portfolio-menu-item">Graphic Design</li>
             <li class="portfolio-menu-item">Artwork</li>

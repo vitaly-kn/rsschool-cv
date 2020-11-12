@@ -27,6 +27,11 @@
   padding: 0px;
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 95px;
+}
+
 body {
   font-family: Lato, sans-serif;
 }
@@ -105,6 +110,12 @@ h1 {
 }
 
 .navmenu-item-link:hover {
+  color: #f06c64;
+  cursor: pointer;
+}
+
+.navmenu-item-link-selected,
+.navmenu-item-link-selected:visited {
   color: #f06c64;
   cursor: pointer;
 }
@@ -244,7 +255,7 @@ h2 {
   cursor: pointer;
 }
 
-.selected {
+.portfolio-menu-item-selected {
   color: #dedede;
   border: 1px solid #bbbbbb;
 }
