@@ -144,9 +144,29 @@ body {
   margin: auto;
 }
 
+.slider-arrow {
+  width: 16px;
+  height: 37px;
+  padding: 5px 0px;
+  box-sizing: border-box;
+}
+
 .slider-arrow:hover {
   cursor: pointer;
-  border: 3px solid red;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.phone-vertical {
+  width: 240px;
+  height: 483px;
+  background-image: url(./assets/img/phone-vertical_desktop.png);
+}
+
+.phone-horizontal {
+  width: 483px;
+  height: 240px;
+  background-image: url(./assets/img/phone-horizontal_desktop.png);
 }
 
 .services {
@@ -353,6 +373,18 @@ body {
     padding: 0px 30px;
   }
 
+  .phone-vertical {
+    width: 182px;
+    height: 365px;
+    background-image: url(./assets/img/phone-vertical_tablet.png);
+  }
+
+  .phone-horizontal {
+    width: 365px;
+    height: 181px;
+    background-image: url(./assets/img/phone-horizontal_tablet.png);
+  }
+
   .services {
     padding-top: 39px;
     padding-bottom: 44px;
@@ -390,6 +422,11 @@ body {
     height: 218px;
   }
 
+  .slider-arrow {
+    width: 14px;
+    height: 34px;
+  }
+
   .services {
     padding-top: 25px;
     padding-bottom: 0px;
@@ -402,6 +439,18 @@ body {
   .service-template {
     margin: 7.5px 0px;
     width: 100%;
+  }
+
+  .phone-vertical {
+    width: 89px;
+    height: 179px;
+    background-image: url(./assets/img/phone-vertical_mobile.png);
+  }
+
+  .phone-horizontal {
+    width: 179px;
+    height: 90px;
+    background-image: url(./assets/img/phone-horizontal_mobile.png);
   }
 
   .portfolio {
