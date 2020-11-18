@@ -7,10 +7,9 @@
     <title>Singolo</title>
   </head>
   <body>
-    <script src="./script.js"></script>
     <header class="header">
       <div class="header-container">
-        <p class="header-text">SINGOLO<span class="mark1">*</span></p>
+        <a class="header-text" href="#">SINGOLO</a>
         <nav>
           <ul class="horizontal-list">
             <li class="navmenu-item"><a class="navmenu-item-link navmenu-item-link-selected" href="#home">HOME</a></li>
@@ -39,8 +38,7 @@
       </div>
       <div class="services" id="services">
         <div class="services-container">
-          <h1>Singolo</h1>
-          <h2>Our Services</h2>
+          <h1 class="chapter">Our Services</h1>
           <p class="description">
             Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum.
             Duis mollis, non commodo luctus, nisi erat porttitor ligula, eget
@@ -143,59 +141,59 @@
       </div>
       <div class="portfolio" id="portfolio">
         <div class="portfolio-container">
-          <h2>Portfolio</h2>
+          <h2 class="chapter">Portfolio</h2>
           <p class="description">
             Duis mollis, est non commodo luctus, nisi erat porttitor ligula,
             eget lacinia odio sem nec elit.
           </p>
           <ul class="horizontal-list">
-            <li class="portfolio-menu-item portfolio-menu-item-selected">All</li>
-            <li class="portfolio-menu-item">Web Design</li>
-            <li class="portfolio-menu-item">Graphic Design</li>
-            <li class="portfolio-menu-item">Artwork</li>
+            <li class="portfolio-menu-item portfolio-menu-item-selected" data-type="all">All</li>
+            <li class="portfolio-menu-item" data-type="web-design">Web Design</li>
+            <li class="portfolio-menu-item" data-type="graphic-design">Graphic Design</li>
+            <li class="portfolio-menu-item" data-type="artwork">Artwork</li>
           </ul>
           <ul class="portfolio-img-container">
-            <li class="portfolio-img-item">
+            <li class="portfolio-img-item" data-type="graphic-design">
               <img class="portfolio-img-item-img" src="./assets/img/portfolio-1.jpg" alt="image" />
             </li>
-            <li class="portfolio-img-item">
-              <img class="portfolio-img-item-img" src="./assets/img/portfolio-2.jpg" alt="image" />
+            <li class="portfolio-img-item" data-type="graphic-design">
+              <img class="portfolio-img-item-img" data-type="artwork" src="./assets/img/portfolio-2.jpg" alt="image" />
             </li>
-            <li class="portfolio-img-item">
+            <li class="portfolio-img-item" data-type="artwork">
               <img class="portfolio-img-item-img" src="./assets/img/portfolio-3.jpg" alt="image" />
             </li>
-            <li class="portfolio-img-item">
+            <li class="portfolio-img-item" data-type="web-design">
               <img class="portfolio-img-item-img" src="./assets/img/portfolio-4.jpg" alt="image" />
             </li>
-            <li class="portfolio-img-item">
+            <li class="portfolio-img-item" data-type="artwork">
               <img class="portfolio-img-item-img" src="./assets/img/portfolio-5.jpg" alt="image" />
             </li>
-            <li class="portfolio-img-item">
+            <li class="portfolio-img-item" data-type="graphic-design">
               <img class="portfolio-img-item-img" src="./assets/img/portfolio-6.jpg" alt="image" />
             </li>
-            <li class="portfolio-img-item">
+            <li class="portfolio-img-item" data-type="web-design">
               <img class="portfolio-img-item-img" src="./assets/img/portfolio-7.jpg" alt="image" />
             </li>
-            <li class="portfolio-img-item">
+            <li class="portfolio-img-item" data-type="artwork">
               <img class="portfolio-img-item-img" src="./assets/img/portfolio-8.jpg" alt="image" />
             </li>
-            <li class="portfolio-img-item">
+            <li class="portfolio-img-item" data-type="web-design">
               <img class="portfolio-img-item-img" src="./assets/img/portfolio-9.jpg" alt="image" />
             </li>
-            <li class="portfolio-img-item">
+            <li class="portfolio-img-item" data-type="graphic-design">
               <img class="portfolio-img-item-img" src="./assets/img/portfolio-10.jpg" alt="image" />
             </li>
-            <li class="portfolio-img-item">
+            <li class="portfolio-img-item" data-type="web-design">
               <img class="portfolio-img-item-img" src="./assets/img/portfolio-11.jpg" alt="image" />
             </li>
-            <li class="portfolio-img-item">
+            <li class="portfolio-img-item" data-type="artwork">
               <img class="portfolio-img-item-img" src="./assets/img/portfolio-12.jpg" alt="image" />
             </li>
-            <li class="portfolio-img-item">
+            <li class="portfolio-img-item" data-type="graphic-design">
               <img class="portfolio-img-item-img" src="./assets/img/portfolio-1.jpg" alt="image" />
             </li>
-            <li class="portfolio-img-item">
-              <img class="portfolio-img-item-img" src="./assets/img/portfolio-2.jpg" alt="image" />
+            <li class="portfolio-img-item" data-type="graphic-design">
+              <img class="portfolio-img-item-img" data-type="artwork" src="./assets/img/portfolio-2.jpg" alt="image" />
             </li>
           </ul>
         </div>
@@ -229,5 +227,6 @@
         </ul>
       </div>
     </footer>
+  <script src="./script.js"></script>
   </body>
 </html>

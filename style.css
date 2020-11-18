@@ -62,15 +62,18 @@ body {
   transition: all 0.3s ease;
 }
 
-.header-text {
+.header-text,
+.header-text:visited {
   font-weight: 700;
   color: #ffffff;
   font-size: 25px;
   line-height: 30px;
   margin: 0px;
+  text-decoration: none;
 }
 
-.mark1 {
+.header-text::after {
+  content: "*";
   color: red;
 }
 
@@ -160,11 +163,7 @@ body {
   margin: auto;
 }
 
-h1 {
-  display: none;
-}
-
-h2 {
+.chapter {
   font-weight: 900;
   color: #666d89;
   font-size: 30px;
@@ -266,6 +265,10 @@ h2 {
   border: 1px solid #bbbbbb;
 }
 
+.portfolio-menu-item-selected:hover {
+  cursor: default;
+}
+
 .portfolio-img-container {
   display: grid;
   grid-template-areas:
@@ -279,11 +282,11 @@ h2 {
   list-style: none;
 }
 
-.portfolio-img-item::before {
+/*.portfolio-img-item::before {
   content: "";
   float: left;
   padding-top: 85%;
-}
+}*/
 
 .portfolio-img-item:nth-child(n + 13) {
   display: none;
