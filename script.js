@@ -26,12 +26,23 @@ sliderArrows.forEach((element) => {
   element.addEventListener("click", onArrowClick);
 });
 
-function onArrowClick(event) {
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function onArrowClick(event) {
   let element;
   switch (event.target.getAttribute("alt")) {
     case "left":
       element = document.querySelectorAll(".slide")[0];
+      document.querySelectorAll(".slide")[0].style.left = "-1000px";
+      document.querySelectorAll(".slide")[0].style.minWidth = "0px";
+      await sleep(500);
       document.querySelectorAll(".slide")[0].remove();
+      element.style.minWidth = window.getComputedStyle(
+        document.querySelector(".slider-container")
+      ).width;
+      element.style.left = "";
       document.querySelector(".slider-container").append(element);
       break;
     case "right":
@@ -41,7 +52,16 @@ function onArrowClick(event) {
       document
         .querySelectorAll(".slide")
         [document.querySelectorAll(".slide").length - 1].remove();
+      element.style.left = "-1000px";
+      element.style.minWidth = "0px";
       document.querySelector(".slider-container").prepend(element);
+      document.querySelectorAll(".slide")[0].style.left = "";
+      document.querySelectorAll(
+        ".slide"
+      )[0].style.minWidth = window.getComputedStyle(
+        document.querySelector(".slider-container")
+      ).width;
+      await sleep(500);
   }
   document.querySelector(
     ".slider"
