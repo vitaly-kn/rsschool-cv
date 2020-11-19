@@ -41,6 +41,7 @@ body {
   height: 95px;
   width: 100%;
   position: fixed;
+  z-index: 5;
   display: flex;
   align-items: center;
   background-color: #2d303a;
@@ -137,11 +138,12 @@ body {
   height: 600px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 0px 40px;
   box-sizing: border-box;
   max-width: 1020px;
   margin: auto;
+  position: relative;
 }
 
 .slider-arrow {
@@ -149,12 +151,29 @@ body {
   height: 37px;
   padding: 5px 0px;
   box-sizing: border-box;
+  position: absolute;
 }
 
 .slider-arrow:hover {
   cursor: pointer;
   border-radius: 2px;
   background-color: rgba(255, 255, 255, 0.5);
+}
+
+.slider-arrow-left {
+  left: 40px;
+}
+
+.slider-arrow-right {
+  right: 40px;
+}
+
+.slide {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .phone-vertical {
@@ -371,6 +390,14 @@ body {
   .slider-container {
     height: 452px;
     padding: 0px 30px;
+  }
+
+  .slider-arrow-left {
+    left: 30px;
+  }
+
+  .slider-arrow-right {
+    right: 30px;
   }
 
   .phone-vertical {
