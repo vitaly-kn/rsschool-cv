@@ -21,6 +21,35 @@ function onScroll(event) {
   });
 }
 
+var sliderArrows = document.querySelectorAll(".slider-arrow");
+sliderArrows.forEach((element) => {
+  element.addEventListener("click", onArrowClick);
+});
+
+function onArrowClick(event) {
+  let element;
+  switch (event.target.getAttribute("alt")) {
+    case "left":
+      element = document.querySelectorAll(".slide")[0];
+      document.querySelectorAll(".slide")[0].remove();
+      document.querySelector(".slider-container").append(element);
+      break;
+    case "right":
+      element = document.querySelectorAll(".slide")[
+        document.querySelectorAll(".slide").length - 1
+      ];
+      document
+        .querySelectorAll(".slide")
+        [document.querySelectorAll(".slide").length - 1].remove();
+      document.querySelector(".slider-container").prepend(element);
+  }
+  document.querySelector(
+    ".slider"
+  ).style.backgroundColor = window.getComputedStyle(
+    document.querySelectorAll(".slide")[0]
+  ).backgroundColor;
+}
+
 var portfolioContent = document.querySelectorAll(".portfolio-img-item");
 var portfolioButtons = document.querySelectorAll(
   ".portfolio-menu-item:not(.portfolio-menu-item-selected)"
