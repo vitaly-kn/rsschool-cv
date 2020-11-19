@@ -138,12 +138,13 @@ body {
   height: 600px;
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  padding: 0px 40px;
+  justify-content: left;
+  /*padding: 0px 40px;*/
   box-sizing: border-box;
   max-width: 1020px;
   margin: auto;
   position: relative;
+  overflow: hidden;
 }
 
 .slider-arrow {
@@ -169,11 +170,21 @@ body {
 }
 
 .slide {
-  width: 100%;
+  min-width: 100%;
   height: 100%;
   display: flex;
-  justify-content: space-around;
   align-items: center;
+}
+
+.slide1 {
+  justify-content: space-around;
+  /*display: none;*/
+}
+
+.slide2 {
+  /*display: none;*/
+  background-color: #648bf0;
+  justify-content: center;
 }
 
 .phone-vertical {
@@ -186,6 +197,13 @@ body {
   width: 483px;
   height: 240px;
   background-image: url(./assets/img/phone-horizontal_desktop.png);
+}
+
+.phones-vertical {
+  width: 516px;
+  height: 514px;
+  background-image: url(./assets/img/phones-vertical.png);
+  background-size: contain;
 }
 
 .services {
@@ -378,7 +396,7 @@ body {
   border: 2px solid white;
 }
 
-@media (max-width: 1020px) {
+@media (max-width: 1019px) {
   h1 {
     margin: 0px auto;
   }
@@ -389,7 +407,7 @@ body {
 
   .slider-container {
     height: 452px;
-    padding: 0px 30px;
+    /*padding: 0px 30px;*/
   }
 
   .slider-arrow-left {
@@ -410,6 +428,11 @@ body {
     width: 365px;
     height: 181px;
     background-image: url(./assets/img/phone-horizontal_tablet.png);
+  }
+
+  .phones-vertical {
+    width: 392px;
+    height: 390px;
   }
 
   .services {
@@ -435,7 +458,7 @@ body {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .header {
     height: 71px;
     border-bottom: none;
@@ -449,6 +472,13 @@ body {
     height: 218px;
   }
 
+  .slider-arrow-left {
+    left: 10px;
+  }
+
+  .slider-arrow-right {
+    right: 10px;
+  }
   .slider-arrow {
     width: 14px;
     height: 34px;
@@ -459,9 +489,9 @@ body {
     padding-bottom: 0px;
   }
 
-  .services-container {
+  /*.services-container {
     padding: 0px 30px;
-  }
+  }*/
 
   .service-template {
     margin: 7.5px 0px;
@@ -478,6 +508,11 @@ body {
     width: 179px;
     height: 90px;
     background-image: url(./assets/img/phone-horizontal_mobile.png);
+  }
+
+  .phones-vertical {
+    width: 191px;
+    height: 190px;
   }
 
   .portfolio {
@@ -519,7 +554,7 @@ body {
   }
 }
 
-@media (max-width: 375px) {
+@media (max-width: 374px) {
   .horizontal-list {
     flex-wrap: wrap;
   }
