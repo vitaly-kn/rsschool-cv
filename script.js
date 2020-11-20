@@ -38,6 +38,11 @@ async function onArrowClick(event) {
       document.querySelectorAll(".slide")[0].style.left = "-1000px";
       document.querySelectorAll(".slide")[0].style.minWidth = "0px";
       await sleep(500);
+      document.querySelector(
+        ".slider"
+      ).style.backgroundColor = window.getComputedStyle(
+        document.querySelectorAll(".slide")[1]
+      ).backgroundColor;
       document.querySelectorAll(".slide")[0].remove();
       element.style.minWidth = window.getComputedStyle(
         document.querySelector(".slider-container")
@@ -62,12 +67,12 @@ async function onArrowClick(event) {
         document.querySelector(".slider-container")
       ).width;
       await sleep(500);
+      document.querySelector(
+        ".slider"
+      ).style.backgroundColor = window.getComputedStyle(
+        document.querySelectorAll(".slide")[0]
+      ).backgroundColor;
   }
-  document.querySelector(
-    ".slider"
-  ).style.backgroundColor = window.getComputedStyle(
-    document.querySelectorAll(".slide")[0]
-  ).backgroundColor;
 }
 
 var portfolioContent = document.querySelectorAll(".portfolio-img-item");
