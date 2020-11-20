@@ -6,8 +6,8 @@ function onScroll(event) {
   const curPos = window.scrollY;
   blocks.forEach((element) => {
     if (element.offsetTop <= curPos + headerHeight + 1 && element.offsetTop + element.offsetHeight > curPos) {
-      document.querySelector(".navmenu-item-link-selected").classList.remove("navmenu-item-link-selected");
-      document.querySelector(`a[href="#${element.getAttribute("id")}"]`).classList.add("navmenu-item-link-selected");
+      document.querySelectorAll(".navmenu-item-link-selected").forEach((menuItem) => menuItem.classList.remove("navmenu-item-link-selected"));
+      document.querySelectorAll(`a[href="#${element.getAttribute("id")}"]`).forEach((menuItem) => menuItem.classList.add("navmenu-item-link-selected"));
     }
   });
 }
