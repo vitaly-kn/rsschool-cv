@@ -12,6 +12,28 @@ function onScroll(event) {
   });
 }
 
+document.querySelector(".burger-menu-icon").addEventListener("click", onBurgerMenuIconClick);
+document.querySelector(".burger-menu-background").addEventListener("click", onBurgerMenuHideRequest);
+document.querySelector(".burger-menu > .header-text").addEventListener("click", onBurgerMenuHideRequest);
+document.querySelectorAll(".navmenu-item-burger > .navmenu-item-link").forEach((menuItem) => menuItem.addEventListener("click", onBurgerMenuHideRequest));
+window.addEventListener("resize", onBurgerMenuHideRequest);
+
+function onBurgerMenuHideRequest() {
+  document.querySelector(".burger-menu-icon").style.transform = "rotate(0deg)";
+  document.querySelector(".burger-menu-background").style.display = "none";
+  document.querySelector(".burger-menu").style.left = `-${window.getComputedStyle(document.querySelector(".burger-menu")).width}`;
+}
+
+function onBurgerMenuIconClick(event) {
+  if (event.target.style.transform === "rotate(90deg)") {
+    onBurgerMenuHideRequest();
+  } else {
+    event.target.style.transform = "rotate(90deg)";
+    document.querySelector(".burger-menu-background").style.display = "block";
+    document.querySelector(".burger-menu").style.left = "0px";
+  }
+}
+
 var sliderArrows = document.querySelectorAll(".slider-arrow");
 sliderArrows.forEach((element) => {
   element.addEventListener("click", onArrowClick);
@@ -26,7 +48,7 @@ async function onArrowClick(event) {
   switch (event.target.getAttribute("alt")) {
     case "left":
       element = document.querySelectorAll(".slide")[0];
-      document.querySelectorAll(".slide")[0].style.left = "-1000px";
+      document.querySelectorAll(".slide")[0].style.left = "-1021px";
       document.querySelectorAll(".slide")[0].style.minWidth = "0px";
       await sleep(500);
       document.querySelector(".slider").style.backgroundColor = window.getComputedStyle(document.querySelectorAll(".slide")[1]).backgroundColor;
@@ -38,7 +60,7 @@ async function onArrowClick(event) {
     case "right":
       element = document.querySelectorAll(".slide")[document.querySelectorAll(".slide").length - 1];
       document.querySelectorAll(".slide")[document.querySelectorAll(".slide").length - 1].remove();
-      element.style.left = "-1000px";
+      element.style.left = "-1021px";
       element.style.minWidth = "0px";
       document.querySelector(".slider-container").prepend(element);
       document.querySelectorAll(".slide")[0].style.left = "";
