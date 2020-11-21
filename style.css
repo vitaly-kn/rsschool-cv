@@ -65,15 +65,15 @@ body {
 }
 
 .burger-menu-icon {
+  display: none;
   position: fixed;
   top: 26px;
   left: 25px;
-  display: none;
   z-index: 8;
 }
 
 .burger-menu-background {
-  display: none;
+  display: block;
   position: fixed;
   top: 0px;
   left: 0px;
@@ -100,8 +100,8 @@ body {
   padding-top: 24px;
 }
 
-.header-text,
-.header-text:visited {
+.logo,
+.logo:visited {
   font-weight: 700;
   color: #ffffff;
   font-size: 25px;
@@ -110,7 +110,7 @@ body {
   text-decoration: none;
 }
 
-.header-text::after {
+.logo::after {
   content: "*";
   color: red;
 }
@@ -220,38 +220,22 @@ body {
   position: relative;
   min-width: 100%;
   height: 100%;
-  display: flex;
   align-items: center;
   transition: all 0.5s ease;
 }
 
 .slide1 {
+  background: url(./assets/img/phones-slide1.png) no-repeat;
   background-color: #f06c64;
-  justify-content: space-around;
+  background-size: 796px 483px;
+  background-position: center;
 }
 
 .slide2 {
+  background: url(./assets/img/phones-slide2.png) no-repeat;
   background-color: #648bf0;
-  justify-content: center;
-}
-
-.phone-vertical {
-  width: 240px;
-  height: 483px;
-  background-image: url(./assets/img/phone-vertical_desktop.png);
-}
-
-.phone-horizontal {
-  width: 483px;
-  height: 240px;
-  background-image: url(./assets/img/phone-horizontal_desktop.png);
-}
-
-.phones-vertical {
-  width: 516px;
-  height: 514px;
-  background-image: url(./assets/img/phones-vertical.png);
-  background-size: contain;
+  background-size: 516px 514px;
+  background-position: center;
 }
 
 .services {
@@ -294,7 +278,7 @@ body {
 .service-template {
   display: flex;
   height: 104px;
-  width: 32%;
+  width: 300px;
   margin: 20px 0px;
   justify-content: left;
 }
@@ -391,6 +375,10 @@ body {
   display: none;
 }
 
+.invisible {
+  display: none;
+}
+
 .portfolio-img-item-img {
   width: 100%;
   height: 100%;
@@ -459,31 +447,18 @@ body {
     right: 30px;
   }
 
-  .phone-vertical {
-    width: 182px;
-    height: 365px;
-    background-image: url(./assets/img/phone-vertical_tablet.png);
+  .slide1 {
+    background-size: 605px 367px;
   }
 
-  .phone-horizontal {
-    width: 365px;
-    height: 181px;
-    background-image: url(./assets/img/phone-horizontal_tablet.png);
-  }
-
-  .phones-vertical {
-    width: 392px;
-    height: 390px;
+  .slide2 {
+    background-size: 392px 390px;
   }
 
   .services {
     padding-top: 39px;
     padding-bottom: 44px;
     border-bottom: none;
-  }
-
-  .service-template {
-    width: 44%;
   }
 
   .portfolio {
@@ -513,8 +488,8 @@ body {
     justify-content: center;
   }
 
-  .header-text,
-  .header-text:visited {
+  .logo,
+  .logo:visited {
     font-size: 19.69px;
     line-height: 23.63px;
   }
@@ -522,20 +497,24 @@ body {
   .burger-menu-icon {
     display: block;
     transition: all 0.5s ease;
+    transform: rotate(0deg);
+  }
+
+  .rotated {
+    transform: rotate(90deg);
   }
 
   .burger-menu-icon:hover {
     cursor: pointer;
   }
 
-  .burger-menu-background {
-    display: none;
-  }
-
   .burger-menu {
-    left: -278px;
     transition: all 0.5s ease;
     display: block;
+  }
+
+  .hidden {
+    left: -278px;
   }
 
   .slider {
@@ -563,26 +542,20 @@ body {
     padding-bottom: 0px;
   }
 
+  .services-box {
+    display: block;
+  }
+
   .service-template {
-    margin: 7.5px 0px;
-    width: 100%;
+    margin: 7.5px auto;
   }
 
-  .phone-vertical {
-    width: 89px;
-    height: 179px;
-    background-image: url(./assets/img/phone-vertical_mobile.png);
+  .slide1 {
+    background-size: 295px 179px;
   }
 
-  .phone-horizontal {
-    width: 179px;
-    height: 90px;
-    background-image: url(./assets/img/phone-horizontal_mobile.png);
-  }
-
-  .phones-vertical {
-    width: 191px;
-    height: 190px;
+  .slide2 {
+    background-size: 191px 190px;
   }
 
   .portfolio {
@@ -611,6 +584,10 @@ body {
     display: none;
   }
 
+  .description {
+    margin: 18px 0px;
+  }
+
   .footer-text {
     display: none;
   }
@@ -631,6 +608,11 @@ body {
   .footer-container {
     padding: 0px;
   }
+
+  .service-template {
+    width: 100%;
+  }
+
   .service-template-text-block {
     width: 67%;
   }

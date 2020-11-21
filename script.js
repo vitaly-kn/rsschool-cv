@@ -1,9 +1,9 @@
 document.addEventListener("scroll", onScroll);
 var blocks = document.querySelectorAll("#home, #services, #portfolio, #about, #contact");
-var headerHeight = document.querySelector(".header").offsetHeight;
 
 function onScroll(event) {
   const curPos = window.scrollY;
+  const headerHeight = document.querySelector(".header").offsetHeight;
   blocks.forEach((element) => {
     if (element.offsetTop <= curPos + headerHeight + 1 && element.offsetTop + element.offsetHeight > curPos) {
       document.querySelectorAll(".navmenu-item-link-selected").forEach((menuItem) => menuItem.classList.remove("navmenu-item-link-selected"));
@@ -12,25 +12,29 @@ function onScroll(event) {
   });
 }
 
-document.querySelector(".burger-menu-icon").addEventListener("click", onBurgerMenuIconClick);
-document.querySelector(".burger-menu-background").addEventListener("click", onBurgerMenuHideRequest);
-document.querySelector(".burger-menu > .header-text").addEventListener("click", onBurgerMenuHideRequest);
+const burgerMenu = document.querySelector(".burger-menu");
+const burgerMenuIcon = document.querySelector(".burger-menu-icon");
+const burgerMenuBackground = document.querySelector(".burger-menu-background");
+
+burgerMenuIcon.addEventListener("click", onBurgerMenuIconClick);
+burgerMenuBackground.addEventListener("click", onBurgerMenuHideRequest);
+document.querySelector(".burger-menu > .logo").addEventListener("click", onBurgerMenuHideRequest);
 document.querySelectorAll(".navmenu-item-burger > .navmenu-item-link").forEach((menuItem) => menuItem.addEventListener("click", onBurgerMenuHideRequest));
 window.addEventListener("resize", onBurgerMenuHideRequest);
 
 function onBurgerMenuHideRequest() {
-  document.querySelector(".burger-menu-icon").style.transform = "rotate(0deg)";
-  document.querySelector(".burger-menu-background").style.display = "none";
-  document.querySelector(".burger-menu").style.left = `-${window.getComputedStyle(document.querySelector(".burger-menu")).width}`;
+  burgerMenuIcon.classList.remove("rotated");
+  burgerMenuBackground.classList.add("invisible");
+  burgerMenu.classList.add("hidden");
 }
 
 function onBurgerMenuIconClick(event) {
-  if (event.target.style.transform === "rotate(90deg)") {
+  if (burgerMenuIcon.classList.contains("rotated")) {
     onBurgerMenuHideRequest();
   } else {
-    event.target.style.transform = "rotate(90deg)";
-    document.querySelector(".burger-menu-background").style.display = "block";
-    document.querySelector(".burger-menu").style.left = "0px";
+    burgerMenuIcon.classList.add("rotated");
+    burgerMenuBackground.classList.remove("invisible");
+    burgerMenu.classList.remove("hidden");
   }
 }
 
@@ -71,25 +75,26 @@ async function onArrowClick(event) {
   }
 }
 
-var portfolioContent = document.querySelectorAll(".portfolio-img-item");
-var portfolioButtons = document.querySelectorAll(".portfolio-menu-item:not(.portfolio-menu-item-selected)");
+const portfolioImageContainer = document.querySelector(".portfolio-img-container");
+const portfolioContent = document.querySelectorAll(".portfolio-img-item");
+const portfolioButtons = document.querySelectorAll(".portfolio-menu-item");
 
 portfolioButtons.forEach((element) => {
   element.addEventListener("click", onPortfolioClick);
 });
 
 function onPortfolioClick(event) {
-  document.querySelector(".portfolio-menu-item-selected").classList.remove("portfolio-menu-item-selected");
-  let currentOption = document.querySelector(".portfolio-menu-item:hover");
-  currentOption.classList.add("portfolio-menu-item-selected");
-  portfolioButtons = document.querySelectorAll(".portfolio-menu-item:not(.portfolio-menu-item-selected)");
-  portfolioButtons.forEach((element) => {
-    element.addEventListener("click", onPortfolioClick);
-  });
-  document.querySelector(".portfolio-img-container").innerHTML = "";
-  portfolioContent.forEach((element) => {
-    if (currentOption.getAttribute("data-type") === "all" || element.getAttribute("data-type") === currentOption.getAttribute("data-type")) {
-      document.querySelector(".portfolio-img-container").append(element);
-    }
-  });
+  if (!event.target.classList.contains("portfolio-menu-item-selected")) {
+    document.querySelector(".portfolio-menu-item-selected").classList.remove("portfolio-menu-item-selected");
+    event.target.classList.add("portfolio-menu-item-selected");
+    portfolioImageContainer.innerHTML = "";
+    portfolioContent.forEach((element) => {
+      if (event.target.getAttribute("data-type") === "all" || element.getAttribute("data-type") === event.target.getAttribute("data-type")) {
+        portfolioImageContainer.append(element);
+        /*element.classList.remove("invisible");
+      } else {
+        element.classList.add("invisible");*/
+      }
+    });
+  }
 }
