@@ -20,7 +20,7 @@ burgerMenuIcon.addEventListener("click", onBurgerMenuIconClick);
 burgerMenuBackground.addEventListener("click", onBurgerMenuHideRequest);
 document.querySelector(".burger-menu > .logo").addEventListener("click", onBurgerMenuHideRequest);
 document.querySelectorAll(".navmenu-item-burger > .navmenu-item-link").forEach((menuItem) => menuItem.addEventListener("click", onBurgerMenuHideRequest));
-window.addEventListener("resize", onBurgerMenuHideRequest);
+window.addEventListener("resize", onResizeWindow);
 
 function onBurgerMenuHideRequest() {
   burgerMenuIcon.classList.remove("rotated");
@@ -38,41 +38,74 @@ function onBurgerMenuIconClick(event) {
   }
 }
 
-var sliderArrows = document.querySelectorAll(".slider-arrow");
-sliderArrows.forEach((element) => {
-  element.addEventListener("click", onArrowClick);
+const sliderParams = {
+  sliderClass: ".slider",
+  sliderContentClass: ".slider-container",
+  sliderContentListClass: ".slides-list",
+  slideClass: ".slide",
+  sliderArrowClass: ".slider-arrow",
+};
+const slides = document.querySelectorAll(sliderParams.slideClass);
+const arrows = document.querySelectorAll(sliderParams.sliderArrowClass);
+const slider = document.querySelector(sliderParams.sliderClass);
+const sliderContentList = document.querySelector(sliderParams.sliderContentListClass);
+const sliderContent = document.querySelector(sliderParams.sliderContentClass);
+
+var sliderWidth = sliderContent.offsetWidth;
+arrows.forEach((arrow) => arrow.addEventListener("click", moveSlide));
+
+var [currentSlide, nextSlide] = [0, 1];
+
+slides.forEach((element, index) => {
+  element.style.width = sliderWidth + "px";
 });
 
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+slides[currentSlide].style.left = "0px";
+slides[nextSlide].style.left = sliderWidth + "px";
+
+/*
+function moveSlide(event) {
+  const arrow = event.target;
+  const direction = +arrow.getAttribute("data-direction");
+  sliderWidth = sliderContent.offsetWidth;
+  if (direction > 0) {
+    slides[nextSlide].style.left = `-${sliderWidth}px`;
+  } else {
+    slides[nextSlide].style.left = `${sliderWidth}px`;
+  }
+  slides[currentSlide].style.left = direction * sliderWidth + "px";
+  slides[nextSlide].style.left = "0px";
+  [currentSlide, nextSlide] = [nextSlide, currentSlide];
+  slider.style.backgroundColor = window.getComputedStyle(slides[currentSlide]).backgroundColor;
+}
+*/
+
+function moveSlide(event) {
+  const arrow = event.target;
+  const direction = +arrow.getAttribute("data-direction");
+  let next = sliderContentList.removeChild(slides[nextSlide]);
+  sliderWidth = sliderContent.offsetWidth;
+  if (direction > 0) {
+    next.style.left = `-${sliderWidth}px`;
+  } else {
+    next.style.left = `${sliderWidth}px`;
+  }
+  slides[currentSlide].style.left = direction * sliderWidth + "px";
+  setTimeout(() => {
+    next.style.left = "0px";
+  });
+  sliderContentList.appendChild(next);
+  [currentSlide, nextSlide] = [nextSlide, currentSlide];
+  slider.style.backgroundColor = window.getComputedStyle(slides[currentSlide]).backgroundColor;
 }
 
-async function onArrowClick(event) {
-  let element;
-  switch (event.target.getAttribute("alt")) {
-    case "left":
-      element = document.querySelectorAll(".slide")[0];
-      document.querySelectorAll(".slide")[0].style.left = "-1021px";
-      document.querySelectorAll(".slide")[0].style.minWidth = "0px";
-      await sleep(500);
-      document.querySelector(".slider").style.backgroundColor = window.getComputedStyle(document.querySelectorAll(".slide")[1]).backgroundColor;
-      document.querySelectorAll(".slide")[0].remove();
-      element.style.minWidth = "100%";
-      element.style.left = "";
-      document.querySelector(".slider-container").append(element);
-      break;
-    case "right":
-      element = document.querySelectorAll(".slide")[document.querySelectorAll(".slide").length - 1];
-      document.querySelectorAll(".slide")[document.querySelectorAll(".slide").length - 1].remove();
-      element.style.left = "-1021px";
-      element.style.minWidth = "0px";
-      document.querySelector(".slider-container").prepend(element);
-      document.querySelectorAll(".slide")[0].style.left = "";
-      document.querySelectorAll(".slide")[0].style.minWidth = window.getComputedStyle(document.querySelector(".slider-container")).width;
-      await sleep(500);
-      document.querySelectorAll(".slide")[0].style.minWidth = "100%";
-      document.querySelector(".slider").style.backgroundColor = window.getComputedStyle(document.querySelectorAll(".slide")[0]).backgroundColor;
-  }
+function onResizeWindow() {
+  onBurgerMenuHideRequest;
+  sliderWidth = sliderContent.offsetWidth;
+  slides.forEach((element, index) => {
+    element.style.width = `${sliderWidth}px`;
+  });
+  slides[nextSlide].style.left = `${sliderWidth}px`;
 }
 
 const portfolioImageContainer = document.querySelector(".portfolio-img-container");
@@ -91,9 +124,6 @@ function onPortfolioClick(event) {
     portfolioContent.forEach((element) => {
       if (event.target.getAttribute("data-type") === "all" || element.getAttribute("data-type") === event.target.getAttribute("data-type")) {
         portfolioImageContainer.append(element);
-        /*element.classList.remove("invisible");
-      } else {
-        element.classList.add("invisible");*/
       }
     });
   }

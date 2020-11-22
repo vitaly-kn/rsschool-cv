@@ -55,11 +55,15 @@
     </header>
     <main>
       <div class="slider" id="home">
+        <div class="arrow-container">
+          <button class="slider-arrow slider-arrow-left" data-direction="1"></button>
+          <button class="slider-arrow slider-arrow-right" data-direction="-1"></button>
+        </div>
         <div class="slider-container">
-          <img src="./assets/img/arrow-left.png" alt="left" class="slider-arrow slider-arrow-left" />
-          <img src="./assets/img/arrow-right.png" alt="right" class="slider-arrow slider-arrow-right" />
-          <div class="slide slide1"></div>
-          <div class="slide slide2"></div>
+          <div class="slides-list">
+            <div class="slide slide1"></div>
+            <div class="slide slide2"></div>
+          </div>
         </div>
       </div>
       <div class="services" id="services">
