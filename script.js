@@ -44,14 +44,12 @@ const sliderParams = {
   sliderContentListClass: ".slides-list",
   slideClass: ".slide",
   sliderArrowClass: ".slider-arrow",
-  sliderBackgroundClass: ".slider-background",
 };
 const slides = document.querySelectorAll(sliderParams.slideClass);
 const arrows = document.querySelectorAll(sliderParams.sliderArrowClass);
 const slider = document.querySelector(sliderParams.sliderClass);
 const sliderContentList = document.querySelector(sliderParams.sliderContentListClass);
 const sliderContent = document.querySelector(sliderParams.sliderContentClass);
-const sliderBackgrounds = document.querySelectorAll(sliderParams.sliderBackgroundClass + " > *");
 
 var sliderWidth = sliderContent.offsetWidth;
 arrows.forEach((arrow) => arrow.addEventListener("click", moveSlide));
@@ -59,19 +57,10 @@ arrows.forEach((arrow) => arrow.addEventListener("click", moveSlide));
 var [currentSlide, nextSlide] = [0, 1];
 
 var direction;
-var isNewBackground = false;
 
 slides.forEach((element, index) => {
   element.style.width = sliderWidth + "px";
-  element.addEventListener("transitionend", onSlideChanged);
 });
-
-function onSlideChanged() {
-  if (isNewBackground) {
-    sliderBackgrounds[(-1 * direction + 1) / 2].style.backgroundColor = window.getComputedStyle(slides[currentSlide]).backgroundColor;
-    isNewBackground = false;
-  }
-}
 
 slides[currentSlide].style.left = "0px";
 slides[nextSlide].style.left = sliderWidth + "px";
@@ -83,12 +72,10 @@ function moveSlide(event) {
   sliderWidth = sliderContent.offsetWidth;
   next.style.left = direction * sliderWidth + "px";
   slides[currentSlide].style.left = -1 * direction * sliderWidth + "px";
-  isNewBackground = true;
   setTimeout(() => {
     next.style.left = "0px";
   });
   sliderContentList.appendChild(next);
-  sliderBackgrounds[(direction + 1) / 2].style.backgroundColor = window.getComputedStyle(slides[nextSlide]).backgroundColor;
   [currentSlide, nextSlide] = [nextSlide, currentSlide];
 }
 
