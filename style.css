@@ -191,6 +191,7 @@ body {
   left: 0px;
   right: 0px;
   width: 100%;
+  box-sizing: border-box;
   border-bottom: 6px solid #ea676b;
   display: flex;
 }
@@ -313,8 +314,11 @@ body {
   font-weight: 300;
   font-size: 18px;
   line-height: 30px;
-  margin-top: 18px;
   color: #767e9e;
+}
+
+.description-services {
+  margin-top: 18px;
 }
 
 .services-box {
@@ -355,13 +359,14 @@ body {
   margin-bottom: 7px;
   font-weight: 900;
   font-size: 18px;
+  line-height: 18px;
   display: block;
   overflow: hidden;
 }
 
 .service-template-text-content {
   line-height: 22px;
-  height: 77px;
+  height: 66px;
   text-align: justify;
   font-weight: 400;
   font-size: 12px;
@@ -382,6 +387,10 @@ body {
   max-width: 1020px;
   box-sizing: border-box;
   margin: auto;
+}
+
+.description-portfolio {
+  margin-top: 14px;
 }
 
 .portfolio-menu-item {
@@ -505,11 +514,16 @@ body {
   }
 
   .service-template {
-    margin: 20px 10px;
+    margin: 20px 0px;
+    flex-basis: 48%;
+  }
+
+  .service-template-text-block {
+    width: 100%;
   }
 
   .portfolio {
-    padding-bottom: 42px;
+    padding-bottom: 65px;
   }
 
   .portfolio-img-container {
@@ -584,9 +598,13 @@ body {
     background-size: 14px 24px;
   }
 
+  .services-container {
+    padding: 0px 33px 15px 43px;
+  }
+
   .services {
     padding-top: 25px;
-    padding-bottom: 0px;
+    padding-bottom: 15px;
   }
 
   .services-box {
@@ -595,10 +613,6 @@ body {
 
   .service-template {
     margin: 15px auto 0px auto;
-    width: 100%;
-  }
-
-  .service-template-text-block {
     width: 100%;
   }
 
@@ -612,11 +626,16 @@ body {
 
   .portfolio {
     padding-top: 42px;
+    padding-bottom: 42px;
     border-bottom: 0px;
   }
 
   .portfolio-container {
     padding: 0px 30px;
+  }
+
+  .portfolio-menu-item {
+    margin: 16px 10px 25px 0;
   }
 
   .portfolio-img-container {
@@ -634,10 +653,6 @@ body {
 
   .navmenu-item {
     display: none;
-  }
-
-  .description {
-    margin: 18px 0px;
   }
 
   .footer-text {
