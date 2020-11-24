@@ -319,6 +319,7 @@ body {
   box-sizing: border-box;
   height: 60px;
   width: 60px;
+  flex-shrink: 0;
   margin-right: 20px;
   border-radius: 50%;
   border: 2px solid #666d89;
@@ -574,6 +575,11 @@ body {
 
   .service-template {
     margin: 7.5px auto;
+    width: 100%;
+  }
+
+  .service-template-text-block {
+    width: 100%;
   }
 
   .slide1 {
@@ -637,9 +643,5 @@ body {
 
   .service-template {
     width: 100%;
-  }
-
-  .service-template-text-block {
-    width: 67%;
   }
 }
