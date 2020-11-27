@@ -13,7 +13,8 @@ const applicationParams = {
   idDot: ".",
   idResult: "result",
   attrDigit: "data-dgt",
-  maxPrecisionRange: "15",
+  maxPrecisionRange: 15,
+  exponentialPrecision: 9,
 };
 
 var hasDot = false;
@@ -91,8 +92,21 @@ function onOperatorClick(event) {
 }
 
 function performOperation() {
-  if (savedOperator === applicationParams.idDiv) return (memoryRegister / screen.value).toPrecision(applicationParams.maxPrecisionRange);
-  if (savedOperator === applicationParams.idMult) return (memoryRegister * screen.value).toPrecision(applicationParams.maxPrecisionRange);
-  if (savedOperator === applicationParams.idMinus) return (+memoryRegister - +screen.value).toPrecision(applicationParams.maxPrecisionRange);
-  if (savedOperator === applicationParams.idPlus) return (+memoryRegister + +screen.value).toPrecision(applicationParams.maxPrecisionRange);
+  let result;
+  if (savedOperator === applicationParams.idDiv) {
+    result = memoryRegister / screen.value;
+    return String(result).length <= applicationParams.maxPrecisionRange ? result : result.toExponential(applicationParams.exponentialPrecision);
+  }
+  if (savedOperator === applicationParams.idMult) {
+    result = memoryRegister * screen.value;
+    return String(result).length <= applicationParams.maxPrecisionRange ? result : result.toExponential(applicationParams.exponentialPrecision);
+  }
+  if (savedOperator === applicationParams.idMinus) {
+    result = +memoryRegister - +screen.value;
+    return String(result).length <= applicationParams.maxPrecisionRange ? result : result.toExponential(applicationParams.exponentialPrecision);
+  }
+  if (savedOperator === applicationParams.idPlus) {
+    result = +memoryRegister + +screen.value;
+    return String(result).length <= applicationParams.maxPrecisionRange ? result : result.toExponential(applicationParams.exponentialPrecision);
+  }
 }
