@@ -1,0 +1,86 @@
+html {
+  font-size: 10px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.application-body {
+  background-color: whitesmoke;
+}
+
+.main-frame {
+  max-width: 320px;
+  box-sizing: border-box;
+  margin: 100px auto 0px;
+  /*border: 1px solid lightgrey;*/
+  border: none;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  overflow: hidden;
+}
+
+.application-name {
+  display: block;
+  font-size: 2rem;
+  color: white;
+  line-height: 4rem;
+  margin: 0px;
+  padding-left: 10px;
+  background-image: linear-gradient(to right, black 0%, lightgray);
+}
+
+.screen,
+.screen:disabled {
+  display: block;
+  margin: 30px auto;
+  border: 1px solid lightgrey;
+  border-radius: 4px;
+  font-size: 3rem;
+  width: 280px;
+  padding: 3px;
+  text-align: right;
+  font-weight: bold;
+  font-family: "Courier New", Courier, monospace;
+  background-color: white;
+  color: black;
+}
+
+.screen:focus {
+  outline: 0px;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20px;
+  justify-content: space-between;
+}
+
+.button {
+  box-sizing: border-box;
+  margin: 10px 0px;
+  background-image: linear-gradient(rgb(255, 255, 255) 0%, rgb(219, 219, 219) 100%);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  border-radius: 4px;
+  font-size: 2rem;
+  line-height: 3rem;
+  flex-basis: 23%;
+  /*transition: all 0.8s ease-in-out;*/
+}
+
+.button:focus {
+  outline: 0px;
+}
+
+.button:hover {
+  cursor: pointer;
+  background-image: linear-gradient(rgb(227, 233, 195) 0%, rgb(243, 201, 63) 100%);
+}
+
+.service {
+  flex-basis: 49%;
+}
+
+.service:hover {
+  background-image: linear-gradient(rgb(233, 195, 195) 0%, rgb(243, 63, 63) 100%);
+}
