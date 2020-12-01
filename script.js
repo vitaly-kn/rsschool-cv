@@ -102,18 +102,13 @@ function makeCalculation() {
   let result;
   if (savedOperator === applicationParams.idDiv) {
     result = memoryRegister / screen.value;
-    return String(result).length <= applicationParams.maxPrecisionRange ? result : result.toExponential(applicationParams.exponentialPrecision);
-  }
-  if (savedOperator === applicationParams.idMult) {
+  } else if (savedOperator === applicationParams.idMult) {
     result = memoryRegister * screen.value;
-    return String(result).length <= applicationParams.maxPrecisionRange ? result : result.toExponential(applicationParams.exponentialPrecision);
-  }
-  if (savedOperator === applicationParams.idMinus) {
+  } else if (savedOperator === applicationParams.idMinus) {
     result = +memoryRegister - +screen.value;
-    return String(result).length <= applicationParams.maxPrecisionRange ? result : result.toExponential(applicationParams.exponentialPrecision);
-  }
-  if (savedOperator === applicationParams.idPlus) {
+  } else if (savedOperator === applicationParams.idPlus) {
     result = +memoryRegister + +screen.value;
-    return String(result).length <= applicationParams.maxPrecisionRange ? result : result.toExponential(applicationParams.exponentialPrecision);
   }
+
+  return String(result).length <= applicationParams.maxPrecisionRange ? result : result.toExponential(applicationParams.exponentialPrecision);
 }
