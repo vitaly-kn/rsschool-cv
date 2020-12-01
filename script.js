@@ -35,15 +35,19 @@ operators.forEach((btnOperator) => btnOperator.addEventListener("click", onOpera
 
 document.getElementById(applicationParams.idDot).addEventListener("click", () => {
   if (!hasDot) {
-    if (isNewNumber) {
-      screen.value = `0${applicationParams.idDot}`;
-      isNewNumber = false;
-    } else {
-      screen.value += applicationParams.idDot;
-    }
+    addDotToScreen();
     hasDot = true;
   }
 });
+
+function addDotToScreen() {
+  if (isNewNumber) {
+    isNewNumber = false;
+    screen.value = `0${applicationParams.idDot}`;
+  } else {
+    screen.value += applicationParams.idDot;
+  }
+}
 
 function onServiceClick(event) {
   screen.value = "0";
@@ -58,12 +62,16 @@ function onServiceClick(event) {
 function onDigitClick(event) {
   if (screen.value.length < applicationParams.maxPrecisionRange || isNewNumber) {
     const input = event.target.getAttribute(applicationParams.attrDigit);
-    if (isNewNumber) {
-      screen.value = input;
-      isNewNumber = false;
-    } else {
-      screen.value += input;
-    }
+    addDigitToScreen(input);
+  }
+}
+
+function addDigitToScreen(input) {
+  if (isNewNumber) {
+    isNewNumber = false;
+    screen.value = input;
+  } else {
+    screen.value += input;
   }
 }
 
@@ -74,24 +82,23 @@ function onOperatorClick(event) {
   } else {
     hasDot = false;
     isNewNumber = true;
-    if (savedOperator === "") {
-      if (operator != applicationParams.idResult) {
-        savedOperator = operator;
-        memoryRegister = screen.value;
-      }
-    } else {
-      screen.value = performOperation();
-      if (operator === applicationParams.idResult) {
-        memoryRegister = 0;
-        savedOperator = "";
-      } else {
-        memoryRegister = screen.value;
-      }
-    }
+    performBinaryOperation(operator);
   }
 }
 
-function performOperation() {
+function performBinaryOperation(operator) {
+  let result = makeCalculation();
+  if (result !== undefined) screen.value = result;
+  if (operator === applicationParams.idResult) {
+    memoryRegister = 0;
+    savedOperator = "";
+  } else {
+    memoryRegister = screen.value;
+    savedOperator = operator;
+  }
+}
+
+function makeCalculation() {
   let result;
   if (savedOperator === applicationParams.idDiv) {
     result = memoryRegister / screen.value;
