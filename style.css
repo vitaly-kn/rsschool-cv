@@ -1,0 +1,137 @@
+:root {
+  --main-color: whitesmoke;
+  --selected-color: chartreuse;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
+
+.main {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  justify-content: space-evenly;
+}
+
+.media-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -1;
+}
+
+.video-player {
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.button {
+  margin: 20px auto;
+  padding: 10px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--main-color);
+  border: 4px solid var(--main-color);
+  min-width: 155px;
+  border-radius: 15px;
+  background: none;
+  cursor: pointer;
+}
+
+.button:focus {
+  outline: 0px;
+}
+
+.selected {
+  border: 4px solid var(--selected-color);
+}
+
+.video-control {
+  justify-content: flex-end;
+}
+
+.player-button {
+  margin: 20px auto;
+  background: none;
+  cursor: pointer;
+  border: none;
+}
+
+.player-button:focus {
+  outline: 0px;
+}
+
+.progress-bar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.progress-bar {
+  position: absolute;
+  /*height: 50%;
+  top: 50%;
+  left: 50%;*/
+  /*transform: translate(-50%, -50%) rotate(-90deg);*/
+  max-width: 150px;
+  max-height: 150px;
+  pointer-events: none;
+}
+
+.svg-icon {
+  height: 75px;
+  width: 75px;
+}
+
+.play {
+  padding-left: 20px;
+}
+
+.svg-track {
+  stroke: var(--main-color);
+}
+
+.svg-moving {
+  stroke: var(--selected-color);
+}
+
+.timer {
+  display: block;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--main-color);
+  margin: 20px auto;
+}
+
+.svg-content {
+  fill: var(--main-color);
+}
+
+.svg-container {
+  cursor: pointer;
+}

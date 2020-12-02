@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Meditation</title>
+  </head>
+  <body class="main"></body>
+  <div class="media-container">
+    <video class="video-player" src="./assets/video/fire.mp4" loop></video>
+    <audio src="./assets/sound/forest.mp3" loop></audio>
+  </div>
+  <div class="controls time-control">
+    <button class="button selected" data-duration="120">2 minutes</button>
+    <button class="button" data-duration="300">5 minutes</button>
+    <button class="button" data-duration="120">10 minutes</button>
+  </div>
+  <div class="controls video-control">
+    <div class="progress-bar-container">
+      <button class="player-button play"><object class="svg-icon" data="./assets/svg/play.svg" type="image/svg+xml"></object></button>
+      <object class="progress-bar" data="./assets/svg/track-outline.svg" type="image/svg+xml"></object>
+      <object class="progress-bar" data="./assets/svg/moving-outline.svg" type="image/svg+xml"></object>
+    </div>
+    <p class="timer">0:00</p>
+  </div>
+  <div class="controls theme-control">
+    <button class="button selected" data-theme="forest">
+      <object class="svg-icon" data="./assets/svg/forest.svg" type="image/svg+xml"></object>
+    </button>
+    <button class="button" data-theme="fire"><object class="svg-icon" data="./assets/svg/fire.svg" type="image/svg+xml"></object></button>
+  </div>
+</html>
