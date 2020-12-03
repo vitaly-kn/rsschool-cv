@@ -36,9 +36,6 @@ html {
   width: auto;
   height: auto;
   position: absolute;
-  /*top: 50%;
-  left: 50%;*/
-  /*transform: translate(-50%, -50%);*/
 }
 
 .controls {
@@ -94,10 +91,7 @@ html {
 
 .progress-bar {
   position: absolute;
-  /*height: 50%;*/
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-90deg);
+  transform: rotate(-90deg);
   max-width: 150px;
   max-height: 150px;
   pointer-events: none;
@@ -107,7 +101,6 @@ html {
   height: 75px;
   width: 75px;
   pointer-events: none;
-  /*transition: all 0.2s ease-in-out;*/
 }
 
 .play {
@@ -115,7 +108,7 @@ html {
 }
 
 .svg-track,
-.svg-moving {
+.svg-progress {
   transition: all 1s linear;
 }
 
@@ -123,7 +116,7 @@ html {
   stroke: var(--main-color);
 }
 
-.svg-moving {
+.svg-progress {
   stroke: var(--selected-color);
 }
 
@@ -142,4 +135,17 @@ html {
 
 .svg-container {
   cursor: pointer;
+}
+
+@media (max-width: 413px) {
+  html {
+    font-size: 7.5px;
+  }
+
+  .button {
+    margin: 10px auto;
+    padding: 5px;
+    border-width: 2px;
+    min-width: 110px;
+  }
 }
