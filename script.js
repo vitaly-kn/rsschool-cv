@@ -28,7 +28,7 @@ const themeButtons = document.querySelectorAll(`${appParams.classThemeControl} >
 const selectedTimeButtonTemplate = `${appParams.classTimeControl} > ${appParams.classSelected}`;
 const selectedThemeButtonTemplate = `${appParams.classThemeControl} > ${appParams.classSelected}`;
 
-let duration;
+let duration, timeLeft;
 
 let isCurrentTimeChanged = (function () {
   let previousTime = 0;
@@ -43,38 +43,60 @@ let isCurrentTimeChanged = (function () {
 
 playerButton.addEventListener("click", (event) => {
   if (audioPlayer.paused) {
-    audioPlayer.play();
-    videoPlayer.play();
-    playerButtonIcon.setAttribute("data", appParams.playerButtonIconPause);
+    startPlayer();
   } else {
     stopPlayer();
   }
-  playerButton.classList.toggle(appParams.playerButtonStatePlay);
+  //playerButton.classList.toggle(appParams.playerButtonStatePlay);
 });
+
+function startPlayer() {
+  audioPlayer.play();
+  videoPlayer.play();
+  playerButtonIcon.setAttribute("data", appParams.playerButtonIconPause);
+  playerButton.classList.remove(appParams.playerButtonStatePlay);
+}
 
 function stopPlayer() {
   audioPlayer.pause();
   videoPlayer.pause();
   playerButtonIcon.setAttribute("data", appParams.playerButtonIconPlay);
+  playerButton.classList.add(appParams.playerButtonStatePlay);
+  console.log("timer stopped!");
 }
 
 audioPlayer.addEventListener("timeupdate", () => {
-  //console.log("start " + duration);
-  if (duration === 0) {
+  console.log("start " + timeLeft);
+  if (timeLeft === 0) {
     stopPlayer();
-    refreshDuration();
-    playerButton.classList.toggle(appParams.playerButtonStatePlay);
+    resetTimer();
+    //playerButton.classList.toggle(appParams.playerButtonStatePlay);
+    console.log("stop block");
   } else if (isCurrentTimeChanged(Math.floor(audioPlayer.currentTime))) {
-    timer.textContent = convertTimeToDisplay(--duration);
+    timer.textContent = convertTimeToDisplay(--timeLeft);
+    console.log("iterate block");
   }
-  //console.log("end " + duration);
+  console.log("end " + timeLeft);
+});
+
+audioPlayer.addEventListener("pause", (event) => {
+  console.log("paused!");
+  console.log(event.target.paused);
+});
+
+audioPlayer.addEventListener("abort", (event) => {
+  console.log("aborted!");
+  console.log(event.target.paused);
+  timeLeft = 0;
+  //stopPlayer();
+  //resetTimer();
 });
 
 timeButtons.forEach((button) => {
   button.addEventListener("click", (event) => {
     document.querySelector(selectedTimeButtonTemplate).classList.toggle(appParams.classSelectedToggler);
     event.target.classList.toggle(appParams.classSelectedToggler);
-    refreshDuration();
+    resetTimer();
   });
 });
 
@@ -83,9 +105,11 @@ themeButtons.forEach((button) => {
     if (!event.target.classList.contains(appParams.classSelectedToggler)) {
       document.querySelector(selectedThemeButtonTemplate).classList.toggle(appParams.classSelectedToggler);
       event.target.classList.toggle(appParams.classSelectedToggler);
-      stopPlayer();
+      //stopPlayer();
+      //timeLeft = 0;
+      //console.log("time left is 0!");
       setMultimediaSources(event.target);
-      playerButton.classList.add(appParams.playerButtonStatePlay);
+      //playerButton.classList.add(appParams.playerButtonStatePlay);
     }
   });
 });
@@ -94,9 +118,10 @@ function getDuration() {
   return document.querySelector(selectedTimeButtonTemplate).getAttribute(appParams.attrDuration);
 }
 
-function refreshDuration() {
+function resetTimer() {
   duration = getDuration();
-  timer.textContent = convertTimeToDisplay(duration);
+  timeLeft = duration;
+  timer.textContent = convertTimeToDisplay(timeLeft);
 }
 
 function convertTimeToDisplay(time) {
@@ -109,6 +134,7 @@ function convertTimeToDisplay(time) {
 function setMultimediaSources(selectedSource) {
   audioPlayer.src = selectedSource.getAttribute(appParams.attrAudioSource);
   videoPlayer.src = selectedSource.getAttribute(appParams.attrVideoSource);
-  refreshDuration();
+  //resetTimer();
 }
 setMultimediaSources(document.querySelector(selectedThemeButtonTemplate));
+resetTimer();
