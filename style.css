@@ -23,16 +23,23 @@ html {
 }
 
 .drums-container {
-  position: relative;
   max-width: 1024px;
   margin: 0 auto;
   padding-top: 600px;
   display: flex;
   flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.line {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .drum {
-  margin-right: 20px;
+  margin: 20px;
   width: 80px;
   height: 80px;
   border: 3px ridge var(--drum-color);

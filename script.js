@@ -8,8 +8,8 @@ drums.forEach((key) => key.addEventListener("animationend", removeAnimationStyle
 window.addEventListener("keydown", playSample);
 
 function playSample(event) {
-  const sample = document.querySelector(`audio[data-key="${event.keyCode}"]`);
-  const drum = document.querySelector(`div[data-key="${event.keyCode}"]`);
+  const sample = document.querySelector(`${appParams.classDrumSelector}[data-key="${event.keyCode}"]>audio`);
+  const drum = document.querySelector(`${appParams.classDrumSelector}[data-key="${event.keyCode}"]`);
   if (!sample) return;
   drum.classList.add(appParams.classKeypressed);
   sample.currentTime = 0;
