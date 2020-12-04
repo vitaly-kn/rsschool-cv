@@ -43,6 +43,7 @@ html {
   align-items: center;
   background-color: var(--drum-background);
   opacity: 0.5;
+  animation: 0.3s ease-in-out;
 }
 
 .symbol {
@@ -61,8 +62,7 @@ html {
   color: var(--drum-name-color);
 }
 
-.drum:hover {
-  animation-duration: 0.3s;
+.keypressed {
   animation-name: drum-shadow;
 }
 
