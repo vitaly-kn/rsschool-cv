@@ -1,0 +1,77 @@
+:root {
+  --drum-color: gold;
+  --symbol-color: yellow;
+  --drum-name-color: cyan;
+  --drum-background: black;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 10px;
+}
+
+.main {
+  width: 100%;
+  height: 100vh;
+  background: var(--drum-background) url(./assets/img/background.jpg) no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.drums-container {
+  position: relative;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding-top: 600px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.drum {
+  margin-right: 20px;
+  width: 80px;
+  height: 80px;
+  border: 3px ridge var(--drum-color);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--drum-background);
+  opacity: 0.5;
+}
+
+.symbol {
+  display: block;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bold;
+  font-size: 2rem;
+  color: var(--symbol-color);
+}
+
+.drum-name {
+  display: block;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--drum-name-color);
+}
+
+.drum:hover {
+  animation-duration: 0.3s;
+  animation-name: drum-shadow;
+}
+
+@keyframes drum-shadow {
+  from {
+    box-shadow: none;
+  }
+
+  to {
+    box-shadow: 0px 0px 2px 20px var(--drum-background), 0px 0px 2px 30px var(--drum-color);
+  }
+}
