@@ -8,10 +8,10 @@
   </head>
   <body class="main">
     <h1 class="header">CSS Variables and JS</h1>
-    <section class="controls-section wrapper">
+    <section class="wrapper controls-section">
       <div class="control">
         <label class="control-label" for="opacity">Opacity</label>
-        <input id="opacity" type="range" name="opacity" min="0" max="10" value="10" data-sizing="" />
+        <input id="opacity" type="range" name="opacity" min="0" max="10" value="10" />
       </div>
       <div class="control">
         <label class="control-label" for="blur">Blur</label>
@@ -28,20 +28,21 @@
       <div class="control">
         <p class="control-label">Background Color</p>
         <form action="" class="radio-group">
-          <div class="radio-control"><input id="none" type="radio" name="background-color" /><label class="radio-label" for="none">None</label></div>
-          <div class="radio-control"><input id="red" type="radio" name="background-color" checked /><label class="radio-label" for="red">Red</label></div>
-          <div class="radio-control"><input id="orange" type="radio" name="background-color" /><label class="radio-label" for="orange">Orange</label></div>
-          <div class="radio-control"><input id="yellow" type="radio" name="background-color" /><label class="radio-label" for="yellow">Yellow</label></div>
-          <div class="radio-control"><input id="green" type="radio" name="background-color" /><label class="radio-label" for="green">Green</label></div>
-          <div class="radio-control"><input id="blue" type="radio" name="background-color" /><label class="radio-label" for="blue">Blue</label></div>
-          <div class="radio-control"><input id="white" type="radio" name="background-color" /><label class="radio-label" for="white">White</label></div>
+          <div class="radio-control"><input value="none" type="radio" name="background-color" checked /><label class="radio-label" for="none">None</label></div>
+          <div class="radio-control"><input value="red" type="radio" name="background-color" /><label class="radio-label" for="red">Red</label></div>
+          <div class="radio-control"><input value="orange" type="radio" name="background-color" /><label class="radio-label" for="orange">Orange</label></div>
+          <div class="radio-control"><input value="yellow" type="radio" name="background-color" /><label class="radio-label" for="yellow">Yellow</label></div>
+          <div class="radio-control"><input value="green" type="radio" name="background-color" /><label class="radio-label" for="green">Green</label></div>
+          <div class="radio-control"><input value="blue" type="radio" name="background-color" /><label class="radio-label" for="blue">Blue</label></div>
+          <div class="radio-control"><input value="white" type="radio" name="background-color" /><label class="radio-label" for="white">White</label></div>
         </form>
       </div>
     </section>
-    <section class="picture-section wrapper">
+    <section class="wrapper">
       <div class="picture-field">
         <img class="picture" src="./assets/img/burj.jpg" alt="image" />
       </div>
     </section>
+    <script src="./script.js"></script>
   </body>
 </html>

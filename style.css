@@ -1,7 +1,7 @@
 :root {
   --main-background-color: #1e1e1e;
   --main-text-color: #c9d4c9;
-  --image-background-color: red;
+  --image-background-color: none;
   --image-blur: 0px;
   --image-opacity: 1;
   --image-border-radius: 0%;
@@ -45,13 +45,17 @@ html {
 }
 
 .control {
-  margin: 20px;
+  margin: 10px 20px;
 }
 
 .control-label {
   display: block;
   font-size: 1.5rem;
   color: var(--main-text-color);
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  opacity: 1;
 }
 
 .radio-control {
@@ -66,10 +70,6 @@ html {
   font-size: 1.5rem;
   color: var(--main-text-color);
 }
-
-/*.picture-section {
-  padding: 10px;
-}*/
 
 .picture-field {
   width: 100%;
