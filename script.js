@@ -18,5 +18,4 @@ function playSample(event) {
 
 function removeAnimationStyle(event) {
   event.target.classList.remove(appParams.classKeypressed);
-  console.log(event);
 }
