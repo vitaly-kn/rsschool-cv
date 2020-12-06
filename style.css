@@ -1,0 +1,90 @@
+:root {
+  --main-background-color: #1e1e1e;
+  --main-text-color: #c9d4c9;
+  --panel-text-color: black;
+  --panel-animation: 2s;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: var(--main-text-color);
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
+
+.main {
+  background-color: var(--main-background-color);
+}
+
+.header {
+  margin: 30px 0;
+  font-size: 3rem;
+  text-align: center;
+}
+
+.wrapper {
+  max-width: 1024px;
+  margin: 10px auto;
+  padding: 10px;
+}
+
+.panel-container {
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  min-height: 75vh;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  transition: all var(--panel-animation) ease-in-out;
+}
+
+.panel:hover {
+  flex: 5;
+  animation-duration: var(--panel-animation);
+  animation-name: panel-rotation;
+}
+
+@keyframes panel-rotation {
+  from {
+    transform: rotate(0turn);
+  }
+  to {
+    transform: rotate(1turn);
+  }
+  /*50% {
+    transform: rotate(0.5turn);
+  }*/
+}
+
+.panel1 {
+  background-color: aqua;
+}
+
+.panel2 {
+  background-color: brown;
+}
+
+.panel3 {
+  background-color: darkorange;
+}
+
+.panel4 {
+  background-color: greenyellow;
+}
+
+.panel5 {
+  background-color: purple;
+}
+
+.text-block {
+  color: var(--panel-text-color);
+}
