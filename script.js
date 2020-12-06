@@ -14,31 +14,27 @@ const appParams = {
   classAudioPlayer: ".audio-player",
   classVideoPlayer: ".video-player",
   classSVGIcon: ".svg-icon",
-  playerButtonIconPlay: "./assets/svg/play.svg",
-  playerButtonIconPause: "./assets/svg/pause.svg",
-  playerButtonStatePlay: "play",
+  classActive_: "active",
+  idButtonPlay: "button-play",
+  idButtonPause: "button-pause",
 };
 
 const audioPlayer = document.querySelector(appParams.classAudioPlayer);
 const videoPlayer = document.querySelector(appParams.classVideoPlayer);
 const timeButtons = document.querySelectorAll(`${appParams.classTimeControl} > ${appParams.classButton}`);
-const playerButton = document.querySelector(appParams.classPlayerButton);
-const playerButtonIcon = document.querySelector(`${appParams.classPlayerButton} > ${appParams.classSVGIcon}`);
+const playerButtons = document.querySelectorAll(appParams.classPlayerButton);
+const buttonPlay = document.getElementById(appParams.idButtonPlay);
+const buttonPause = document.getElementById(appParams.idButtonPause);
 const timer = document.querySelector(appParams.classTimer);
 const themeButtons = document.querySelectorAll(`${appParams.classThemeControl} > ${appParams.classButton}`);
 const selectedTimeButtonTemplate = `${appParams.classTimeControl} > ${appParams.classSelected}`;
 const selectedThemeButtonTemplate = `${appParams.classThemeControl} > ${appParams.classSelected}`;
 
 let duration, timeLeft;
-let outlineLength;
-let progressBarOutline;
-
-window.addEventListener("load", function () {
-  progressBarOutline = document.querySelector(appParams.classProgressBar).contentDocument.querySelector(appParams.classProgressBarOutline);
-  outlineLength = progressBarOutline.getTotalLength();
-  progressBarOutline.style.strokeDashoffset = outlineLength;
-  progressBarOutline.style.strokeDasharray = outlineLength;
-});
+let progressBarOutline = document.querySelector(appParams.classProgressBarOutline);
+let outlineLength = progressBarOutline.getTotalLength();
+progressBarOutline.style.strokeDashoffset = outlineLength;
+progressBarOutline.style.strokeDasharray = outlineLength;
 
 let isCurrentTimeChanged = (function () {
   let previousTime = 0;
@@ -51,26 +47,28 @@ let isCurrentTimeChanged = (function () {
   };
 })(0);
 
-playerButton.addEventListener("click", (event) => {
-  if (audioPlayer.paused) {
-    startPlayer();
-  } else {
-    stopPlayer();
-  }
-});
+playerButtons.forEach((button) =>
+  button.addEventListener("click", (event) => {
+    if (audioPlayer.paused) {
+      startPlayer();
+    } else {
+      stopPlayer();
+    }
+  })
+);
 
 function startPlayer() {
   audioPlayer.play();
   videoPlayer.play();
-  playerButtonIcon.setAttribute("data", appParams.playerButtonIconPause);
-  playerButton.classList.remove(appParams.playerButtonStatePlay);
+  buttonPlay.classList.remove(appParams.classActive_);
+  buttonPause.classList.add(appParams.classActive_);
 }
 
 function stopPlayer() {
   audioPlayer.pause();
   videoPlayer.pause();
-  playerButtonIcon.setAttribute("data", appParams.playerButtonIconPlay);
-  playerButton.classList.add(appParams.playerButtonStatePlay);
+  buttonPause.classList.remove(appParams.classActive_);
+  buttonPlay.classList.add(appParams.classActive_);
 }
 
 audioPlayer.addEventListener("timeupdate", () => {
@@ -120,8 +118,11 @@ function resetTimer() {
   progressBarOutline && (progressBarOutline.style.strokeDashoffset = outlineLength);
 }
 
+function formatToTwoDigits(number) {
+  return number < 10 ? `0${number}` : number + "";
+}
+
 function convertTimeToDisplay(time) {
-  formatToTwoDigits = (number) => (number < 10 ? `0${number}` : number + "");
   let min = Math.floor(time / 60);
   let sec = time % 60;
   return `${min}:${formatToTwoDigits(sec)}`;

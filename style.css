@@ -65,6 +65,7 @@ html {
 
 .selected {
   border: 4px solid var(--selected-color);
+  color: var(--selected-color);
 }
 
 .video-control {
@@ -76,6 +77,11 @@ html {
   background: none;
   cursor: pointer;
   border: none;
+  display: none;
+}
+
+.active {
+  display: inline-block;
 }
 
 .player-button:focus {
@@ -101,6 +107,7 @@ html {
   height: 75px;
   width: 75px;
   pointer-events: none;
+  cursor: pointer;
 }
 
 .play {
@@ -133,8 +140,8 @@ html {
   fill: var(--main-color);
 }
 
-.svg-container {
-  cursor: pointer;
+.selected .svg-content {
+  fill: var(--selected-color);
 }
 
 @media (max-width: 413px) {
