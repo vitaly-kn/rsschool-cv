@@ -1,7 +1,7 @@
 :root {
   --main-background-color: #1e1e1e;
   --main-text-color: #c9d4c9;
-  --panel-text-color: black;
+  --panel-text-color: white;
   --panel-animation: 2s;
 }
 
@@ -28,7 +28,7 @@ html {
 }
 
 .wrapper {
-  max-width: 1024px;
+  max-width: 1300px;
   margin: 10px auto;
   padding: 10px;
 }
@@ -41,16 +41,33 @@ html {
 }
 
 .panel {
+  font-size: 2rem;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  padding: 10px;
   flex: 1;
   transition: all var(--panel-animation) ease-in-out;
 }
 
+.panel :first-child {
+  transform: translateY(-100%);
+}
+
+.panel :last-child {
+  transform: translateY(100%);
+}
+
 .panel:hover {
+  font-size: 6rem;
   flex: 5;
   animation-duration: var(--panel-animation);
   animation-name: panel-rotation;
+}
+
+.panel:hover :first-child,
+.panel:hover :last-child {
+  transform: translateY(0);
 }
 
 @keyframes panel-rotation {
@@ -60,9 +77,6 @@ html {
   to {
     transform: rotate(1turn);
   }
-  /*50% {
-    transform: rotate(0.5turn);
-  }*/
 }
 
 .panel1 {
@@ -86,5 +100,12 @@ html {
 }
 
 .text-block {
+  text-transform: uppercase;
   color: var(--panel-text-color);
+  text-shadow: 2px 2px 2px var(--main-background-color);
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform var(--panel-animation) ease-in-out;
 }
