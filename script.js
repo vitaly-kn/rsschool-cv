@@ -45,7 +45,7 @@ let isCurrentTimeChanged = (function () {
     }
     return false;
   };
-})(0);
+})();
 
 playerButtons.forEach((button) =>
   button.addEventListener("click", (event) => {
