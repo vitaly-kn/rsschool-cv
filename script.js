@@ -25,28 +25,26 @@ let isNewHour = true;
 function getBackground() {
   const currentHour = new Date(),
     hour = currentHour.getHours();
-  switch (true) {
-    case hour < 6:
-      return `url("${appParams.backgroundNight}")`;
-    case hour >= 6 && hour < 12:
-      return `url("${appParams.backgroundMorning}")`;
-    case hour >= 12 && hour < 18:
-      return `url("${appParams.backgroundAfternoon}")`;
-    case hour >= 18:
-      return `url("${appParams.backgroundEvening}")`;
+  if (hour < 6) {
+    return `url("${appParams.backgroundNight}")`;
+  } else if (hour < 12) {
+    return `url("${appParams.backgroundMorning}")`;
+  } else if (hour < 18) {
+    return `url("${appParams.backgroundAfternoon}")`;
+  } else {
+    return `url("${appParams.backgroundEvening}")`;
   }
 }
 
 function getGreeting() {
   const currentHour = new Date(),
     hour = currentHour.getHours();
-  switch (true) {
-    case hour < 12:
-      return appParams.greetingMorning;
-    case hour >= 12 && hour < 18:
-      return appParams.greetingAfternoon;
-    case hour >= 18:
-      return appParams.greetingEvening;
+  if (hour < 12) {
+    return appParams.greetingMorning;
+  } else if (hour < 18) {
+    return appParams.greetingAfternoon;
+  } else {
+    return appParams.greetingEvening;
   }
 }
 
