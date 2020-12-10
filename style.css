@@ -1,0 +1,66 @@
+:root {
+  --main-background-color: #1e1e1e;
+  --main-text-color: #c9d4c9;
+  --canvas-background-color: white;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
+
+.main {
+  background-color: var(--main-background-color);
+}
+
+.header {
+  margin: 20px 0;
+  color: var(--main-text-color);
+  text-align: center;
+}
+
+.wrapper {
+  position: relative;
+  width: 1024px;
+  margin: 10px auto;
+  border: 3px double var(--main-text-color);
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.controls-section {
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.control {
+  margin: 10px 20px;
+}
+
+.control-label {
+  display: block;
+  font-size: 1.5rem;
+  color: var(--main-text-color);
+}
+
+.button {
+  padding: 8px 15px;
+}
+
+.canvas-container {
+  height: 75vh;
+}
+
+.canvas {
+  background-color: var(--canvas-background-color);
+  cursor: crosshair;
+}

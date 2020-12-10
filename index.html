@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Fun with HTML5 Canvas</title>
+  </head>
+  <body class="main">
+    <h1 class="header">Fun with HTML5 Canvas</h1>
+    <section class="wrapper controls-section">
+      <div class="control">
+        <label class="control-label" for="brush-size">Brush Size</label>
+        <input id="brush-size" type="range" name="brush-size" min="1" max="10" value="5" step="1" />
+      </div>
+      <div class="control">
+        <label class="control-label" for="brush-color">Color</label>
+        <input id="brush-color" type="color" name="brush-color" value="#000000" />
+      </div>
+      <button class="control button" id="clear">Clear</button>
+    </section>
+    <section class="wrapper canvas-container">
+      <canvas class="canvas"></canvas>
+    </section>
+    <script src="./script.js"></script>
+  </body>
+</html>
