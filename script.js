@@ -50,8 +50,10 @@ function draw(event) {
 }
 
 function initCanvas() {
-  canvas.width = canvasContainer.clientWidth - parseInt(getComputedStyle(canvasContainer).padding) * 2;
-  canvas.height = canvasContainer.clientHeight - parseInt(getComputedStyle(canvasContainer).padding) * 2;
+  canvas.width =
+    canvasContainer.clientWidth - parseInt(getComputedStyle(canvasContainer).paddingLeft) - parseInt(getComputedStyle(canvasContainer).paddingRight);
+  canvas.height =
+    canvasContainer.clientHeight - parseInt(getComputedStyle(canvasContainer).paddingTop) - parseInt(getComputedStyle(canvasContainer).paddingBottom);
   canvasContext.strokeStyle = brushColorControl.value;
   canvasContext.lineJoin = "round";
   canvasContext.lineCap = "round";
