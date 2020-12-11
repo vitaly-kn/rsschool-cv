@@ -16,10 +16,27 @@ html {
   margin: 0px auto;
   background-repeat: no-repeat;
   background-position: center;
+  background-size: cover;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
+}
+
+.morning {
+  background-image: url(./assets/img/morning.png);
+}
+
+.afternoon {
+  background-image: url(./assets/img/afternoon.png);
+}
+
+.evening {
+  background-image: url(./assets/img/evening.png);
+}
+
+.night {
+  background-image: url(./assets/img/night.png);
 }
 
 .time {

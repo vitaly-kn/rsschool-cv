@@ -3,36 +3,36 @@ const appParams = {
   idName: "name",
   idFocus: "focus",
   idTime: "time",
-  backgroundMorning: "./assets/img/morning.png",
-  backgroundAfternoon: "./assets/img/afternoon.png",
-  backgroundEvening: "./assets/img/evening.png",
-  backgroundNight: "./assets/img/night.png",
+  classMorning: "morning",
+  classAfternoon: "afternoon",
+  classEvening: "evening",
+  classNight: "night",
   greetingMorning: "morning",
   greetingAfternoon: "afternoon",
   greetingEvening: "evening",
-  classMain: ".main",
+  classMainSelector: ".main",
 };
 
 const timeField = document.getElementById(appParams.idTime);
 const greetingField = document.getElementById(appParams.idGreeting);
 const nameField = document.getElementById(appParams.idName);
 const focusField = document.getElementById(appParams.idFocus);
-const main = document.querySelector(appParams.classMain);
+const main = document.querySelector(appParams.classMainSelector);
 
 let savedHour = new Date().getHours();
 let isNewHour = true;
 
-function getBackground() {
+function getBackgroundClass() {
   const currentHour = new Date(),
     hour = currentHour.getHours();
   if (hour < 6) {
-    return `url("${appParams.backgroundNight}")`;
+    return appParams.classNight;
   } else if (hour < 12) {
-    return `url("${appParams.backgroundMorning}")`;
+    return appParams.classMorning;
   } else if (hour < 18) {
-    return `url("${appParams.backgroundAfternoon}")`;
+    return appParams.classAfternoon;
   } else {
-    return `url("${appParams.backgroundEvening}")`;
+    return appParams.classEvening;
   }
 }
 
@@ -49,13 +49,16 @@ function getGreeting() {
 }
 
 function setBackgroundAndGreeting() {
-  main.style.backgroundImage = getBackground();
+  main.classList.remove(appParams.classMorning, appParams.classAfternoon, appParams.classEvening, appParams.classNight);
+  main.classList.add(getBackgroundClass());
   greetingField.textContent = getGreeting();
 }
 
-function getTime() {
-  formatToTwoDigits = (number) => (number < 10 ? `0${number}` : number + "");
+function formatToTwoDigits(number) {
+  return number < 10 ? `0${number}` : number + "";
+}
 
+function getTime() {
   let currentTime = new Date(),
     hour = currentTime.getHours(),
     min = currentTime.getMinutes(),
