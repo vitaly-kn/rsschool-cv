@@ -56,11 +56,9 @@ html {
   padding: 8px 15px;
 }
 
-.canvas-container {
-  height: 75vh;
-}
-
 .canvas {
   background-color: var(--canvas-background-color);
   cursor: crosshair;
+  width: 100%;
+  height: 75vh;
 }

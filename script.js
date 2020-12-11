@@ -3,41 +3,45 @@ const appParams = {
   idBrushColor: "brush-color",
   idClear: "clear",
   classCanvas: ".canvas",
-  classCanvasContainer: ".canvas-container",
 };
 
 const brushSizeControl = document.getElementById(appParams.idBrushSize);
 const brushColorControl = document.getElementById(appParams.idBrushColor);
-const canvas = document.querySelector(appParams.classCanvas);
-const canvasContainer = document.querySelector(appParams.classCanvasContainer);
-const canvasContext = canvas.getContext("2d");
+let canvas, canvasContainer;
+let isDrawing = false;
+let startX, startY;
 
-initCanvas();
+function initCanvas() {
+  canvas = document.querySelector(appParams.classCanvas);
+  canvasContext = canvas.getContext("2d");
 
-var isDrawing = false;
-var startX, startY;
+  canvas.addEventListener("mousedown", startDrawing);
+  canvas.addEventListener("mouseup", stopDrawing);
+  canvas.addEventListener("mouseout", stopDrawing);
+  canvas.addEventListener("mousemove", draw);
+
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
+  canvasContext.strokeStyle = brushColorControl.value;
+  canvasContext.lineJoin = "round";
+  canvasContext.lineCap = "round";
+  canvasContext.lineWidth = brushSizeControl.value;
+}
 
 brushSizeControl.addEventListener("change", onBrushSizeChange);
 brushSizeControl.addEventListener("mousemove", onBrushSizeChange);
 
 brushColorControl.addEventListener("change", onBrushColorChange);
 
-document.getElementById(appParams.idClear).addEventListener("click", () => canvasContext.clearRect(0, 0, canvas.width, canvas.height));
+document.getElementById(appParams.idClear).addEventListener("click", clearCanvas);
 
-canvas.addEventListener("mousedown", (event) => {
+function startDrawing(event) {
   isDrawing = true;
   [startX, startY] = [event.offsetX, event.offsetY];
-});
-canvas.addEventListener("mouseup", () => (isDrawing = false));
-canvas.addEventListener("mouseout", () => (isDrawing = false));
-canvas.addEventListener("mousemove", draw);
-
-function onBrushSizeChange(event) {
-  canvasContext.lineWidth = brushSizeControl.value;
 }
 
-function onBrushColorChange(event) {
-  canvasContext.strokeStyle = brushColorControl.value;
+function stopDrawing() {
+  isDrawing = false;
 }
 
 function draw(event) {
@@ -49,13 +53,16 @@ function draw(event) {
   [startX, startY] = [event.offsetX, event.offsetY];
 }
 
-function initCanvas() {
-  canvas.width =
-    canvasContainer.clientWidth - parseInt(getComputedStyle(canvasContainer).paddingLeft) - parseInt(getComputedStyle(canvasContainer).paddingRight);
-  canvas.height =
-    canvasContainer.clientHeight - parseInt(getComputedStyle(canvasContainer).paddingTop) - parseInt(getComputedStyle(canvasContainer).paddingBottom);
-  canvasContext.strokeStyle = brushColorControl.value;
-  canvasContext.lineJoin = "round";
-  canvasContext.lineCap = "round";
+function onBrushSizeChange(event) {
   canvasContext.lineWidth = brushSizeControl.value;
 }
+
+function onBrushColorChange(event) {
+  canvasContext.strokeStyle = brushColorControl.value;
+}
+
+function clearCanvas() {
+  canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+initCanvas();
