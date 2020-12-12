@@ -4,12 +4,20 @@ const appParams = {
 };
 
 const drums = document.querySelectorAll(appParams.classDrumSelector);
-drums.forEach((key) => key.addEventListener("animationend", removeAnimationStyle));
+drums.forEach((key) => {
+  key.addEventListener("animationend", removeAnimationStyle);
+  key.addEventListener("click", playSample);
+});
 window.addEventListener("keydown", playSample);
 
 function playSample(event) {
-  const sample = document.querySelector(`${appParams.classDrumSelector}[data-key="${event.keyCode}"]>audio`);
-  const drum = document.querySelector(`${appParams.classDrumSelector}[data-key="${event.keyCode}"]`);
+  let drum;
+  if (event.type === "keydown") {
+    drum = document.querySelector(`${appParams.classDrumSelector}[data-key="${event.keyCode}"]`);
+  } else {
+    drum = this;
+  }
+  const sample = drum.querySelector("audio");
   if (!sample) return;
   drum.classList.add(appParams.classKeypressed);
   sample.currentTime = 0;
