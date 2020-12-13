@@ -1,0 +1,128 @@
+:root {
+  --main-background-color: #1e1e1e;
+  --main-text-color: #c9d4c9;
+  --controls-color: red;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
+
+.main {
+  height: 100vh;
+  background-color: var(--main-background-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.player {
+  max-width: 750px;
+  border: 5px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.video-content {
+  width: 100%;
+  height: auto;
+}
+
+.controls {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 0 0 8px;
+  transform: translateY(100%) translateY(-5px);
+  transition: all 0.5s;
+  flex-wrap: wrap;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.player:hover .controls {
+  transform: translateY(0);
+}
+
+.progress {
+  /*flex: 10;
+  position: relative;*/
+  display: flex;
+  margin: 0 0 8px;
+  /*flex-basis: 100%;*/
+  width: 100%;
+  height: 8px;
+  transition: height 0.3s;
+  background: rgba(0, 0, 0, 0.6);
+  cursor: ew-resize;
+}
+
+.progress-filled {
+  width: 50%;
+  background: var(--controls-color);
+  /*flex: 0;
+  flex-basis: 50%;*/
+}
+
+.controls-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 10px;
+}
+
+.buttons {
+  /*flex-basis: 20%;*/
+  width: auto;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  margin: 0 5px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.button:focus {
+  outline: 0px;
+}
+
+.play,
+.pause {
+  display: none;
+}
+
+.active {
+  display: inline-block;
+}
+
+.sliders {
+  /*flex-basis: 40%;*/
+  flex: 2;
+}
+
+.slider {
+  flex-grow: 1;
+}
+
+.svg-icon {
+  height: 16px;
+  width: 16px;
+  pointer-events: none;
+  cursor: pointer;
+  display: block;
+}
+
+.svg-content {
+  fill: var(--controls-color);
+}
