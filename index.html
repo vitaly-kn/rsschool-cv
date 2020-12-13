@@ -9,7 +9,7 @@
 
   <body class="main">
     <div class="player">
-      <video class="video-content" src="./assets/video/forest.mp4"></video>
+      <video class="video-content" src="./assets/video/Three_Little_Pigs_Fairy_Tale-628470.mp4"></video>
       <div class="controls">
         <div class="progress">
           <div class="progress-filled"></div>
@@ -118,7 +118,10 @@
             </svg>
           </button>
         </div>
-        <div class="controls-container sliders volume">
+        <div class="controls-container">
+          <div class="timer">0:00:00</div>
+        </div>
+        <div class="controls-container sliders">
           <svg
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
@@ -153,7 +156,7 @@
           </svg>
           <input type="range" name="volume" class="slider" min="0" max="1" step="0.05" value="1" />
         </div>
-        <div class="controls-container sliders rate">
+        <div class="controls-container sliders">
           <svg class="svg-icon" enable-background="new 0 0 512 512" height="512" viewBox="0 0 512 512" width="512" xmlns="http://www.w3.org/2000/svg">
             <path class="svg-content" d="m241 35.154c-57.822 3.319-112.046 25.788-155.327 64.361l66.936 66.936c25.19-20.971 55.776-33.644 88.391-36.624z" />
             <path
@@ -178,9 +181,10 @@
               d="m289.33 257.977c-18.377-18.377-48.279-18.377-66.656 0s-18.377 48.279 0 66.656c23.216 23.216 137.311 96.066 150.245 104.296 5.931 3.775 13.688 2.923 18.66-2.048 4.971-4.971 5.823-12.728 2.048-18.66-8.231-12.933-81.081-127.029-104.297-150.244z"
             />
           </svg>
-          <input type="range" name="rate" class="slider" min="0.5" max="2" step="0.1" value="1" />
+          <input type="range" name="playbackRate" class="slider" min="0.5" max="2" step="0.1" value="1" />
         </div>
       </div>
     </div>
+    <script src="./script.js"></script>
   </body>
 </html>

@@ -53,11 +53,8 @@ html {
 }
 
 .progress {
-  /*flex: 10;
-  position: relative;*/
   display: flex;
   margin: 0 0 8px;
-  /*flex-basis: 100%;*/
   width: 100%;
   height: 8px;
   transition: height 0.3s;
@@ -66,10 +63,8 @@ html {
 }
 
 .progress-filled {
-  width: 50%;
+  width: 0%;
   background: var(--controls-color);
-  /*flex: 0;
-  flex-basis: 50%;*/
 }
 
 .controls-container {
@@ -80,8 +75,13 @@ html {
 }
 
 .buttons {
-  /*flex-basis: 20%;*/
   width: auto;
+}
+
+.timer {
+  width: auto;
+  color: var(--main-text-color);
+  font-weight: bold;
 }
 
 .button {
@@ -107,7 +107,6 @@ html {
 }
 
 .sliders {
-  /*flex-basis: 40%;*/
   flex: 2;
 }
 
@@ -118,9 +117,10 @@ html {
 .svg-icon {
   height: 16px;
   width: 16px;
-  pointer-events: none;
+
   cursor: pointer;
   display: block;
+  pointer-events: none;
 }
 
 .svg-content {
