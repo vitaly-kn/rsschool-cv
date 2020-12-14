@@ -11,11 +11,9 @@ drums.forEach((key) => {
 window.addEventListener("keydown", playSample);
 
 function playSample(event) {
-  let drum;
+  let drum = event.currentTarget;
   if (event.type === "keydown") {
     drum = document.querySelector(`${appParams.classDrumSelector}[data-key="${event.keyCode}"]`);
-  } else {
-    drum = this;
   }
   const sample = drum.querySelector("audio");
   if (!sample) return;
