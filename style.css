@@ -1,0 +1,178 @@
+@font-face {
+  font-family: Acme;
+  src: url(./assets/fonts/Acme-Regular.ttf);
+}
+
+:root {
+  --main-background-color: #1e1e1e;
+  --main-text-color: coral;
+  --score-shadow-color: red;
+  --hi-score-text-color: maroon;
+  --tries-text-color: salmon;
+  --level-text-color: purple;
+  --highlight-color: lightgoldenrodyellow;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Acme, sans-serif;
+  font-weight: bold;
+  font-style: italic;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
+
+.main {
+  height: 100vh;
+  background-color: var(--main-background-color);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.header {
+  margin: 30px 0;
+  font-size: 7.5rem;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  color: var(--main-text-color);
+}
+
+.game {
+  width: 800px;
+  height: 600px;
+  position: relative;
+  padding: 0 80px;
+  background: url(./assets/img/field.png);
+  border: 5px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-content: flex-end;
+}
+
+.game-info {
+  position: absolute;
+  top: 10px;
+  left: 0px;
+  margin: 0 auto;
+  width: 100%;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-info > * {
+  width: 33.3%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+}
+
+.left-bar {
+  padding-left: 20px;
+}
+
+.left-bar > * {
+  font-size: 3rem;
+  text-shadow: 0 0 10px var(--score-shadow-color);
+}
+
+.hi-score {
+  color: var(--hi-score-text-color);
+}
+
+.level {
+  color: var(--level-text-color);
+}
+
+.tries {
+  color: var(--tries-text-color);
+}
+
+.score {
+  font-size: 8rem;
+  color: var(--main-text-color);
+  text-shadow: 0 0 10px var(--score-shadow-color);
+  text-align: center;
+}
+
+.button {
+  width: 150px;
+  height: 40px;
+  background: none;
+  cursor: pointer;
+  font-size: 2.5rem;
+  color: var(--main-text-color);
+  text-shadow: 0 0 10px var(--score-shadow-color);
+  text-align: center;
+  margin: 10px auto;
+  border: 4px solid var(--main-text-color);
+  box-shadow: 0 0 10px var(--score-shadow-color);
+  border-radius: 5px;
+  transition: all 0.5s;
+}
+
+.button:focus {
+  outline: none;
+}
+
+.button:hover {
+  color: var(--highlight-color);
+  text-shadow: 0 0 20px var(--highlight-color);
+  border: 4px solid var(--highlight-color);
+  box-shadow: 0 0 20px var(--highlight-color);
+}
+
+.hidden {
+  display: none;
+}
+
+.hole {
+  width: 128px;
+  height: 128px;
+  position: relative;
+  overflow: hidden;
+  margin: 30px 30px 0px;
+}
+
+.fg-hole {
+  position: absolute;
+  bottom: 0px;
+  width: 128px;
+  height: 64px;
+  background: url(./assets/img/fg_hole.png) no-repeat;
+  z-index: 3;
+}
+
+.bg-hole {
+  position: absolute;
+  bottom: 0px;
+  width: 128px;
+  height: 64px;
+  background: url(./assets/img/bg_hole.png) no-repeat;
+  z-index: 1;
+}
+
+.mole {
+  position: absolute;
+  top: 100%;
+  width: 128px;
+  height: 128px;
+  background: url(./assets/img/mole.png) no-repeat;
+  z-index: 2;
+  transition: all 0.5s;
+}
+
+.hole:hover .mole {
+  top: 0px;
+}
