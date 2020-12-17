@@ -2,7 +2,6 @@ const appParams = {
   classHighligthed: "highlighted",
   classShake: "shake",
   classUp: "up",
-  classClicked: "clicked",
   classHoleSelector: ".hole",
   classMoleSelector: ".mole",
   idTheme: "theme",
@@ -70,6 +69,7 @@ function onStartClick() {
   } else if (!isRestarting) {
     isRestarting = true;
     stopGame();
+    startButton.textContent = "Restarting...";
     setTimeout(startGame, moleDelay);
   }
 }
@@ -78,7 +78,6 @@ function startGame() {
   soundTheme.play();
   isRestarting = false;
   startButton.textContent = "Restart";
-  animateButtonClick(startButton);
   resetScore();
   showMole();
   startMainTimer();
@@ -147,7 +146,7 @@ function updateLevel() {
     level = currentLevel;
     updateField(levelField, level);
     addBonusTime(appParams.animationDelay * 2);
-    moleDelay = appParams.baseMoleDelay - level * (appParams.animationDelay / 2);
+    moleDelay = Math.max(appParams.baseMoleDelay - level * (appParams.animationDelay / 2), 0);
   }
 }
 
@@ -185,11 +184,4 @@ function addBonusTime(timeMs) {
   setTimeout(() => {
     bonusTimeField.textContent = "";
   }, appParams.animationDelay / 2);
-}
-
-function animateButtonClick(button) {
-  button.classList.add(appParams.classClicked);
-  setTimeout(() => {
-    button.classList.remove(appParams.classClicked);
-  }, appParams.animationDelay / 3);
 }

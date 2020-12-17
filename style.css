@@ -122,16 +122,15 @@ html {
   transition: all 0.5s;
 }
 
-.button:focus {
-  outline: none;
-}
-
-.clicked {
-  outline: none;
+.button:active {
   color: var(--highlight-color);
   text-shadow: 0 0 20px var(--highlight-color);
   border: 4px solid var(--highlight-color);
   box-shadow: 0 0 20px var(--highlight-color);
+}
+
+.button:focus {
+  outline: none;
 }
 
 .highlighted {
