@@ -5,6 +5,9 @@ const appParams = {
   classClicked: "clicked",
   classHoleSelector: ".hole",
   classMoleSelector: ".mole",
+  idTheme: "theme",
+  idHit: "hit",
+  idUp: "up",
   idScore: "score",
   idHiScore: "hi-score",
   idLevel: "level",
@@ -17,6 +20,9 @@ const appParams = {
   baseMoleDelay: 2000,
 };
 
+const soundTheme = document.getElementById(appParams.idTheme);
+const soundHit = document.getElementById(appParams.idHit);
+const soundUp = document.getElementById(appParams.idUp);
 const holes = document.querySelectorAll(appParams.classHoleSelector);
 const scoreField = document.getElementById(appParams.idScore);
 const hiScoreField = document.getElementById(appParams.idHiScore);
@@ -25,7 +31,7 @@ const timeField = document.getElementById(appParams.idTime);
 const bonusTimeField = document.getElementById(appParams.idBonusTime);
 const moles = document.querySelectorAll(appParams.classMoleSelector);
 const startButton = document.getElementById(appParams.idStart);
-let isGameInProgress = false;
+//let isGameInProgress = false;
 let isRestarting = false;
 let lastHole;
 let timeLeft = 0;
@@ -53,6 +59,7 @@ function showMole() {
   //if (isGameInProgress) {
   const hole = getRandomHole(holes);
   hole.classList.add(appParams.classUp);
+  soundUp.play();
   setTimeout(() => {
     hole.classList.remove(appParams.classUp);
     if (timeLeft) showMole();
@@ -61,6 +68,7 @@ function showMole() {
 }
 
 function onStartClick() {
+  soundTheme.play();
   if (!timeLeft) {
     startGame();
   } else if (!isRestarting) {
@@ -93,6 +101,7 @@ function startGame() {
 
 function hit(event) {
   //console.log("hit!!!");
+  soundHit.play();
   const moleHole = event.currentTarget.parentNode;
   if (!moleHole.classList.contains(appParams.classShake)) {
     addBonusTime(appParams.animationDelay);
