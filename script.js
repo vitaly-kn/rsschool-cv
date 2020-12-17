@@ -31,7 +31,6 @@ const timeField = document.getElementById(appParams.idTime);
 const bonusTimeField = document.getElementById(appParams.idBonusTime);
 const moles = document.querySelectorAll(appParams.classMoleSelector);
 const startButton = document.getElementById(appParams.idStart);
-//let isGameInProgress = false;
 let isRestarting = false;
 let lastHole;
 let timeLeft = 0;
@@ -56,7 +55,6 @@ function getRandomHole(holes) {
 }
 
 function showMole() {
-  //if (isGameInProgress) {
   const hole = getRandomHole(holes);
   hole.classList.add(appParams.classUp);
   soundUp.play();
@@ -64,34 +62,40 @@ function showMole() {
     hole.classList.remove(appParams.classUp);
     if (timeLeft) showMole();
   }, moleDelay);
-  //}
 }
 
 function onStartClick() {
-  soundTheme.play();
-  if (!timeLeft) {
+  if (!isRestarting && !timeLeft) {
     startGame();
   } else if (!isRestarting) {
-    console.log("restarting!!! " + moleDelay);
     isRestarting = true;
+    stopGame();
     setTimeout(startGame, moleDelay);
   }
 }
 
 function startGame() {
-  //isGameInProgress = true;
+  soundTheme.play();
   isRestarting = false;
-  console.log("starting the game!!!");
   startButton.textContent = "Restart";
   animateButtonClick(startButton);
   resetScore();
   showMole();
+  startMainTimer();
+}
+
+function stopGame() {
+  timeLeft = 0;
+  soundTheme.pause();
+  startButton.textContent = "Start";
+}
+
+function startMainTimer() {
   setTimeout(function run() {
+    if (isRestarting) return;
     timeLeft -= appParams.timerStep;
     if (timeLeft <= 0) {
-      timeLeft = 0;
-      //isGameInProgress = false;
-      startButton.textContent = "Start";
+      stopGame();
     } else {
       setTimeout(run, appParams.timerStep);
     }
@@ -100,10 +104,9 @@ function startGame() {
 }
 
 function hit(event) {
-  //console.log("hit!!!");
   soundHit.play();
   const moleHole = event.currentTarget.parentNode;
-  if (!moleHole.classList.contains(appParams.classShake)) {
+  if (!moleHole.classList.contains(appParams.classShake) && timeLeft) {
     addBonusTime(appParams.animationDelay);
     hideMole(moleHole);
     updateScore();
