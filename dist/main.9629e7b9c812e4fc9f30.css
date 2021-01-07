@@ -14,6 +14,11 @@
   --drop-shadow-color: midnightblue;
   --drop-bonus-color: fuchsia;
   --drop-bonus-text-color: ivory;
+  --keypad-border-color: tan;
+  --screen-background-color: #eeeeee;
+  --screen-text-color: firebrick;
+  --keys-border-color: lightgray;
+  --keys-background-color: white;
   --score-background-color: antiquewhite;
   --score-shadow-color: red;
   --hi-score-text-color: maroon;
@@ -79,6 +84,10 @@ html {
 .score {
   flex-basis: 30%;
   height: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background-color: var(--score-background-color);
   box-shadow: inset 0.5rem 0px 1rem rgba(0, 0, 0, 0.2);
 }
@@ -290,6 +299,78 @@ html {
   background-image: url(assets/img/ef0f775f93c5ba6c1feefc9ec8096704.png);
   background-size: 50% 50%;
   animation: move_wave 15s linear infinite;
+}
+
+.keypad {
+  width: 90%;
+  height: 60%;
+  border: 0.5rem solid var(--keypad-border-color);
+  border-radius: 1rem;
+  box-shadow: 0.1rem 0.1rem 1rem rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.keypad > div {
+  border: 0.2rem inset var(--keys-border-color);
+}
+
+.screen {
+  flex-basis: 30%;
+  background: var(--screen-background-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5rem;
+  font-weight: bold;
+  color: var(--screen-text-color);
+}
+
+.keys {
+  flex-basis: 70%;
+  background: var(--keys-background-color);
+  display: flex;
+}
+
+.left-block {
+  flex-basis: 75%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.left-block > div {
+  flex-basis: 33.3%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0.1rem solid var(--keys-border-color);
+  font-size: 4rem;
+  font-weight: bold;
+}
+
+.left-block > .wide {
+  flex-basis: 66.6%;
+}
+
+.left-block > div:last-child {
+  font-size: 1.4rem;
+}
+
+.right-block {
+  flex-basis: 25%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.right-block > div {
+  flex-basis: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0.1rem solid var(--keys-border-color);
+  font-size: 1.4rem;
+  font-weight: bold;
 }
 
 @media (min-width: 880px) {
