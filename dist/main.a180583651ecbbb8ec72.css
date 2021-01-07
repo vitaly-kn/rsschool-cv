@@ -1,6 +1,6 @@
 @font-face {
   font-family: MontserratAlternates;
-  src: url(./assets/fonts/MontserratAlternates-Regular.ttf);
+  src: url(assets/fonts/a14e717fce35ec36a170808323572faa.ttf);
 }
 
 :root {
@@ -271,7 +271,7 @@ html {
 .wave-top {
   z-index: 15;
   opacity: 0.5;
-  background-image: url("./assets/img/wave-top.png");
+  background-image: url(assets/img/e9762a344bd7669c8ccfc758ce764199.png);
   background-size: 50% 100%;
   animation: move-wave 3s;
   animation-delay: 1s;
@@ -280,14 +280,14 @@ html {
 .wave-middle {
   z-index: 10;
   opacity: 0.75;
-  background-image: url("./assets/img/wave-mid.png");
+  background-image: url(assets/img/936c3cedf1a445b3456d35ca330bbbde.png);
   background-size: 50% 90%;
   animation: move_wave 10s linear infinite;
 }
 
 .wave-bottom {
   z-index: 5;
-  background-image: url("./assets/img/wave-bot.png");
+  background-image: url(assets/img/ef0f775f93c5ba6c1feefc9ec8096704.png);
   background-size: 50% 50%;
   animation: move_wave 15s linear infinite;
 }
@@ -297,3 +297,4 @@ html {
     font-size: 10px;
   }
 }
+
