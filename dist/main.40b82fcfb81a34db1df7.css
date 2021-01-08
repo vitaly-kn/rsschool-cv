@@ -14,6 +14,8 @@
   --drop-shadow-color: midnightblue;
   --drop-bonus-color: fuchsia;
   --drop-bonus-text-color: ivory;
+  --controls-background-color: antiquewhite;
+  --score-amount-color: yellow;
   --keypad-border-color: tan;
   --screen-background-color: #eeeeee;
   --screen-text-color: firebrick;
@@ -21,12 +23,11 @@
   --keys-background-color: white;
   --keys-hover-background-color: khaki;
   --keys-active-background-color: darkkhaki;
-  --score-background-color: antiquewhite;
-  --score-shadow-color: red;
+  /*  --score-shadow-color: red;
   --hi-score-text-color: maroon;
   --tries-text-color: salmon;
   --level-text-color: purple;
-  --highlight-color: lightgoldenrodyellow;
+  --highlight-color: lightgoldenrodyellow;*/
 }
 
 * {
@@ -83,14 +84,14 @@ html {
   background-image: linear-gradient(var(--sky-deep-color) 0%, var(--sky-bottom-color) 100%);
 }
 
-.score {
+.controls {
   flex-basis: 30%;
   height: inherit;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  background-color: var(--score-background-color);
+  background-color: var(--controls-background-color);
   box-shadow: inset 0.5rem 0px 1rem rgba(0, 0, 0, 0.2);
 }
 
@@ -303,6 +304,23 @@ html {
   animation: move_wave 15s linear infinite;
 }
 
+.score {
+  width: 75%;
+  background: rgba(0, 0, 0, 0.4);
+  /*padding: 2rem 0;*/
+  height: 8%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  font-size: 2rem;
+}
+
+.score-amount {
+  color: var(--score-amount-color);
+}
+
 .keypad {
   width: 90%;
   height: 60%;
@@ -325,7 +343,6 @@ html {
   justify-content: center;
   align-items: center;
   font-size: 5rem;
-  font-weight: bold;
   color: var(--screen-text-color);
 }
 
@@ -350,7 +367,6 @@ html {
   border: 0.1rem solid var(--keys-border-color);
   background: var(--keys-background-color);
   font-size: 4rem;
-  font-weight: bold;
   outline: none;
   cursor: pointer;
 }
@@ -382,6 +398,39 @@ html {
 
 .right-block > button {
   flex-basis: 100%;
+}
+
+.buttons {
+  height: 10%;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: center;
+  flex-wrap: wrap-reverse;
+}
+
+.control-button {
+  flex-basis: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  color: var(--controls-background-color);
+  border: none;
+  box-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 0.5rem;
+  outline: none;
+}
+
+.control-button:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.control-button:active {
+  background: rgba(0, 0, 0, 0.8);
+  transform: translateX(0.1rem) translateY(0.1rem);
+  box-shadow: none;
 }
 
 @media (min-width: 880px) {
