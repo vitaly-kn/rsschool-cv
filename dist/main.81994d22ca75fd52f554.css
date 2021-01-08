@@ -136,7 +136,7 @@ html {
 }
 
 .drop1 {
-  left: 10rem;
+  left: 17%;
 }
 
 .drop1::before {
@@ -144,7 +144,7 @@ html {
 }
 
 .drop2 {
-  left: 20rem;
+  left: 37%;
   animation-delay: 2s;
 }
 
@@ -153,7 +153,7 @@ html {
 }
 
 .drop3 {
-  left: 30rem;
+  left: 57%;
   animation-delay: 3s;
 }
 
@@ -162,7 +162,7 @@ html {
 }
 
 .drop4 {
-  left: 40rem;
+  left: 77%;
   animation-delay: 5s;
 }
 
@@ -307,7 +307,6 @@ html {
 .score {
   width: 75%;
   background: rgba(0, 0, 0, 0.4);
-  /*padding: 2rem 0;*/
   height: 8%;
   display: flex;
   justify-content: center;
@@ -401,6 +400,7 @@ html {
 }
 
 .buttons {
+  width: 90%;
   height: 10%;
   display: flex;
   justify-content: space-around;
@@ -411,6 +411,7 @@ html {
 
 .control-button {
   flex-basis: 30%;
+  height: 40%;
   display: flex;
   justify-content: center;
   align-items: center;
