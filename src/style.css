@@ -19,6 +19,8 @@
   --screen-text-color: firebrick;
   --keys-border-color: lightgray;
   --keys-background-color: white;
+  --keys-hover-background-color: khaki;
+  --keys-active-background-color: darkkhaki;
   --score-background-color: antiquewhite;
   --score-shadow-color: red;
   --hi-score-text-color: maroon;
@@ -329,48 +331,57 @@ html {
 
 .keys {
   flex-basis: 70%;
-  background: var(--keys-background-color);
   display: flex;
 }
 
-.left-block {
-  flex-basis: 75%;
+.keys > div {
   display: flex;
   flex-wrap: wrap;
 }
 
-.left-block > div {
-  flex-basis: 33.3%;
+.left-block {
+  flex-basis: 75%;
+}
+
+.key {
   display: flex;
   justify-content: center;
   align-items: center;
   border: 0.1rem solid var(--keys-border-color);
+  background: var(--keys-background-color);
   font-size: 4rem;
   font-weight: bold;
+  outline: none;
+  cursor: pointer;
 }
 
-.left-block > .wide {
-  flex-basis: 66.6%;
+.key:hover {
+  background: var(--keys-hover-background-color);
 }
 
-.left-block > div:last-child {
+.key:active {
+  background: var(--keys-active-background-color);
+  transform: translateY(0.1rem);
+}
+
+.left-block > button {
+  flex-basis: 33.3%;
+}
+
+.key_wide {
+  flex-basis: 66.6% !important;
+}
+
+.key_text {
   font-size: 1.4rem;
 }
 
 .right-block {
   flex-basis: 25%;
-  display: flex;
-  flex-wrap: wrap;
 }
 
-.right-block > div {
+.right-block > button {
   flex-basis: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 0.1rem solid var(--keys-border-color);
-  font-size: 1.4rem;
-  font-weight: bold;
 }
 
 @media (min-width: 880px) {
