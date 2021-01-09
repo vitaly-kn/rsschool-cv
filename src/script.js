@@ -54,7 +54,7 @@ function toggleFullscreenButton() {
 function onKeyEntered(event) {
   /*console.log("clicked!");*/
   const input = event.currentTarget.getAttribute(appParams.attrValue);
-  console.log("clicked! input = " + input);
+  /*console.log(`clicked! input = ${input}, target = ${event.target}, phase = ${event.eventPhase}`);*/
   if (input === appParams.attrValueEnter) {
     let resultEvent = new CustomEvent(appParams.eventResult, { detail: { result: screen.textContent } });
     screen.textContent = "";
@@ -69,12 +69,12 @@ function onKeyEntered(event) {
 }
 
 function onKeyDown(event) {
-  console.log(event.keyCode);
+  /*console.log(event.keyCode);*/
   let key = document.querySelector(`${appParams.classKeySelector}[data-${appParams.attrKey}="${event.keyCode}"]`);
   if (!key) key = document.querySelector(`${appParams.classKeySelector}[data-${appParams.attrKeyNumpad}="${event.keyCode}"]`);
   if (key) {
     /*console.log(key);*/
-    console.log("emulating click!..");
+    /*console.log("emulating click!..");*/
     let emulatedClickEvent = new Event("click");
     key.dispatchEvent(emulatedClickEvent);
   }

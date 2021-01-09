@@ -379,7 +379,7 @@ html {
   transform: translateY(0.1rem);
 }
 
-.left-block > button {
+.left-block > div {
   flex-basis: 33.3%;
 }
 
@@ -395,7 +395,7 @@ html {
   flex-basis: 25%;
 }
 
-.right-block > button {
+.right-block > div {
   flex-basis: 100%;
 }
 
