@@ -1,8 +1,10 @@
 import "./style.css";
+import Cadencer from "./components/Cadencer";
 
 const appParams = {
   classApplicationSelector: ".application",
   classDropContainerSelector: ".drop-container",
+  classDropPause: "drop-pause",
   classScreenSelector: ".screen",
   classKeySelector: ".key",
   classKeyActive: "key-active",
@@ -16,6 +18,8 @@ const appParams = {
   idStop: "stop",
   idPause: "pause",
   eventResult: "result",
+  eventPause: "pause",
+  eventResume: "resume",
 };
 
 const MAX_DIGITS = 3;
@@ -30,6 +34,8 @@ const stopButton = document.getElementById(appParams.idStop);
 const pauseButton = document.getElementById(appParams.idPause);
 
 dropContainer.addEventListener(appParams.eventResult, onResultReceived);
+dropContainer.addEventListener(appParams.eventPause, onPauseGame);
+dropContainer.addEventListener(appParams.eventResume, onResumeGame);
 
 keypadKeys.forEach((key) => key.addEventListener("click", onKeyEntered));
 
@@ -96,52 +102,37 @@ function onResultReceived(event) {
   console.log(`Result received : ${event.detail.result}`);
 }
 
-class Cadencer {
-  constructor(callback) {
-    this.CADENCE = 1000;
-    this.isPaused = true;
-    this.callback = callback;
-  }
-  _tick() {
-    this.callback();
-  }
-  _run() {
-    if (this.isPaused) return;
-    this._tick();
-    setTimeout(this._run.bind(this), this.CADENCE);
-  }
-  start() {
-    if (this.isPaused) {
-      this.isPaused = false;
-      this._run();
-    }
-  }
-  stop() {
-    this.isPaused = true;
-  }
-  toggle() {
-    if (this.isPaused) {
-      this.start();
-    } else {
-      this.stop();
-    }
-  }
+//let bonusDrop = document.querySelector(".bonus");
+
+let cadencer = new Cadencer(onCadence);
+cadencer.start();
+
+function onCadence() {
+  console.log("tick!");
 }
 
-let bonusDrop = document.querySelector(".bonus");
+pauseButton.addEventListener("click", onPauseButtonClick);
 
-let cadencer = new Cadencer(() => {
-  console.log("callback tick! " + bonusDrop.animationPlayState + " " + bonusDrop);
-  if (bonusDrop.animationPlayState == "paused") {
-    bonusDrop.animationPlayState = "running";
+function onPauseButtonClick(event) {
+  event.currentTarget.blur();
+  let dropEvent;
+  if (cadencer.toggle()) {
+    event.currentTarget.textContent = "Pause";
+    dropEvent = new CustomEvent(appParams.eventResume);
   } else {
-    bonusDrop.animationPlayState = "paused";
+    event.currentTarget.textContent = "Resume";
+    dropEvent = new CustomEvent(appParams.eventPause);
   }
-});
+  dropContainer.dispatchEvent(dropEvent);
+}
 
-pauseButton.addEventListener("click", () => {
-  cadencer.toggle();
-});
+function onPauseGame(event) {
+  event.currentTarget.classList.add(appParams.classDropPause);
+}
+
+function onResumeGame(event) {
+  event.currentTarget.classList.remove(appParams.classDropPause);
+}
 
 stopButton.addEventListener("click", () => {
   cadencer.start();

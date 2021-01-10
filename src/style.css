@@ -104,6 +104,11 @@ html {
   /*height: 20%;*/
 }
 
+.drop-pause > .drop,
+.drop-pause > .drop::before {
+  animation-play-state: paused;
+}
+
 .drop {
   font-size: 2.5rem;
   display: flex;
