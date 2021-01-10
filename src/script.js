@@ -22,9 +22,27 @@ const appParams = {
   eventResume: "resume",
 };
 
+const operators = [
+  { operation: "+", display: "+" },
+  { operation: "-", display: "-" },
+  { operation: "*", display: "x" },
+  { operation: "/", display: "÷" },
+];
+const operatorsIndexes = {
+  add: 0,
+  sub: 1,
+  mul: 2,
+  div: 3,
+};
+const FIRST_TRACK_OFFSET = 5;
+const TRACK_STEP = 10;
+const MAX_TRACKS = 9;
+const MAX_OPERAND_VALUE = 99;
 const MAX_DIGITS = 3;
+let difficultyLevel = 6;
 let isFullscreen = false;
 let isKeypadLocked = false;
+let cadencer = new Cadencer(onCadence);
 
 const applicationDiv = document.querySelector(appParams.classApplicationSelector);
 const dropContainer = document.querySelector(appParams.classDropContainerSelector);
@@ -43,6 +61,7 @@ keypadKeys.forEach((key) => key.addEventListener("click", onKeyEntered));
 window.addEventListener("keydown", onKeyDown);
 window.addEventListener("keyup", onKeyUp);
 
+pauseButton.addEventListener("click", onPauseButtonClick);
 fullscreenButton.addEventListener("click", toggleFullscreen);
 document.addEventListener("fullscreenchange", toggleFullscreenButton);
 
@@ -104,14 +123,51 @@ function onResultReceived(event) {
   console.log(`Result received : ${event.detail.result}`);
 }
 
-let cadencer = new Cadencer(onCadence);
-cadencer.start();
-
-function onCadence() {
-  console.log("tick!");
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-pauseButton.addEventListener("click", onPauseButtonClick);
+function getDropOffset() {
+  let track = getRandomInt(0, MAX_TRACKS - 1);
+  return `${FIRST_TRACK_OFFSET + track * TRACK_STEP}%`;
+}
+
+function getRandomExpression(difficulty = 1) {
+  //1 is the higest difficulty, 2, 3 ... -- lower
+  let operator = getRandomInt(0, operators.length - 1);
+  let operand1 = getRandomInt(0, Math.round(MAX_OPERAND_VALUE / difficulty));
+  let operand2;
+  if (operator <= 1) {
+    operand2 = getRandomInt(0, Math.round(MAX_OPERAND_VALUE / 10));
+  } else {
+    operand2 = getRandomInt(0, 10);
+  }
+  let expression;
+  let result;
+  if (operator === operatorsIndexes.add || operator === operatorsIndexes.mul) {
+    expression = `${operand1} ${operators[operator].operation} ${operand2}`;
+    result = eval(expression);
+  } else {
+    if (operator === operatorsIndexes.sub) {
+      expression = `${operand1} ${operators[operatorsIndexes.add].operation} ${operand2}`;
+    } else expression = `${operand1} ${operators[operatorsIndexes.mul].operation} ${operand2}`;
+    result = eval(expression);
+    [operand1, result] = [result, operand1];
+  }
+  return {
+    operand1: operand1,
+    operation: operators[operator].display,
+    operand2: operand2,
+    result: result,
+  };
+}
+
+function onCadence() {
+  let expr = getRandomExpression(difficultyLevel);
+  console.log(`tick! operation : ${expr.operand1} ${expr.operation} ${expr.operand2} = ${expr.result}, offset : ${getDropOffset()}`);
+}
 
 function onPauseButtonClick(event) {
   event.currentTarget.blur();
@@ -139,3 +195,6 @@ function onResumeGame(event) {
 stopButton.addEventListener("click", () => {
   cadencer.start();
 });
+
+//entry point of the program
+cadencer.start();

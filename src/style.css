@@ -141,7 +141,7 @@ html {
 }
 
 .drop1 {
-  left: 17%;
+  left: 5%;
 }
 
 .drop1::before {
@@ -167,7 +167,7 @@ html {
 }
 
 .drop4 {
-  left: 77%;
+  left: 85%;
   animation-delay: 5s;
 }
 
