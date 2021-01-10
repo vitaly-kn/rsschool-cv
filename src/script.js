@@ -24,6 +24,7 @@ const appParams = {
 
 const MAX_DIGITS = 3;
 let isFullscreen = false;
+let isKeypadLocked = false;
 
 const applicationDiv = document.querySelector(appParams.classApplicationSelector);
 const dropContainer = document.querySelector(appParams.classDropContainerSelector);
@@ -66,6 +67,7 @@ function toggleFullscreenButton() {
 
 function onKeyEntered(event) {
   event.currentTarget.blur();
+  if (isKeypadLocked) return;
   const input = event.currentTarget.getAttribute(appParams.attrValue);
   if (input === appParams.attrValueEnter) {
     let resultEvent = new CustomEvent(appParams.eventResult, { detail: { result: screen.textContent } });
@@ -102,8 +104,6 @@ function onResultReceived(event) {
   console.log(`Result received : ${event.detail.result}`);
 }
 
-//let bonusDrop = document.querySelector(".bonus");
-
 let cadencer = new Cadencer(onCadence);
 cadencer.start();
 
@@ -118,9 +118,11 @@ function onPauseButtonClick(event) {
   let dropEvent;
   if (cadencer.toggle()) {
     event.currentTarget.textContent = "Pause";
+    isKeypadLocked = false;
     dropEvent = new CustomEvent(appParams.eventResume);
   } else {
     event.currentTarget.textContent = "Resume";
+    isKeypadLocked = true;
     dropEvent = new CustomEvent(appParams.eventPause);
   }
   dropContainer.dispatchEvent(dropEvent);
