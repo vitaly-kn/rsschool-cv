@@ -5,6 +5,7 @@ const appParams = {
   classDropContainerSelector: ".drop-container",
   classScreenSelector: ".screen",
   classKeySelector: ".key",
+  classKeyActive: "key-active",
   attrValue: "data-value",
   attrValueEnter: "enter",
   attrValueDelete: "delete",
@@ -12,6 +13,8 @@ const appParams = {
   attrKey: "key",
   attrKeyNumpad: "key-numpad",
   idFullscreen: "fullscreen",
+  idStop: "stop",
+  idPause: "pause",
   eventResult: "result",
 };
 
@@ -23,17 +26,21 @@ const dropContainer = document.querySelector(appParams.classDropContainerSelecto
 const screen = document.querySelector(appParams.classScreenSelector);
 const keypadKeys = document.querySelectorAll(appParams.classKeySelector);
 const fullscreenButton = document.getElementById(appParams.idFullscreen);
+const stopButton = document.getElementById(appParams.idStop);
+const pauseButton = document.getElementById(appParams.idPause);
 
 dropContainer.addEventListener(appParams.eventResult, onResultReceived);
 
 keypadKeys.forEach((key) => key.addEventListener("click", onKeyEntered));
 
 window.addEventListener("keydown", onKeyDown);
+window.addEventListener("keyup", onKeyUp);
 
 fullscreenButton.addEventListener("click", toggleFullscreen);
 document.addEventListener("fullscreenchange", toggleFullscreenButton);
 
-function toggleFullscreen() {
+function toggleFullscreen(event) {
+  event.currentTarget.blur();
   if (!isFullscreen) {
     applicationDiv.requestFullscreen();
   } else {
@@ -52,9 +59,8 @@ function toggleFullscreenButton() {
 }
 
 function onKeyEntered(event) {
-  /*console.log("clicked!");*/
+  event.currentTarget.blur();
   const input = event.currentTarget.getAttribute(appParams.attrValue);
-  /*console.log(`clicked! input = ${input}, target = ${event.target}, phase = ${event.eventPhase}`);*/
   if (input === appParams.attrValueEnter) {
     let resultEvent = new CustomEvent(appParams.eventResult, { detail: { result: screen.textContent } });
     screen.textContent = "";
@@ -68,18 +74,75 @@ function onKeyEntered(event) {
   }
 }
 
-function onKeyDown(event) {
-  /*console.log(event.keyCode);*/
+function getActiveKeypadKey(event) {
   let key = document.querySelector(`${appParams.classKeySelector}[data-${appParams.attrKey}="${event.keyCode}"]`);
-  if (!key) key = document.querySelector(`${appParams.classKeySelector}[data-${appParams.attrKeyNumpad}="${event.keyCode}"]`);
+  return key ? key : document.querySelector(`${appParams.classKeySelector}[data-${appParams.attrKeyNumpad}="${event.keyCode}"]`);
+}
+
+function onKeyDown(event) {
+  let key = getActiveKeypadKey(event);
   if (key) {
-    /*console.log(key);*/
-    /*console.log("emulating click!..");*/
-    let emulatedClickEvent = new Event("click");
-    key.dispatchEvent(emulatedClickEvent);
+    key.classList.add(appParams.classKeyActive);
+    key.click();
   }
+}
+
+function onKeyUp(event) {
+  let key = getActiveKeypadKey(event);
+  if (key) key.classList.remove(appParams.classKeyActive);
 }
 
 function onResultReceived(event) {
   console.log(`Result received : ${event.detail.result}`);
 }
+
+class Cadencer {
+  constructor(callback) {
+    this.CADENCE = 1000;
+    this.isPaused = true;
+    this.callback = callback;
+  }
+  _tick() {
+    this.callback();
+  }
+  _run() {
+    if (this.isPaused) return;
+    this._tick();
+    setTimeout(this._run.bind(this), this.CADENCE);
+  }
+  start() {
+    if (this.isPaused) {
+      this.isPaused = false;
+      this._run();
+    }
+  }
+  stop() {
+    this.isPaused = true;
+  }
+  toggle() {
+    if (this.isPaused) {
+      this.start();
+    } else {
+      this.stop();
+    }
+  }
+}
+
+let bonusDrop = document.querySelector(".bonus");
+
+let cadencer = new Cadencer(() => {
+  console.log("callback tick! " + bonusDrop.animationPlayState + " " + bonusDrop);
+  if (bonusDrop.animationPlayState == "paused") {
+    bonusDrop.animationPlayState = "running";
+  } else {
+    bonusDrop.animationPlayState = "paused";
+  }
+});
+
+pauseButton.addEventListener("click", () => {
+  cadencer.toggle();
+});
+
+stopButton.addEventListener("click", () => {
+  cadencer.start();
+});

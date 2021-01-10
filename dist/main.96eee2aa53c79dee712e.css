@@ -374,12 +374,13 @@ html {
   background: var(--keys-hover-background-color);
 }
 
-.key:active {
+.key:active,
+.key-active {
   background: var(--keys-active-background-color);
   transform: translateY(0.1rem);
 }
 
-.left-block > div {
+.left-block > * {
   flex-basis: 33.3%;
 }
 
@@ -395,7 +396,7 @@ html {
   flex-basis: 25%;
 }
 
-.right-block > div {
+.right-block > * {
   flex-basis: 100%;
 }
 
@@ -421,7 +422,7 @@ html {
   box-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.2);
   background: rgba(0, 0, 0, 0.4);
   border-radius: 0.5rem;
-  outline: none;
+  /*outline: none;*/
 }
 
 .control-button:hover {
