@@ -1,6 +1,6 @@
 export default class Cadencer {
   constructor(callback) {
-    this.CADENCE = 1000;
+    this.CADENCE = 3000;
     this.isPaused = true;
     this.callback = callback;
   }

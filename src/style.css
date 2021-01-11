@@ -5,6 +5,8 @@
 
 :root {
   --max-application-width: 880;
+  --drop-animation-duration: 10s;
+  --bang-animation-duration: 0.5s;
   --main-background-color: #1e1e1e;
   --main-text-color: aquamarine;
   --sky-bottom-color: lightcyan;
@@ -119,7 +121,7 @@ html {
   z-index: 1;
   border-radius: 50%;
   opacity: 0;
-  animation: drop-fall 6s linear infinite;
+  animation: drop-fall var(--drop-animation-duration) linear;
 }
 
 .drop > div {
@@ -137,42 +139,7 @@ html {
   border-radius: 50%;
   transform: scale(0.9, 1) rotate(45deg);
   box-shadow: 0.1rem 0.1rem 0.7rem var(--drop-shadow-color);
-  animation: drop-outline 6s linear infinite;
-}
-
-.drop1 {
-  left: 5%;
-}
-
-.drop1::before {
-  animation-delay: 0s;
-}
-
-.drop2 {
-  left: 37%;
-  animation-delay: 2s;
-}
-
-.drop2::before {
-  animation-delay: 2s;
-}
-
-.drop3 {
-  left: 57%;
-  animation-delay: 3s;
-}
-
-.drop3::before {
-  animation-delay: 3s;
-}
-
-.drop4 {
-  left: 85%;
-  animation-delay: 5s;
-}
-
-.drop4::before {
-  animation-delay: 5s;
+  animation: drop-outline var(--drop-animation-duration) linear;
 }
 
 .bonus {
@@ -230,10 +197,19 @@ html {
   }
 }
 
-.bang {
-  transition: all 0.5s ease;
+.bang > div {
   opacity: 0;
-  transform: scale(3, 3);
+}
+
+.bang::before {
+  animation: drop-bang var(--bang-animation-duration) ease;
+}
+
+@keyframes drop-bang {
+  to {
+    opacity: 0;
+    transform: scale(3, 3);
+  }
 }
 
 .operands {

@@ -4,7 +4,9 @@ import Cadencer from "./components/Cadencer";
 const appParams = {
   classApplicationSelector: ".application",
   classDropContainerSelector: ".drop-container",
+  classDrop: "drop",
   classDropPause: "drop-pause",
+  classBang: "bang",
   classScreenSelector: ".screen",
   classKeySelector: ".key",
   classKeyActive: "key-active",
@@ -89,7 +91,7 @@ function onKeyEntered(event) {
   if (isKeypadLocked) return;
   const input = event.currentTarget.getAttribute(appParams.attrValue);
   if (input === appParams.attrValueEnter) {
-    let resultEvent = new CustomEvent(appParams.eventResult, { detail: { result: screen.textContent } });
+    let resultEvent = new CustomEvent(appParams.eventResult, { detail: { result: screen.textContent * 1 } });
     screen.textContent = "";
     dropContainer.dispatchEvent(resultEvent);
   } else if (input === appParams.attrValueClear) {
@@ -120,7 +122,12 @@ function onKeyUp(event) {
 }
 
 function onResultReceived(event) {
-  console.log(`Result received : ${event.detail.result}`);
+  //console.log(`Result received : ${event.detail.result}`);
+  for (let drop of dropContainer.children) {
+    if (drop.result === event.detail.result) {
+      drop.bang();
+    }
+  }
 }
 
 function getRandomInt(min, max) {
@@ -129,7 +136,7 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function getDropOffset() {
+function getRandomDropOffset() {
   let track = getRandomInt(0, MAX_TRACKS - 1);
   return `${FIRST_TRACK_OFFSET + track * TRACK_STEP}%`;
 }
@@ -142,7 +149,7 @@ function getRandomExpression(difficulty = 1) {
   if (operator <= 1) {
     operand2 = getRandomInt(0, Math.round(MAX_OPERAND_VALUE / 10));
   } else {
-    operand2 = getRandomInt(0, 10);
+    operand2 = getRandomInt(1, 10);
   }
   let expression;
   let result;
@@ -164,9 +171,43 @@ function getRandomExpression(difficulty = 1) {
   };
 }
 
+function createRandomDrop() {
+  const expr = getRandomExpression(difficultyLevel);
+  const drop = document.createElement("div");
+  drop.style.left = getRandomDropOffset();
+  drop.classList.add(appParams.classDrop);
+  drop.insertAdjacentHTML(
+    "afterbegin",
+    `<div class="operator">${expr.operation}</div>
+     <div class=operands>
+     <div>${expr.operand1}</div>
+     <div>${expr.operand2}</div>
+     </div>`
+  );
+
+  drop.addEventListener(
+    "animationend",
+    (event) => {
+      event.currentTarget.parentNode.removeChild(event.currentTarget);
+    },
+    { once: true }
+  );
+
+  drop.result = expr.result;
+
+  drop.bang = function () {
+    drop.classList.add(appParams.classBang);
+  };
+
+  return drop;
+}
+
 function onCadence() {
-  let expr = getRandomExpression(difficultyLevel);
-  console.log(`tick! operation : ${expr.operand1} ${expr.operation} ${expr.operand2} = ${expr.result}, offset : ${getDropOffset()}`);
+  let drop = createRandomDrop();
+  dropContainer.appendChild(drop);
+  //let expr = getRandomExpression(difficultyLevel);
+  //console.log(`tick! operation : ${expr.operand1} ${expr.operation} ${expr.operand2} = ${expr.result}, offset : ${getDropOffset()}`);
+  console.log(`tick! drop.result = ${drop.result}`);
 }
 
 function onPauseButtonClick(event) {
@@ -193,7 +234,9 @@ function onResumeGame(event) {
 }
 
 stopButton.addEventListener("click", () => {
-  cadencer.start();
+  for (let drop of dropContainer.children) {
+    drop.bang();
+  }
 });
 
 //entry point of the program
