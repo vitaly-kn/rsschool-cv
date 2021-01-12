@@ -1,12 +1,14 @@
 import "./style.css";
 import Cadencer from "./components/Cadencer";
-import { getRandomDropOffset, getRandomExpression } from "./components/randoms";
+import { getRandomInt, getRandomDropOffset, getRandomExpression } from "./components/randoms";
 
 const appParams = {
   classApplicationSelector: ".application",
   classDropContainerSelector: ".drop-container",
   classDrop: "drop",
+  classBonus: "bonus",
   classDropPause: "drop-pause",
+  animationDropFall: "drop-fall",
   classBang: "bang",
   classScoreSelector: ".score-amount",
   classScreenSelector: ".screen",
@@ -27,10 +29,14 @@ const appParams = {
 };
 
 const MAX_DIGITS = 3;
-let difficultyLevel = 6;
+const BONUS_FREQUENCY = 5;
+let difficultyLevel = 8;
 let isFullscreen = false;
 let isGamePaused = false;
 let isGameInProgress = false;
+let chainBonus = 1;
+let isBonusOnScreen = false;
+let bonusResult;
 let cadencer = new Cadencer(onCadence);
 
 const applicationDiv = document.querySelector(appParams.classApplicationSelector);
@@ -82,7 +88,7 @@ function onKeyEntered(event) {
   if (!isGameInProgress || isGamePaused) return;
   const input = event.currentTarget.getAttribute(appParams.attrValue);
   if (input === appParams.attrValueEnter) {
-    let resultEvent = new CustomEvent(appParams.eventResult, { detail: { result: screen.textContent * 1 } });
+    let resultEvent = new CustomEvent(appParams.eventResult, { detail: { result: +screen.textContent } });
     screen.textContent = "";
     dropContainer.dispatchEvent(resultEvent);
   } else if (input === appParams.attrValueClear) {
@@ -114,15 +120,25 @@ function onKeyUp(event) {
 
 function onResultReceived(event) {
   //console.log(`Result received : ${event.detail.result}`);
+  let isCorrectAnswer = false;
   for (let drop of dropContainer.children) {
-    if (drop.result === event.detail.result) {
-      score.textContent++;
+    if (event.detail.result === bonusResult || drop.result === event.detail.result) {
+      isCorrectAnswer = true;
+      score.textContent = +score.textContent + chainBonus;
+      chainBonus++;
       drop.bang();
     }
   }
+  if (event.detail.result === bonusResult) {
+    isBonusOnScreen = false;
+    bonusResult = undefined;
+  }
+  if (!isCorrectAnswer) {
+    chainBonus = 1;
+  }
 }
 
-function createRandomDrop() {
+function createRandomDrop(difficultyLevel) {
   const expr = getRandomExpression(difficultyLevel);
   const drop = document.createElement("div");
   drop.style.left = getRandomDropOffset();
@@ -135,26 +151,28 @@ function createRandomDrop() {
      <div>${expr.operand2}</div>
      </div>`
   );
-
   drop.addEventListener(
     "animationend",
     (event) => {
+      console.log(`animation : ${event.animationName}`);
       event.currentTarget.parentNode.removeChild(event.currentTarget);
     },
     { once: true }
   );
-
   drop.result = expr.result;
-
   drop.bang = function () {
     drop.classList.add(appParams.classBang);
   };
-
   return drop;
 }
 
 function onCadence() {
-  let drop = createRandomDrop();
+  let drop = createRandomDrop(difficultyLevel);
+  if (!isBonusOnScreen && getRandomInt(0, BONUS_FREQUENCY) === BONUS_FREQUENCY) {
+    drop.classList.add(appParams.classBonus);
+    bonusResult = drop.result;
+    isBonusOnScreen = true;
+  }
   dropContainer.appendChild(drop);
   //let expr = getRandomExpression(difficultyLevel);
   //console.log(`tick! operation : ${expr.operand1} ${expr.operation} ${expr.operand2} = ${expr.result}, offset : ${getDropOffset()}`);
@@ -211,6 +229,10 @@ function restartGame() {
   score.textContent = 0;
   screen.textContent = "";
   isGameInProgress = false;
+  chainBonus = 1;
+  difficultyLevel = 8;
+  bonusResult = undefined;
+  isBonusOnScreen = false;
   startButton.textContent = "Start";
   pauseButton.textContent = "Pause";
   resumeGame();
