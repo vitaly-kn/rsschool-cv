@@ -35,7 +35,7 @@ export default class Cadencer {
   setCadence(cadence) {
     this.CADENCE = cadence;
   }
-  getCadence(cadence) {
+  getCadence() {
     return this.CADENCE;
   }
 }

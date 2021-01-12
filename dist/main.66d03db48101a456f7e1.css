@@ -5,6 +5,7 @@
 
 :root {
   --max-application-width: 880;
+  --flood-transition-duration: 0.7s;
   --drop-animation-duration: 10s;
   --bang-animation-duration: 0.5s;
   --main-background-color: #1e1e1e;
@@ -101,9 +102,22 @@ html {
   position: relative;
   width: 100%;
   height: 90%;
+  transition: var(--flood-transition-duration) ease-out;
   /*height: 80%;*/
   /*height: 70%;*/
   /*height: 20%;*/
+}
+
+.sea-level1 {
+  height: 80%;
+}
+
+.sea-level2 {
+  height: 70%;
+}
+
+.flood {
+  height: 20%;
 }
 
 .drop-pause > .drop,

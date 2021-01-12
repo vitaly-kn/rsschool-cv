@@ -5,6 +5,7 @@ import { getRandomInt, getRandomDropOffset, getRandomExpression } from "./compon
 const appParams = {
   classApplicationSelector: ".application",
   classDropContainerSelector: ".drop-container",
+  classListSeaLevels: ["sea-level1", "sea-level2", "flood"],
   classDrop: "drop",
   classBonus: "bonus",
   classDropPause: "drop-pause",
@@ -26,6 +27,7 @@ const appParams = {
   eventResult: "result",
   eventPause: "pause",
   eventResume: "resume",
+  eventRiseSeaLevel: "risesealevel",
 };
 
 const MAX_DIGITS = 3;
@@ -37,6 +39,7 @@ let isGameInProgress = false;
 let chainBonus = 1;
 let isBonusOnScreen = false;
 let bonusResult;
+let seaLevel = -1;
 let cadencer = new Cadencer(onCadence);
 
 const applicationDiv = document.querySelector(appParams.classApplicationSelector);
@@ -53,6 +56,7 @@ score.textContent = 0;
 dropContainer.addEventListener(appParams.eventResult, onResultReceived);
 dropContainer.addEventListener(appParams.eventPause, onPauseGame);
 dropContainer.addEventListener(appParams.eventResume, onResumeGame);
+dropContainer.addEventListener(appParams.eventRiseSeaLevel, onRiseSeaLevel);
 
 keypadKeys.forEach((key) => key.addEventListener("click", onKeyEntered));
 
@@ -154,7 +158,10 @@ function createRandomDrop(difficultyLevel) {
   drop.addEventListener(
     "animationend",
     (event) => {
-      console.log(`animation : ${event.animationName}`);
+      //console.log(`animation : ${event.animationName}`);
+      if (event.animationName === appParams.animationDropFall) {
+        dropContainer.dispatchEvent(new CustomEvent(appParams.eventRiseSeaLevel));
+      }
       event.currentTarget.parentNode.removeChild(event.currentTarget);
     },
     { once: true }
@@ -199,6 +206,18 @@ function onResumeGame(event) {
   event.currentTarget.classList.remove(appParams.classDropPause);
 }
 
+function onRiseSeaLevel(event) {
+  seaLevel++;
+  console.log(seaLevel);
+  event.currentTarget.classList.add(appParams.classListSeaLevels[seaLevel]);
+  if (seaLevel === appParams.classListSeaLevels.length - 1) {
+    //console.log(`game over! sealevel : ${seaLevel}, ${appParams.classListSeaLevels[seaLevel]}`);
+    cadencer.stop(); //temp!!! to be revised!!!
+    pauseGame();
+    setTimeout(restartGame, 2000);
+  }
+}
+
 function onStartButtonClick(event) {
   event.currentTarget.blur();
   if (!isGameInProgress) {
@@ -225,12 +244,15 @@ function startGame() {
 }
 
 function restartGame() {
+  //console.log("restart!");
   dropContainer.innerHTML = "";
   score.textContent = 0;
   screen.textContent = "";
   isGameInProgress = false;
   chainBonus = 1;
   difficultyLevel = 8;
+  seaLevel = -1;
+  appParams.classListSeaLevels.forEach((seaLevel) => dropContainer.classList.remove(seaLevel));
   bonusResult = undefined;
   isBonusOnScreen = false;
   startButton.textContent = "Start";
