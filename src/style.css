@@ -9,6 +9,7 @@
   --drop-animation-duration: 10s;
   --drop-restart-duration: 3s;
   --bang-animation-duration: 0.5s;
+  --modal-show-duration: 1s;
   --main-background-color: #1e1e1e;
   --main-text-color: aquamarine;
   --sky-bottom-color: lightcyan;
@@ -72,6 +73,8 @@ html {
   flex-wrap: wrap;
   justify-content: center;
   align-content: stretch;
+  user-select: none;
+  overflow: hidden;
 }
 
 .application::before {
@@ -442,6 +445,54 @@ html {
   background: rgba(0, 0, 0, 0.8);
   transform: translateX(0.1rem) translateY(0.1rem);
   box-shadow: none;
+}
+
+.modal-container {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 20;
+  display: flex;
+  top: 100%;
+  transition: top var(--modal-show-duration) cubic-bezier(0.175, 0.885, 0.32, 1.175);
+}
+
+.shadow {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.game-over {
+  position: relative;
+  display: none;
+  flex-basis: 70%;
+  font-size: 2.5rem;
+}
+
+.show-modal {
+  top: 0;
+}
+
+.show-game-over > .game-over {
+  display: block;
+}
+
+.modal-header {
+  font-size: 5rem;
+  text-align: center;
+  margin: 8% 0;
+}
+
+.game-over > p {
+  margin: 3% 5%;
+}
+
+.modal-button {
+  margin: 6% auto;
+  height: 2.5rem;
+  min-width: 10%;
 }
 
 @media (min-width: 880px) {

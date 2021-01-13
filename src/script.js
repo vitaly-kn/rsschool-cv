@@ -16,6 +16,16 @@ const appParams = {
   classScreenSelector: ".screen",
   classKeySelector: ".key",
   classKeyActive: "key-active",
+  classModalSelector: ".modal-container",
+  classShowModal: "show-modal",
+  classGameOverSelector: ".game-over",
+  classShowGameOver: "show-game-over",
+  idTotalDrops: "total-drops",
+  idResolvedDrops: "resolved-drops",
+  idResolutionRate: "resolution-rate",
+  idMistakes: "mistakes",
+  idAccuracy: "accuracy",
+  idCloseGameOver: "close-gameover",
   attrValue: "data-value",
   attrValueEnter: "enter",
   attrValueDelete: "delete",
@@ -56,6 +66,14 @@ const keypadKeys = document.querySelectorAll(appParams.classKeySelector);
 const fullscreenButton = document.getElementById(appParams.idFullscreen);
 const startButton = document.getElementById(appParams.idStart);
 const pauseButton = document.getElementById(appParams.idPause);
+const modalContainer = document.querySelector(appParams.classModalSelector);
+const gameOver = document.querySelector(appParams.classGameOverSelector);
+const totalDrops = document.getElementById(appParams.idTotalDrops);
+const resolvedDrops = document.getElementById(appParams.idResolvedDrops);
+const resolutionRate = document.getElementById(appParams.idResolutionRate);
+const mistakes = document.getElementById(appParams.idMistakes);
+const accuracy = document.getElementById(appParams.idAccuracy);
+const closeGameOver = document.getElementById(appParams.idCloseGameOver);
 
 score.textContent = 0;
 
@@ -64,6 +82,7 @@ dropContainer.addEventListener(appParams.eventPause, onPauseGame);
 dropContainer.addEventListener(appParams.eventResume, onResumeGame);
 dropContainer.addEventListener(appParams.eventRiseSeaLevel, onRiseSeaLevel);
 dropContainer.addEventListener("animationend", resetGame);
+dropContainer.addEventListener("transitionend", onRiseSeaLevelEnd);
 
 keypadKeys.forEach((key) => key.addEventListener("click", onKeyEntered));
 
@@ -74,9 +93,9 @@ startButton.addEventListener("click", onStartButtonClick);
 pauseButton.addEventListener("click", onPauseButtonClick);
 fullscreenButton.addEventListener("click", toggleFullscreen);
 document.addEventListener("fullscreenchange", toggleFullscreenButton);
+closeGameOver.addEventListener("click", onGameOverClose);
 
 let level = {
-  //previousScore: 0,
   upgrade() {
     let difference = +score.textContent - this.previousScore;
     if (difference / NEXT_LEVEL_SCORE_STEP >= 1) {
@@ -97,13 +116,12 @@ let statistics = {
   accuracy() {
     return this.resolvedDrops ? `${Math.round((this.resolvedDrops / (this.resolvedDrops + this.mistakes)) * 100)}%` : "0%";
   },
-  resolved() {
+  resolutionRate() {
     return this.resolvedDrops ? `${Math.round((this.resolvedDrops / this.totalDrops) * 100)}%` : "0%";
   },
   reset() {
     this.mistakes = 0;
     this.totalDrops = 0;
-    //this.missedDrops = 0;
     this.resolvedDrops = 0;
   },
 };
@@ -204,7 +222,6 @@ function createRandomDrop(difficultyLevel) {
       if (event.animationName === appParams.animationDropFall) {
         dropContainer.dispatchEvent(new CustomEvent(appParams.eventRiseSeaLevel));
       }
-      //if (event.currentTarget.parentNode) event.currentTarget.parentNode.removeChild(event.currentTarget);
       event.currentTarget.parentNode?.removeChild(event.currentTarget);
     },
     { once: true }
@@ -247,9 +264,7 @@ function onPauseButtonClick(event) {
 }
 
 function onPauseGame(event) {
-  //console.log("onPause!");
   event.currentTarget.classList.add(appParams.classDropPause);
-  console.log("game paused!");
 }
 
 function onResumeGame(event) {
@@ -262,10 +277,12 @@ function onRiseSeaLevel(event) {
   resetBonus();
   destroyAllDrops();
   chainBonus = 1;
+}
+
+function onRiseSeaLevelEnd() {
   if (seaLevel === appParams.classListSeaLevels.length - 1) {
-    cadencer.stop(); //temp!!! to be revised!!!
+    cadencer.stop();
     showStatistics();
-    setTimeout(resetGame, 3000);
   }
 }
 
@@ -315,7 +332,6 @@ function resetGame() {
   resetBonus();
   startButton.textContent = "Start";
   pauseButton.textContent = "Pause";
-  //level.reset();
   resumeGame();
   cadencer.stop();
 }
@@ -323,7 +339,20 @@ function resetGame() {
 function showStatistics() {
   console.log("****************************");
   console.log("GAME OVER!");
-  console.log(`Total drops : ${statistics.totalDrops}, resolved : ${statistics.resolvedDrops} (${statistics.resolved()})`);
+  console.log(`Total drops : ${statistics.totalDrops}, resolved : ${statistics.resolvedDrops} (${statistics.resolutionRate()})`);
   console.log(`mistakes : ${statistics.mistakes}, accuracy : ${statistics.accuracy()}`);
   console.log("****************************");
+  modalContainer.classList.add(appParams.classShowModal);
+  modalContainer.classList.add(appParams.classShowGameOver);
+  totalDrops.textContent = statistics.totalDrops;
+  resolvedDrops.textContent = statistics.resolvedDrops;
+  resolutionRate.textContent = statistics.resolutionRate();
+  mistakes.textContent = statistics.mistakes;
+  accuracy.textContent = statistics.accuracy();
+}
+
+function onGameOverClose() {
+  modalContainer.classList.remove(appParams.classShowModal);
+  modalContainer.classList.remove(appParams.classShowGameOver);
+  resetGame();
 }
