@@ -7,6 +7,7 @@
   --max-application-width: 880;
   --flood-transition-duration: 0.7s;
   --drop-animation-duration: 10s;
+  --drop-restart-duration: 3s;
   --bang-animation-duration: 0.5s;
   --main-background-color: #1e1e1e;
   --main-text-color: aquamarine;
@@ -118,6 +119,19 @@ html {
 
 .flood {
   height: 20%;
+}
+
+.restart {
+  animation: water-restart var(--drop-restart-duration) linear;
+}
+
+@keyframes water-restart {
+  50% {
+    height: 20%;
+  }
+  100% {
+    height: 90%;
+  }
 }
 
 .drop-pause > .drop,

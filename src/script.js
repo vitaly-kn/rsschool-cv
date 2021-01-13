@@ -6,6 +6,7 @@ const appParams = {
   classApplicationSelector: ".application",
   classDropContainerSelector: ".drop-container",
   classListSeaLevels: ["sea-level1", "sea-level2", "flood"],
+  classRestart: "restart",
   classDrop: "drop",
   classBonus: "bonus",
   classDropPause: "drop-pause",
@@ -32,7 +33,12 @@ const appParams = {
 
 const MAX_DIGITS = 3;
 const BONUS_FREQUENCY = 5;
-let difficultyLevel = 8;
+const NEXT_LEVEL_SCORE_STEP = 100;
+const NEXT_LEVEL_CADENCE_STEP = 250;
+const BASIC_CADENCE = 3000;
+const BASIC_DIFFICULTY_LEVEL = 8;
+const MIN_CADENCE = 500;
+let difficultyLevel = BASIC_DIFFICULTY_LEVEL;
 let isFullscreen = false;
 let isGamePaused = false;
 let isGameInProgress = false;
@@ -40,7 +46,7 @@ let chainBonus = 1;
 let isBonusOnScreen = false;
 let bonusResult;
 let seaLevel = -1;
-let cadencer = new Cadencer(onCadence);
+let cadencer = new Cadencer(onCadence, BASIC_CADENCE);
 
 const applicationDiv = document.querySelector(appParams.classApplicationSelector);
 const dropContainer = document.querySelector(appParams.classDropContainerSelector);
@@ -57,6 +63,7 @@ dropContainer.addEventListener(appParams.eventResult, onResultReceived);
 dropContainer.addEventListener(appParams.eventPause, onPauseGame);
 dropContainer.addEventListener(appParams.eventResume, onResumeGame);
 dropContainer.addEventListener(appParams.eventRiseSeaLevel, onRiseSeaLevel);
+dropContainer.addEventListener("animationend", resetGame);
 
 keypadKeys.forEach((key) => key.addEventListener("click", onKeyEntered));
 
@@ -122,6 +129,24 @@ function onKeyUp(event) {
   if (key) key.classList.remove(appParams.classKeyActive);
 }
 
+let level = {
+  previousScore: 0,
+  upgrade() {
+    let difference = +score.textContent - this.previousScore;
+    if (difference / NEXT_LEVEL_SCORE_STEP >= 1) {
+      if (difficultyLevel > 1) difficultyLevel -= Math.floor(difference / NEXT_LEVEL_SCORE_STEP);
+      if (cadencer.getCadence() > MIN_CADENCE) cadencer.setCadence(cadencer.getCadence() - NEXT_LEVEL_CADENCE_STEP);
+      //console.log(`new level : ${difficultyLevel}, new cadence ${cadencer.getCadence()}`);
+      this.previousScore = +score.textContent;
+    }
+  },
+  reset() {
+    this.previousScore = 0;
+    difficultyLevel = BASIC_DIFFICULTY_LEVEL;
+    cadencer.setCadence(BASIC_CADENCE);
+  },
+};
+
 function onResultReceived(event) {
   //console.log(`Result received : ${event.detail.result}`);
   let isCorrectAnswer = false;
@@ -133,9 +158,9 @@ function onResultReceived(event) {
       drop.bang();
     }
   }
+  level.upgrade();
   if (event.detail.result === bonusResult) {
-    isBonusOnScreen = false;
-    bonusResult = undefined;
+    resetBonus();
   }
   if (!isCorrectAnswer) {
     chainBonus = 1;
@@ -158,11 +183,11 @@ function createRandomDrop(difficultyLevel) {
   drop.addEventListener(
     "animationend",
     (event) => {
-      //console.log(`animation : ${event.animationName}`);
+      event.stopPropagation();
       if (event.animationName === appParams.animationDropFall) {
         dropContainer.dispatchEvent(new CustomEvent(appParams.eventRiseSeaLevel));
       }
-      event.currentTarget.parentNode.removeChild(event.currentTarget);
+      if (event.currentTarget.parentNode) event.currentTarget.parentNode.removeChild(event.currentTarget);
     },
     { once: true }
   );
@@ -171,6 +196,10 @@ function createRandomDrop(difficultyLevel) {
     drop.classList.add(appParams.classBang);
   };
   return drop;
+}
+
+function destroyAllDrops() {
+  dropContainer.innerHTML = "";
 }
 
 function onCadence() {
@@ -199,7 +228,9 @@ function onPauseButtonClick(event) {
 }
 
 function onPauseGame(event) {
+  //console.log("onPause!");
   event.currentTarget.classList.add(appParams.classDropPause);
+  console.log("game paused!");
 }
 
 function onResumeGame(event) {
@@ -208,13 +239,13 @@ function onResumeGame(event) {
 
 function onRiseSeaLevel(event) {
   seaLevel++;
-  console.log(seaLevel);
   event.currentTarget.classList.add(appParams.classListSeaLevels[seaLevel]);
+  resetBonus();
+  destroyAllDrops();
+  chainBonus = 1;
   if (seaLevel === appParams.classListSeaLevels.length - 1) {
-    //console.log(`game over! sealevel : ${seaLevel}, ${appParams.classListSeaLevels[seaLevel]}`);
     cadencer.stop(); //temp!!! to be revised!!!
-    pauseGame();
-    setTimeout(restartGame, 2000);
+    setTimeout(resetGame, 3000);
   }
 }
 
@@ -222,8 +253,10 @@ function onStartButtonClick(event) {
   event.currentTarget.blur();
   if (!isGameInProgress) {
     startGame();
-  } else if (confirm("Are you sure you want to restart the game?")) {
-    restartGame();
+  } else {
+    cadencer.stop();
+    destroyAllDrops();
+    dropContainer.classList.add(appParams.classRestart);
   }
 }
 
@@ -243,20 +276,24 @@ function startGame() {
   cadencer.start();
 }
 
-function restartGame() {
-  //console.log("restart!");
-  dropContainer.innerHTML = "";
+function resetBonus() {
+  bonusResult = undefined;
+  isBonusOnScreen = false;
+}
+
+function resetGame() {
+  destroyAllDrops();
   score.textContent = 0;
   screen.textContent = "";
   isGameInProgress = false;
   chainBonus = 1;
-  difficultyLevel = 8;
   seaLevel = -1;
   appParams.classListSeaLevels.forEach((seaLevel) => dropContainer.classList.remove(seaLevel));
-  bonusResult = undefined;
-  isBonusOnScreen = false;
+  dropContainer.classList.remove(appParams.classRestart);
+  resetBonus();
   startButton.textContent = "Start";
   pauseButton.textContent = "Pause";
+  level.reset();
   resumeGame();
   cadencer.stop();
 }
