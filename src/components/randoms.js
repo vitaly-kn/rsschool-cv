@@ -32,7 +32,7 @@ export function getRandomExpression(difficulty = 1) {
   let operand1 = getRandomInt(0, Math.round(MAX_OPERAND_VALUE / difficulty));
   let operand2;
   if (operator <= 1) {
-    operand2 = getRandomInt(0, Math.round(MAX_OPERAND_VALUE / 10));
+    operand2 = getRandomInt(0, Math.round(MAX_OPERAND_VALUE / difficulty));
   } else {
     operand2 = getRandomInt(1, 10);
   }

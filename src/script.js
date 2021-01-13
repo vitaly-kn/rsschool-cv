@@ -75,6 +75,39 @@ pauseButton.addEventListener("click", onPauseButtonClick);
 fullscreenButton.addEventListener("click", toggleFullscreen);
 document.addEventListener("fullscreenchange", toggleFullscreenButton);
 
+let level = {
+  //previousScore: 0,
+  upgrade() {
+    let difference = +score.textContent - this.previousScore;
+    if (difference / NEXT_LEVEL_SCORE_STEP >= 1) {
+      if (difficultyLevel > 1) difficultyLevel -= Math.floor(difference / NEXT_LEVEL_SCORE_STEP);
+      if (cadencer.getCadence() > MIN_CADENCE) cadencer.setCadence(cadencer.getCadence() - NEXT_LEVEL_CADENCE_STEP);
+      //console.log(`new level : ${difficultyLevel}, new cadence ${cadencer.getCadence()}`);
+      this.previousScore = +score.textContent;
+    }
+  },
+  reset() {
+    this.previousScore = 0;
+    difficultyLevel = BASIC_DIFFICULTY_LEVEL;
+    cadencer.setCadence(BASIC_CADENCE);
+  },
+};
+
+let statistics = {
+  accuracy() {
+    return this.resolvedDrops ? `${Math.round((this.resolvedDrops / (this.resolvedDrops + this.mistakes)) * 100)}%` : "0%";
+  },
+  resolved() {
+    return this.resolvedDrops ? `${Math.round((this.resolvedDrops / this.totalDrops) * 100)}%` : "0%";
+  },
+  reset() {
+    this.mistakes = 0;
+    this.totalDrops = 0;
+    //this.missedDrops = 0;
+    this.resolvedDrops = 0;
+  },
+};
+
 function toggleFullscreen(event) {
   event.currentTarget.blur();
   if (!isFullscreen) {
@@ -129,24 +162,6 @@ function onKeyUp(event) {
   if (key) key.classList.remove(appParams.classKeyActive);
 }
 
-let level = {
-  previousScore: 0,
-  upgrade() {
-    let difference = +score.textContent - this.previousScore;
-    if (difference / NEXT_LEVEL_SCORE_STEP >= 1) {
-      if (difficultyLevel > 1) difficultyLevel -= Math.floor(difference / NEXT_LEVEL_SCORE_STEP);
-      if (cadencer.getCadence() > MIN_CADENCE) cadencer.setCadence(cadencer.getCadence() - NEXT_LEVEL_CADENCE_STEP);
-      //console.log(`new level : ${difficultyLevel}, new cadence ${cadencer.getCadence()}`);
-      this.previousScore = +score.textContent;
-    }
-  },
-  reset() {
-    this.previousScore = 0;
-    difficultyLevel = BASIC_DIFFICULTY_LEVEL;
-    cadencer.setCadence(BASIC_CADENCE);
-  },
-};
-
 function onResultReceived(event) {
   //console.log(`Result received : ${event.detail.result}`);
   let isCorrectAnswer = false;
@@ -155,6 +170,7 @@ function onResultReceived(event) {
       isCorrectAnswer = true;
       score.textContent = +score.textContent + chainBonus;
       chainBonus++;
+      statistics.resolvedDrops++;
       drop.bang();
     }
   }
@@ -164,6 +180,7 @@ function onResultReceived(event) {
   }
   if (!isCorrectAnswer) {
     chainBonus = 1;
+    statistics.mistakes++;
   }
 }
 
@@ -187,7 +204,8 @@ function createRandomDrop(difficultyLevel) {
       if (event.animationName === appParams.animationDropFall) {
         dropContainer.dispatchEvent(new CustomEvent(appParams.eventRiseSeaLevel));
       }
-      if (event.currentTarget.parentNode) event.currentTarget.parentNode.removeChild(event.currentTarget);
+      //if (event.currentTarget.parentNode) event.currentTarget.parentNode.removeChild(event.currentTarget);
+      event.currentTarget.parentNode?.removeChild(event.currentTarget);
     },
     { once: true }
   );
@@ -210,6 +228,7 @@ function onCadence() {
     isBonusOnScreen = true;
   }
   dropContainer.appendChild(drop);
+  statistics.totalDrops++;
   //let expr = getRandomExpression(difficultyLevel);
   //console.log(`tick! operation : ${expr.operand1} ${expr.operation} ${expr.operand2} = ${expr.result}, offset : ${getDropOffset()}`);
   console.log(`tick! drop.result = ${drop.result}`);
@@ -245,6 +264,7 @@ function onRiseSeaLevel(event) {
   chainBonus = 1;
   if (seaLevel === appParams.classListSeaLevels.length - 1) {
     cadencer.stop(); //temp!!! to be revised!!!
+    showStatistics();
     setTimeout(resetGame, 3000);
   }
 }
@@ -272,6 +292,8 @@ function pauseGame() {
 
 function startGame() {
   isGameInProgress = true;
+  level.reset();
+  statistics.reset();
   startButton.textContent = "Restart";
   cadencer.start();
 }
@@ -293,7 +315,15 @@ function resetGame() {
   resetBonus();
   startButton.textContent = "Start";
   pauseButton.textContent = "Pause";
-  level.reset();
+  //level.reset();
   resumeGame();
   cadencer.stop();
+}
+
+function showStatistics() {
+  console.log("****************************");
+  console.log("GAME OVER!");
+  console.log(`Total drops : ${statistics.totalDrops}, resolved : ${statistics.resolvedDrops} (${statistics.resolved()})`);
+  console.log(`mistakes : ${statistics.mistakes}, accuracy : ${statistics.accuracy()}`);
+  console.log("****************************");
 }
