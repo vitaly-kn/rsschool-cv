@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Raindrops</title>
-<link href="main.617f936572cb9e789f22.css" rel="stylesheet"></head>
+<link href="main.ff211fbd2fd84cfdad1d.css" rel="stylesheet"></head>
 
 <body class="main">
   <h1 class="header">Raindrops</h1>
@@ -55,18 +55,49 @@
       </div>
     </div>
     <div class="modal-container">
-      <!--<div class="shadow"></div>-->
       <div class="game-over">
-        <h2 class="modal-header">GAME OVER</h2>
+        <h2 class="game-over-header">GAME OVER</h2>
         <p>Statistics</p>
         <p>Total drops : <span id="total-drops">0</span></p>
         <p>Expressions resolved : <span id="resolved-drops">9999</span> (<span id="resolution-rate">99%</span>)</p>
         <p>Mistakes made : <span id="mistakes">9999</span> (accuracy : <span id="accuracy">99%</span>)</p>
         <button class="control-button modal-button" id="close-gameover">Ok</button>
       </div>
+      <div class="settings">
+        <div class="blur"></div>
+        <div class="settings-window">
+          <h3 class="settings-header">Settings</h3>
+          <p>Choose available operations:</p>
+          <div class="operations">
+            <div>
+              <input type="checkbox" id="add-checkbox" name="add-checkbox" value="add" checked>
+              <label for="add-checkbox">(+) Addition</label>
+            </div>
+            <div>
+              <input type="checkbox" id="sub-checkbox" name="sub-checkbox" value="sub" checked>
+              <label for="sub-checkbox">(-) Subtraction</label>
+            </div>
+            <div>
+              <input type="checkbox" id="mul-checkbox" name="mul-checkbox" value="mul" checked>
+              <label for="mul-checkbox">(x) Multiplication</label>
+            </div>
+            <div>
+              <input type="checkbox" id="div-checkbox" name="div-checkbox" value="div" checked>
+              <label for="div-checkbox">(÷) Division</label>
+            </div>
+          </div>
+          <p>Choose max range of operands:</p>
+          <div>
+            <input class="max-operand" id="max-operand" type="number" step="1" name="max-operand" min="1" max="99"
+              value="99" />
+          </div>
+          <button class="control-button modal-button" id="close-settings">Ok</button>
+        </div>
+
+      </div>
     </div>
   </div>
   </div>
-<script src="main.4686270e89bf4e0e69e0.js"></script></body>
+<script src="main.2a8a8ee8d70e124b4557.js"></script></body>
 
 </html>

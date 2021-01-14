@@ -1,17 +1,14 @@
 export default class Cadencer {
   constructor(callback, cadence = 3000) {
-    this.CADENCE = cadence;
+    this.cadence = cadence;
     this.isPaused = true;
     this.callback = callback;
     this.timerID;
   }
-  _tick() {
-    this.callback();
-  }
   _run() {
     if (this.isPaused) return;
-    this._tick();
-    this.timerID = setTimeout(this._run.bind(this), this.CADENCE);
+    this.callback();
+    this.timerID = setTimeout(this._run.bind(this), this.cadence);
   }
   start() {
     if (this.isPaused) {
@@ -33,9 +30,9 @@ export default class Cadencer {
     }
   }
   setCadence(cadence) {
-    this.CADENCE = cadence;
+    this.cadence = cadence;
   }
   getCadence() {
-    return this.CADENCE;
+    return this.cadence;
   }
 }

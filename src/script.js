@@ -18,14 +18,17 @@ const appParams = {
   classKeyActive: "key-active",
   classModalSelector: ".modal-container",
   classShowModal: "show-modal",
-  classGameOverSelector: ".game-over",
+  classShowSettings: "show-settings",
   classShowGameOver: "show-game-over",
+  settingsOperationsCheckboxSelector: '.operations input[type="checkbox"]',
+  classMaxOperandSelector: ".max-operand",
   idTotalDrops: "total-drops",
   idResolvedDrops: "resolved-drops",
   idResolutionRate: "resolution-rate",
   idMistakes: "mistakes",
   idAccuracy: "accuracy",
   idCloseGameOver: "close-gameover",
+  idCloseSettings: "close-settings",
   attrValue: "data-value",
   attrValueEnter: "enter",
   attrValueDelete: "delete",
@@ -35,6 +38,7 @@ const appParams = {
   idFullscreen: "fullscreen",
   idStart: "start",
   idPause: "pause",
+  idSettings: "settings",
   eventResult: "result",
   eventPause: "pause",
   eventResume: "resume",
@@ -43,19 +47,23 @@ const appParams = {
 
 const MAX_DIGITS = 3;
 const BONUS_FREQUENCY = 5;
-const NEXT_LEVEL_SCORE_STEP = 100;
+const NEXT_LEVEL_SCORE_STEP = 200;
 const NEXT_LEVEL_CADENCE_STEP = 250;
 const BASIC_CADENCE = 3000;
 const BASIC_DIFFICULTY_LEVEL = 8;
+const MAX_DIFFICULTY_LEVEL = 1;
 const MIN_CADENCE = 500;
-let difficultyLevel = BASIC_DIFFICULTY_LEVEL;
+const SCORE_STEP = 10;
+
 let isFullscreen = false;
 let isGamePaused = false;
+let wasGamePaused = isGamePaused;
 let isGameInProgress = false;
-let chainBonus = 1;
+let chainBonus = 0;
 let isBonusOnScreen = false;
 let bonusResult;
 let seaLevel = -1;
+let maxOperand = 99;
 let cadencer = new Cadencer(onCadence, BASIC_CADENCE);
 
 const applicationDiv = document.querySelector(appParams.classApplicationSelector);
@@ -66,14 +74,17 @@ const keypadKeys = document.querySelectorAll(appParams.classKeySelector);
 const fullscreenButton = document.getElementById(appParams.idFullscreen);
 const startButton = document.getElementById(appParams.idStart);
 const pauseButton = document.getElementById(appParams.idPause);
+const settingsButton = document.getElementById(appParams.idSettings);
 const modalContainer = document.querySelector(appParams.classModalSelector);
-const gameOver = document.querySelector(appParams.classGameOverSelector);
 const totalDrops = document.getElementById(appParams.idTotalDrops);
 const resolvedDrops = document.getElementById(appParams.idResolvedDrops);
 const resolutionRate = document.getElementById(appParams.idResolutionRate);
 const mistakes = document.getElementById(appParams.idMistakes);
 const accuracy = document.getElementById(appParams.idAccuracy);
 const closeGameOver = document.getElementById(appParams.idCloseGameOver);
+const operationsCheckboxes = document.querySelectorAll(appParams.settingsOperationsCheckboxSelector);
+const maxOperandInput = document.querySelector(appParams.classMaxOperandSelector);
+const closeSettings = document.getElementById(appParams.idCloseSettings);
 
 score.textContent = 0;
 
@@ -92,22 +103,23 @@ window.addEventListener("keyup", onKeyUp);
 startButton.addEventListener("click", onStartButtonClick);
 pauseButton.addEventListener("click", onPauseButtonClick);
 fullscreenButton.addEventListener("click", toggleFullscreen);
+settingsButton.addEventListener("click", onSettingsClick);
 document.addEventListener("fullscreenchange", toggleFullscreenButton);
 closeGameOver.addEventListener("click", onGameOverClose);
+operationsCheckboxes.forEach((checkbox) => checkbox.addEventListener("change", onOperationCheckboxChange));
+maxOperandInput.addEventListener("change", onMaxOperandChange);
+closeSettings.addEventListener("click", onSettingsClose);
+
+let operationsMask = { add: true, sub: true, mul: true, div: true };
 
 let level = {
   upgrade() {
-    let difference = +score.textContent - this.previousScore;
-    if (difference / NEXT_LEVEL_SCORE_STEP >= 1) {
-      if (difficultyLevel > 1) difficultyLevel -= Math.floor(difference / NEXT_LEVEL_SCORE_STEP);
-      if (cadencer.getCadence() > MIN_CADENCE) cadencer.setCadence(cadencer.getCadence() - NEXT_LEVEL_CADENCE_STEP);
-      //console.log(`new level : ${difficultyLevel}, new cadence ${cadencer.getCadence()}`);
-      this.previousScore = +score.textContent;
-    }
+    this.difficulty = Math.max(BASIC_DIFFICULTY_LEVEL - Math.trunc(+score.textContent / NEXT_LEVEL_SCORE_STEP), MAX_DIFFICULTY_LEVEL);
+    cadencer.setCadence(Math.max(BASIC_CADENCE - Math.trunc(+score.textContent / NEXT_LEVEL_SCORE_STEP) * NEXT_LEVEL_CADENCE_STEP, MIN_CADENCE));
+    console.log(`level : ${level.difficulty}, cadence ${cadencer.getCadence()}`);
   },
   reset() {
-    this.previousScore = 0;
-    difficultyLevel = BASIC_DIFFICULTY_LEVEL;
+    this.difficulty = BASIC_DIFFICULTY_LEVEL;
     cadencer.setCadence(BASIC_CADENCE);
   },
 };
@@ -181,12 +193,11 @@ function onKeyUp(event) {
 }
 
 function onResultReceived(event) {
-  //console.log(`Result received : ${event.detail.result}`);
   let isCorrectAnswer = false;
   for (let drop of dropContainer.children) {
     if (event.detail.result === bonusResult || drop.result === event.detail.result) {
       isCorrectAnswer = true;
-      score.textContent = +score.textContent + chainBonus;
+      score.textContent = +score.textContent + SCORE_STEP + chainBonus;
       chainBonus++;
       statistics.resolvedDrops++;
       drop.bang();
@@ -197,13 +208,13 @@ function onResultReceived(event) {
     resetBonus();
   }
   if (!isCorrectAnswer) {
-    chainBonus = 1;
+    chainBonus = 0;
     statistics.mistakes++;
   }
 }
 
-function createRandomDrop(difficultyLevel) {
-  const expr = getRandomExpression(difficultyLevel);
+function createRandomDrop() {
+  const expr = getRandomExpression(level.difficulty, maxOperand, operationsMask);
   const drop = document.createElement("div");
   drop.style.left = getRandomDropOffset();
   drop.classList.add(appParams.classDrop);
@@ -238,7 +249,7 @@ function destroyAllDrops() {
 }
 
 function onCadence() {
-  let drop = createRandomDrop(difficultyLevel);
+  let drop = createRandomDrop();
   if (!isBonusOnScreen && getRandomInt(0, BONUS_FREQUENCY) === BONUS_FREQUENCY) {
     drop.classList.add(appParams.classBonus);
     bonusResult = drop.result;
@@ -246,8 +257,6 @@ function onCadence() {
   }
   dropContainer.appendChild(drop);
   statistics.totalDrops++;
-  //let expr = getRandomExpression(difficultyLevel);
-  //console.log(`tick! operation : ${expr.operand1} ${expr.operation} ${expr.operand2} = ${expr.result}, offset : ${getDropOffset()}`);
   console.log(`tick! drop.result = ${drop.result}`);
 }
 
@@ -256,10 +265,10 @@ function onPauseButtonClick(event) {
   if (!isGameInProgress) return;
   if (cadencer.toggle()) {
     event.currentTarget.textContent = "Pause";
-    resumeGame();
+    resumeGameInterface();
   } else {
     event.currentTarget.textContent = "Resume";
-    pauseGame();
+    pauseGameInterface();
   }
 }
 
@@ -276,7 +285,6 @@ function onRiseSeaLevel(event) {
   event.currentTarget.classList.add(appParams.classListSeaLevels[seaLevel]);
   resetBonus();
   destroyAllDrops();
-  chainBonus = 1;
 }
 
 function onRiseSeaLevelEnd() {
@@ -297,12 +305,12 @@ function onStartButtonClick(event) {
   }
 }
 
-function resumeGame() {
+function resumeGameInterface() {
   isGamePaused = false;
   dropContainer.dispatchEvent(new CustomEvent(appParams.eventResume));
 }
 
-function pauseGame() {
+function pauseGameInterface() {
   isGamePaused = true;
   dropContainer.dispatchEvent(new CustomEvent(appParams.eventPause));
 }
@@ -318,6 +326,7 @@ function startGame() {
 function resetBonus() {
   bonusResult = undefined;
   isBonusOnScreen = false;
+  chainBonus = 0;
 }
 
 function resetGame() {
@@ -325,23 +334,24 @@ function resetGame() {
   score.textContent = 0;
   screen.textContent = "";
   isGameInProgress = false;
-  chainBonus = 1;
   seaLevel = -1;
   appParams.classListSeaLevels.forEach((seaLevel) => dropContainer.classList.remove(seaLevel));
   dropContainer.classList.remove(appParams.classRestart);
   resetBonus();
   startButton.textContent = "Start";
   pauseButton.textContent = "Pause";
-  resumeGame();
+  resumeGameInterface();
   cadencer.stop();
 }
 
 function showStatistics() {
+  /*
   console.log("****************************");
   console.log("GAME OVER!");
   console.log(`Total drops : ${statistics.totalDrops}, resolved : ${statistics.resolvedDrops} (${statistics.resolutionRate()})`);
   console.log(`mistakes : ${statistics.mistakes}, accuracy : ${statistics.accuracy()}`);
   console.log("****************************");
+  */
   modalContainer.classList.add(appParams.classShowModal);
   modalContainer.classList.add(appParams.classShowGameOver);
   totalDrops.textContent = statistics.totalDrops;
@@ -355,4 +365,51 @@ function onGameOverClose() {
   modalContainer.classList.remove(appParams.classShowModal);
   modalContainer.classList.remove(appParams.classShowGameOver);
   resetGame();
+}
+
+function onOperationCheckboxChange() {
+  let lastChecked;
+  let checkedCount = 0;
+  operationsCheckboxes.forEach((checkbox) => {
+    if (checkbox.checked) {
+      checkbox.disabled = false;
+      operationsMask[checkbox.value] = true;
+      lastChecked = checkbox;
+      checkedCount++;
+    } else {
+      operationsMask[checkbox.value] = false;
+    }
+  });
+  if (checkedCount === 1) lastChecked.disabled = true;
+}
+
+function onMaxOperandChange(event) {
+  let value = Math.floor(event.currentTarget.value);
+  if (value > 99) {
+    value = 99;
+  } else if (value < 1) {
+    value = 1;
+  }
+  event.currentTarget.value = value;
+  maxOperand = value;
+}
+
+function onSettingsClick(event) {
+  event.currentTarget.blur();
+  wasGamePaused = isGamePaused;
+  if (isGameInProgress) {
+    cadencer.stop();
+    pauseGameInterface();
+  }
+  modalContainer.classList.add(appParams.classShowModal);
+  modalContainer.classList.add(appParams.classShowSettings);
+}
+
+function onSettingsClose() {
+  modalContainer.classList.remove(appParams.classShowModal);
+  modalContainer.classList.remove(appParams.classShowSettings);
+  if (!wasGamePaused && isGameInProgress) {
+    resumeGameInterface();
+    cadencer.start();
+  }
 }

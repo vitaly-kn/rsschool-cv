@@ -1,15 +1,10 @@
 const operators = [
-  { operation: "+", display: "+" },
-  { operation: "-", display: "-" },
-  { operation: "*", display: "x" },
-  { operation: "/", display: "÷" },
+  { name: "add", operation: "+", display: "+" },
+  { name: "sub", operation: "-", display: "-" },
+  { name: "mul", operation: "*", display: "x" },
+  { name: "div", operation: "/", display: "÷" },
 ];
-const operatorsIndexes = {
-  add: 0,
-  sub: 1,
-  mul: 2,
-  div: 3,
-};
+
 const FIRST_TRACK_OFFSET = 5;
 const TRACK_STEP = 10;
 const MAX_TRACKS = 9;
@@ -26,32 +21,47 @@ export function getRandomDropOffset() {
   return `${FIRST_TRACK_OFFSET + track * TRACK_STEP}%`;
 }
 
-export function getRandomExpression(difficulty = 1) {
+export function getRandomExpression(difficulty = 1, maxOperand = MAX_OPERAND_VALUE, operationsMask = { add: true, sub: true, mul: true, div: true }) {
   //1 is the higest difficulty, 2, 3 ... -- lower
-  let operator = getRandomInt(0, operators.length - 1);
-  let operand1 = getRandomInt(0, Math.round(MAX_OPERAND_VALUE / difficulty));
+  let operator;
+  do {
+    operator = getRandomInt(0, operators.length - 1);
+  } while (!operationsMask[operators[operator].name]);
+  if (difficulty > maxOperand) difficulty = 1;
+  //console.log(`difficulty : ${difficulty}`);
+  let operand1 = getRandomInt(0, Math.round(maxOperand / difficulty));
   let operand2;
-  if (operator <= 1) {
-    operand2 = getRandomInt(0, Math.round(MAX_OPERAND_VALUE / difficulty));
-  } else {
-    operand2 = getRandomInt(1, 10);
-  }
   let expression;
   let result;
-  if (operator === operatorsIndexes.add || operator === operatorsIndexes.mul) {
-    expression = `${operand1} ${operators[operator].operation} ${operand2}`;
-    result = eval(expression);
-  } else {
-    if (operator === operatorsIndexes.sub) {
-      expression = `${operand1} ${operators[operatorsIndexes.add].operation} ${operand2}`;
-    } else expression = `${operand1} ${operators[operatorsIndexes.mul].operation} ${operand2}`;
-    result = eval(expression);
-    [operand1, result] = [result, operand1];
-  }
+  if (operators[operator].operation === "+" || operators[operator].operation === "*") {
+    operand2 = getRandomInt(0, Math.round(maxOperand / difficulty));
+  } else if (operators[operator].operation === "-") {
+    operand2 = getRandomInt(0, Math.round(maxOperand / difficulty));
+    if (operand1 < operand2) [operand1, operand2] = [operand2, operand1];
+  } else if (operand1) {
+    let divisors = getDivisors(operand1);
+    //console.log(`divider : ${operand1}, divisors : ${divisors}`);
+    operand2 = divisors[getRandomInt(0, divisors.length - 1)];
+  } else operand2 = getRandomInt(1, Math.round(maxOperand / difficulty));
+
+  expression = `${operand1} ${operators[operator].operation} ${operand2}`;
+  result = eval(expression);
+
   return {
     operand1: operand1,
     operation: operators[operator].display,
     operand2: operand2,
     result: result,
   };
+}
+
+function getDivisors(int) {
+  let divisors = [];
+  for (let i = 1; i <= Math.floor(Math.sqrt(int)); i++) {
+    if (!(int % i)) {
+      divisors.push(i);
+      divisors.push(Math.trunc(int / i));
+    }
+  }
+  return divisors;
 }
