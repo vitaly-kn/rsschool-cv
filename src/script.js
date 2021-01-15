@@ -39,6 +39,7 @@ const appParams = {
   idStart: "start",
   idPause: "pause",
   idSettings: "settings",
+  idSound: "sound",
   eventResult: "result",
   eventPause: "pause",
   eventResume: "resume",
@@ -75,6 +76,7 @@ const fullscreenButton = document.getElementById(appParams.idFullscreen);
 const startButton = document.getElementById(appParams.idStart);
 const pauseButton = document.getElementById(appParams.idPause);
 const settingsButton = document.getElementById(appParams.idSettings);
+const soundButton = document.getElementById(appParams.idSound);
 const modalContainer = document.querySelector(appParams.classModalSelector);
 const totalDrops = document.getElementById(appParams.idTotalDrops);
 const resolvedDrops = document.getElementById(appParams.idResolvedDrops);
@@ -104,6 +106,7 @@ startButton.addEventListener("click", onStartButtonClick);
 pauseButton.addEventListener("click", onPauseButtonClick);
 fullscreenButton.addEventListener("click", toggleFullscreen);
 settingsButton.addEventListener("click", onSettingsClick);
+soundButton.addEventListener("click", onSoundClick);
 document.addEventListener("fullscreenchange", toggleFullscreenButton);
 closeGameOver.addEventListener("click", onGameOverClose);
 operationsCheckboxes.forEach((checkbox) => checkbox.addEventListener("change", onOperationCheckboxChange));
@@ -111,6 +114,35 @@ maxOperandInput.addEventListener("change", onMaxOperandChange);
 closeSettings.addEventListener("click", onSettingsClose);
 
 let operationsMask = { add: true, sub: true, mul: true, div: true };
+
+//Sounds
+let isSoundEnabled = true;
+
+HTMLAudioElement.prototype.playGameSfx = function () {
+  if (isSoundEnabled) return this.play();
+};
+
+const appSounds = {
+  idKey: "sound-key",
+  idBonus: "sound-bonus",
+  idDropStart: "sound-drop-start",
+  idDropFall: "sound-drop-fall",
+  idDropBang: "sound-drop-bang",
+  idGameOver: "sound-game-over",
+  idMistake: "sound-mistake",
+  idSeaRise: "sound-sea-rise",
+  idSoundTheme: "sound-theme",
+};
+
+const soundKey = document.getElementById(appSounds.idKey);
+const soundBonus = document.getElementById(appSounds.idBonus);
+const soundDropStart = document.getElementById(appSounds.idDropStart);
+const soundDropFall = document.getElementById(appSounds.idDropFall);
+const soundDropBang = document.getElementById(appSounds.idDropBang);
+const soundGameOver = document.getElementById(appSounds.idGameOver);
+const soundMistake = document.getElementById(appSounds.idMistake);
+const soundSeaRise = document.getElementById(appSounds.idSeaRise);
+const soundTheme = document.getElementById(appSounds.idSoundTheme);
 
 let level = {
   upgrade() {
@@ -159,6 +191,7 @@ function toggleFullscreenButton() {
 
 function onKeyEntered(event) {
   event.currentTarget.blur();
+  soundKey.playGameSfx();
   if (!isGameInProgress || isGamePaused) return;
   const input = event.currentTarget.getAttribute(appParams.attrValue);
   if (input === appParams.attrValueEnter) {
@@ -196,6 +229,7 @@ function onResultReceived(event) {
   let isCorrectAnswer = false;
   for (let drop of dropContainer.children) {
     if (event.detail.result === bonusResult || drop.result === event.detail.result) {
+      soundBonus.playGameSfx();
       isCorrectAnswer = true;
       score.textContent = +score.textContent + SCORE_STEP + chainBonus;
       chainBonus++;
@@ -210,6 +244,7 @@ function onResultReceived(event) {
   if (!isCorrectAnswer) {
     chainBonus = 0;
     statistics.mistakes++;
+    soundMistake.playGameSfx();
   }
 }
 
@@ -231,6 +266,7 @@ function createRandomDrop() {
     (event) => {
       event.stopPropagation();
       if (event.animationName === appParams.animationDropFall) {
+        soundDropFall.playGameSfx();
         dropContainer.dispatchEvent(new CustomEvent(appParams.eventRiseSeaLevel));
       }
       event.currentTarget.parentNode?.removeChild(event.currentTarget);
@@ -240,6 +276,7 @@ function createRandomDrop() {
   drop.result = expr.result;
   drop.bang = function () {
     drop.classList.add(appParams.classBang);
+    soundDropBang.playGameSfx();
   };
   return drop;
 }
@@ -257,6 +294,7 @@ function onCadence() {
   }
   dropContainer.appendChild(drop);
   statistics.totalDrops++;
+  soundDropStart.playGameSfx();
   console.log(`tick! drop.result = ${drop.result}`);
 }
 
@@ -283,12 +321,14 @@ function onResumeGame(event) {
 function onRiseSeaLevel(event) {
   seaLevel++;
   event.currentTarget.classList.add(appParams.classListSeaLevels[seaLevel]);
+  soundSeaRise.playGameSfx();
   resetBonus();
   destroyAllDrops();
 }
 
 function onRiseSeaLevelEnd() {
   if (seaLevel === appParams.classListSeaLevels.length - 1) {
+    soundGameOver.playGameSfx();
     cadencer.stop();
     showStatistics();
   }
@@ -320,6 +360,7 @@ function startGame() {
   level.reset();
   statistics.reset();
   startButton.textContent = "Restart";
+  soundTheme.playGameSfx();
   cadencer.start();
 }
 
@@ -331,6 +372,7 @@ function resetBonus() {
 
 function resetGame() {
   destroyAllDrops();
+  soundTheme.pause();
   score.textContent = 0;
   screen.textContent = "";
   isGameInProgress = false;
@@ -411,5 +453,15 @@ function onSettingsClose() {
   if (!wasGamePaused && isGameInProgress) {
     resumeGameInterface();
     cadencer.start();
+  }
+}
+
+function onSoundClick(event) {
+  event.currentTarget.blur();
+  isSoundEnabled = !isSoundEnabled;
+  if (isSoundEnabled) {
+    event.currentTarget.textContent = "Sound : On";
+  } else {
+    event.currentTarget.textContent = "Sound : Off";
   }
 }

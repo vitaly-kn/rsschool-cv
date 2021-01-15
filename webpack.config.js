@@ -1,7 +1,7 @@
 const path = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-//const CopyWebpackPlugin = require("copy-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
@@ -19,16 +19,17 @@ module.exports = {
   plugins: [
     new HTMLWebpackPlugin({
       template: "./index.html",
+      favicon: "./favicon.png",
     }),
     new CleanWebpackPlugin(),
-    /*new CopyWebpackPlugin({
+    new CopyWebpackPlugin({
       patterns: [
         {
           from: path.resolve(__dirname, "src/assets/sound/"),
           to: path.resolve(__dirname, "dist/assets/sound/"),
         },
       ],
-    }),*/
+    }),
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash].css",
     }),
