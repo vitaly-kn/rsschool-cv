@@ -10,6 +10,8 @@
   --drop-restart-duration: 3s;
   --bang-animation-duration: 0.5s;
   --modal-show-duration: 1s;
+  --howto-scroll-duration: 12s;
+  --howto-text-color: rgba(0, 0, 0, 0.6);
   --main-background-color: #1e1e1e;
   --main-text-color: aquamarine;
   --sky-bottom-color: lightcyan;
@@ -28,12 +30,6 @@
   --keys-background-color: white;
   --keys-hover-background-color: khaki;
   --keys-active-background-color: darkkhaki;
-  /*--checkbox-disabled-color: darkgrey;*/
-  /*  --score-shadow-color: red;
-  --hi-score-text-color: maroon;
-  --tries-text-color: salmon;
-  --level-text-color: purple;
-  --highlight-color: lightgoldenrodyellow;*/
 }
 
 * {
@@ -41,12 +37,10 @@
   padding: 0;
   font-family: MontserratAlternates, sans-serif;
   font-weight: bold;
-  /*font-style: italic;*/
   box-sizing: border-box;
 }
 
 html {
-  /*font-size: 10px;*/
   font-size: calc(10 * 100vmin / var(--max-application-width));
   height: 100%;
 }
@@ -264,7 +258,7 @@ html {
   background-image: linear-gradient(var(--sea-surface-color), var(--sea-deep-color) 100%);
 }
 
-@keyframes move_wave {
+@keyframes move-wave {
   0% {
     transform: translateX(0) translateZ(0) scaleY(1);
   }
@@ -307,14 +301,14 @@ html {
   opacity: 0.75;
   background-image: url(assets/img/936c3cedf1a445b3456d35ca330bbbde.png);
   background-size: 50% 90%;
-  animation: move_wave 10s linear infinite;
+  animation: move-wave 10s linear infinite;
 }
 
 .wave-bottom {
   z-index: 5;
   background-image: url(assets/img/ef0f775f93c5ba6c1feefc9ec8096704.png);
   background-size: 50% 50%;
-  animation: move_wave 15s linear infinite;
+  animation: move-wave 15s linear infinite;
 }
 
 .score {
@@ -430,12 +424,13 @@ html {
   justify-content: center;
   align-items: center;
   font-size: 1.2rem;
+  line-height: 1.2rem;
   color: var(--controls-background-color);
   border: none;
   box-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.2);
   background: rgba(0, 0, 0, 0.4);
   border-radius: 0.5rem;
-  /*outline: none;*/
+  outline: none;
 }
 
 .control-button:hover {
@@ -544,16 +539,6 @@ html {
   font-size: 2rem;
 }
 
-/*
-.checkbox-disabled {
-  pointer-events: none;
-}
-
-.checkbox-disabled + label {
-  color: var(--checkbox-disabled-color);
-  pointer-events: none;
-}
-*/
 .max-operand {
   max-width: 30%;
   font-size: 2rem;
@@ -568,6 +553,34 @@ html {
   height: 100%;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.6);
+}
+
+.howto {
+  position: absolute;
+  z-index: 30;
+  display: none;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  font-size: 6rem;
+  color: var(--howto-text-color);
+  animation: howto-scroll var(--howto-scroll-duration) linear infinite;
+}
+
+.show-howto > .howto {
+  display: flex;
+}
+
+@keyframes howto-scroll {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(90%);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 @media (min-width: 880px) {

@@ -20,6 +20,7 @@ const appParams = {
   classShowModal: "show-modal",
   classShowSettings: "show-settings",
   classShowGameOver: "show-game-over",
+  classShowHowto: "show-howto",
   settingsOperationsCheckboxSelector: '.operations input[type="checkbox"]',
   classMaxOperandSelector: ".max-operand",
   idTotalDrops: "total-drops",
@@ -40,6 +41,7 @@ const appParams = {
   idPause: "pause",
   idSettings: "settings",
   idSound: "sound",
+  idHowTo: "howto",
   eventResult: "result",
   eventPause: "pause",
   eventResume: "resume",
@@ -55,6 +57,8 @@ const BASIC_DIFFICULTY_LEVEL = 8;
 const MAX_DIFFICULTY_LEVEL = 1;
 const MIN_CADENCE = 500;
 const SCORE_STEP = 10;
+const AI_CADENCE = 4500;
+const AI_INPUT_DELAY = 400;
 
 let isFullscreen = false;
 let isGamePaused = false;
@@ -65,7 +69,10 @@ let isBonusOnScreen = false;
 let bonusResult;
 let seaLevel = -1;
 let maxOperand = 99;
+let isKeyBoardLocked = true;
+let isAIMode = false;
 let cadencer = new Cadencer(onCadence, BASIC_CADENCE);
+let aiCadencer = new Cadencer(onAICadence, AI_CADENCE);
 
 const applicationDiv = document.querySelector(appParams.classApplicationSelector);
 const dropContainer = document.querySelector(appParams.classDropContainerSelector);
@@ -77,6 +84,7 @@ const startButton = document.getElementById(appParams.idStart);
 const pauseButton = document.getElementById(appParams.idPause);
 const settingsButton = document.getElementById(appParams.idSettings);
 const soundButton = document.getElementById(appParams.idSound);
+const howToButton = document.getElementById(appParams.idHowTo);
 const modalContainer = document.querySelector(appParams.classModalSelector);
 const totalDrops = document.getElementById(appParams.idTotalDrops);
 const resolvedDrops = document.getElementById(appParams.idResolvedDrops);
@@ -107,6 +115,7 @@ pauseButton.addEventListener("click", onPauseButtonClick);
 fullscreenButton.addEventListener("click", toggleFullscreen);
 settingsButton.addEventListener("click", onSettingsClick);
 soundButton.addEventListener("click", onSoundClick);
+howToButton.addEventListener("click", onHowToClick);
 document.addEventListener("fullscreenchange", toggleFullscreenButton);
 closeGameOver.addEventListener("click", onGameOverClose);
 operationsCheckboxes.forEach((checkbox) => checkbox.addEventListener("change", onOperationCheckboxChange));
@@ -148,7 +157,7 @@ let level = {
   upgrade() {
     this.difficulty = Math.max(BASIC_DIFFICULTY_LEVEL - Math.trunc(+score.textContent / NEXT_LEVEL_SCORE_STEP), MAX_DIFFICULTY_LEVEL);
     cadencer.setCadence(Math.max(BASIC_CADENCE - Math.trunc(+score.textContent / NEXT_LEVEL_SCORE_STEP) * NEXT_LEVEL_CADENCE_STEP, MIN_CADENCE));
-    console.log(`level : ${level.difficulty}, cadence ${cadencer.getCadence()}`);
+    //console.log(`level : ${level.difficulty}, cadence ${cadencer.getCadence()}`);
   },
   reset() {
     this.difficulty = BASIC_DIFFICULTY_LEVEL;
@@ -192,7 +201,7 @@ function toggleFullscreenButton() {
 function onKeyEntered(event) {
   event.currentTarget.blur();
   soundKey.playGameSfx();
-  if (!isGameInProgress || isGamePaused) return;
+  if ((!isGameInProgress || isGamePaused) && !isAIMode) return;
   const input = event.currentTarget.getAttribute(appParams.attrValue);
   if (input === appParams.attrValueEnter) {
     let resultEvent = new CustomEvent(appParams.eventResult, { detail: { result: +screen.textContent } });
@@ -213,6 +222,7 @@ function getActiveKeypadKey(event) {
 }
 
 function onKeyDown(event) {
+  if (isKeyBoardLocked) return;
   let key = getActiveKeypadKey(event);
   if (key) {
     key.classList.add(appParams.classKeyActive);
@@ -221,6 +231,7 @@ function onKeyDown(event) {
 }
 
 function onKeyUp(event) {
+  if (isKeyBoardLocked) return;
   let key = getActiveKeypadKey(event);
   if (key) key.classList.remove(appParams.classKeyActive);
 }
@@ -295,7 +306,7 @@ function onCadence() {
   dropContainer.appendChild(drop);
   statistics.totalDrops++;
   soundDropStart.playGameSfx();
-  console.log(`tick! drop.result = ${drop.result}`);
+  //console.log(`tick! drop.result = ${drop.result}`);
 }
 
 function onPauseButtonClick(event) {
@@ -328,8 +339,9 @@ function onRiseSeaLevel(event) {
 
 function onRiseSeaLevelEnd() {
   if (seaLevel === appParams.classListSeaLevels.length - 1) {
-    soundGameOver.playGameSfx();
     cadencer.stop();
+    soundGameOver.playGameSfx();
+    isKeyBoardLocked = true;
     showStatistics();
   }
 }
@@ -340,23 +352,28 @@ function onStartButtonClick(event) {
     startGame();
   } else {
     cadencer.stop();
+    isKeyBoardLocked = true;
     destroyAllDrops();
+    appParams.classListSeaLevels.forEach((seaLevel) => dropContainer.classList.remove(seaLevel));
     dropContainer.classList.add(appParams.classRestart);
   }
 }
 
 function resumeGameInterface() {
   isGamePaused = false;
+  isKeyBoardLocked = false;
   dropContainer.dispatchEvent(new CustomEvent(appParams.eventResume));
 }
 
 function pauseGameInterface() {
   isGamePaused = true;
+  isKeyBoardLocked = true;
   dropContainer.dispatchEvent(new CustomEvent(appParams.eventPause));
 }
 
 function startGame() {
   isGameInProgress = true;
+  isKeyBoardLocked = false;
   level.reset();
   statistics.reset();
   startButton.textContent = "Restart";
@@ -377,23 +394,16 @@ function resetGame() {
   screen.textContent = "";
   isGameInProgress = false;
   seaLevel = -1;
-  appParams.classListSeaLevels.forEach((seaLevel) => dropContainer.classList.remove(seaLevel));
   dropContainer.classList.remove(appParams.classRestart);
   resetBonus();
   startButton.textContent = "Start";
   pauseButton.textContent = "Pause";
   resumeGameInterface();
+  isKeyBoardLocked = true;
   cadencer.stop();
 }
 
 function showStatistics() {
-  /*
-  console.log("****************************");
-  console.log("GAME OVER!");
-  console.log(`Total drops : ${statistics.totalDrops}, resolved : ${statistics.resolvedDrops} (${statistics.resolutionRate()})`);
-  console.log(`mistakes : ${statistics.mistakes}, accuracy : ${statistics.accuracy()}`);
-  console.log("****************************");
-  */
   modalContainer.classList.add(appParams.classShowModal);
   modalContainer.classList.add(appParams.classShowGameOver);
   totalDrops.textContent = statistics.totalDrops;
@@ -406,6 +416,7 @@ function showStatistics() {
 function onGameOverClose() {
   modalContainer.classList.remove(appParams.classShowModal);
   modalContainer.classList.remove(appParams.classShowGameOver);
+  appParams.classListSeaLevels.forEach((seaLevel) => dropContainer.classList.remove(seaLevel));
   resetGame();
 }
 
@@ -442,6 +453,8 @@ function onSettingsClick(event) {
   if (isGameInProgress) {
     cadencer.stop();
     pauseGameInterface();
+  } else {
+    isKeyBoardLocked = true;
   }
   modalContainer.classList.add(appParams.classShowModal);
   modalContainer.classList.add(appParams.classShowSettings);
@@ -453,6 +466,8 @@ function onSettingsClose() {
   if (!wasGamePaused && isGameInProgress) {
     resumeGameInterface();
     cadencer.start();
+  } else {
+    isKeyBoardLocked = false;
   }
 }
 
@@ -461,7 +476,63 @@ function onSoundClick(event) {
   isSoundEnabled = !isSoundEnabled;
   if (isSoundEnabled) {
     event.currentTarget.textContent = "Sound : On";
+    if (isGameInProgress) soundTheme.play();
   } else {
     event.currentTarget.textContent = "Sound : Off";
+    soundTheme.pause();
   }
+}
+
+function onHowToClick() {
+  if (isGameInProgress) return;
+  isAIMode = true;
+  modalContainer.classList.add(appParams.classShowModal);
+  modalContainer.classList.add(appParams.classShowHowto);
+  level.reset();
+  statistics.reset();
+  aiCadencer.start();
+  cadencer.start();
+  modalContainer.addEventListener("click", onAIQuit, { once: true });
+}
+
+function onAIQuit(event) {
+  aiCadencer.stop();
+  cadencer.stop();
+  isAIMode = false;
+  destroyAllDrops();
+  event.currentTarget.classList.remove(appParams.classShowModal);
+  event.currentTarget.classList.remove(appParams.classShowHowto);
+  appParams.classListSeaLevels.forEach((seaLevel) => dropContainer.classList.remove(seaLevel));
+  if (event.currentTarget.classList.contains(appParams.classShowGameOver)) {
+    event.currentTarget.classList.remove(appParams.classShowGameOver);
+    resetGame();
+  } else {
+    dropContainer.classList.add(appParams.classRestart);
+  }
+}
+
+function onAICadence() {
+  if (dropContainer.children.length) {
+    let dropToResolve = dropContainer.children[getRandomInt(0, dropContainer.children.length - 1)];
+    enterResult(dropToResolve.result);
+  }
+}
+
+function enterResult(result) {
+  let resultArray = (result + "").split("");
+  resultArray.push("enter");
+  let i = 0;
+  (function sendKeys() {
+    if (i) {
+      let prevKey = document.querySelector(`${appParams.classKeySelector}[${appParams.attrValue}="${resultArray[i - 1]}"]`);
+      prevKey.classList.remove(appParams.classKeyActive);
+    }
+    if (i < resultArray.length) {
+      let key = document.querySelector(`${appParams.classKeySelector}[${appParams.attrValue}="${resultArray[i]}"]`);
+      key.classList.add(appParams.classKeyActive);
+      i++;
+      key.click();
+      setTimeout(sendKeys, AI_INPUT_DELAY);
+    }
+  })();
 }

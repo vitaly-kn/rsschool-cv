@@ -28,7 +28,6 @@ export function getRandomExpression(difficulty = 1, maxOperand = MAX_OPERAND_VAL
     operator = getRandomInt(0, operators.length - 1);
   } while (!operationsMask[operators[operator].name]);
   if (difficulty > maxOperand) difficulty = 1;
-  //console.log(`difficulty : ${difficulty}`);
   let operand1 = getRandomInt(0, Math.round(maxOperand / difficulty));
   let operand2;
   let expression;
@@ -40,13 +39,10 @@ export function getRandomExpression(difficulty = 1, maxOperand = MAX_OPERAND_VAL
     if (operand1 < operand2) [operand1, operand2] = [operand2, operand1];
   } else if (operand1) {
     let divisors = getDivisors(operand1);
-    //console.log(`divider : ${operand1}, divisors : ${divisors}`);
     operand2 = divisors[getRandomInt(0, divisors.length - 1)];
   } else operand2 = getRandomInt(1, Math.round(maxOperand / difficulty));
-
   expression = `${operand1} ${operators[operator].operation} ${operand2}`;
   result = eval(expression);
-
   return {
     operand1: operand1,
     operation: operators[operator].display,
