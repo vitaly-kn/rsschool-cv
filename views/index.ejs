@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" const="text/html;charset=UTF-8" />
+  <link href="http://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="/socket.io/socket.io.js"></script>
+  <title>Chat App</title>
+</head>
+
+<body class="main">
+
+  <div class="wrapper">
+
+    <h1 class="header">Chat App</h1>
+
+    <section class="chat">
+      <section class="chat-block username">
+        <input class="input-field" id="username" type="text" placeholder="Anonymous" />
+        <button class="button" id="send-username" type="button">Change Username</button>
+      </section>
+      <section class="chat-block chatroom">
+        <div class="messages"></div>
+      </section>
+      <section class="chat-block input-block">
+        <input class="input-field new-message" id="message" type="text" placeholder="Enter new message..." />
+        <button class="button" id="send-message" type="button">Send</button>
+      </section>
+    </section>
+  </div>
+
+  <script src="chat.js"></script>
+</body>
+
+</html>

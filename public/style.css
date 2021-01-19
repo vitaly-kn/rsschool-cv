@@ -1,0 +1,119 @@
+:root {
+  --main-background-color: whitesmoke;
+  --primary-color: dodgerblue;
+  --secondary-color: rgba(0, 0, 0, 0.6);
+  --button-hover-color: blue;
+  --button-active-color: steelblue;
+  --input-text-color: rgba(0, 0, 0, 0.8);
+  --input-text-placeholder-color: rgba(0, 0, 0, 0.4);
+  --chat-window-color: snow;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: var(--primary-color);
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
+
+.main {
+  background-color: var(--main-background-color);
+}
+
+.wrapper {
+  position: relative;
+  max-width: 1024px;
+  height: calc(100vh - 2rem);
+  margin: 1rem auto;
+  /*border: 3px double var(--main-text-color);*/
+  box-shadow: 0.3rem 0.3rem 1rem var(--primary-color);
+  background-color: var(--chat-window-color);
+  padding: 1rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  flex-basis: 8%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--main-text-color);
+}
+
+.chat {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  justify-content: space-between;
+}
+
+.chat-block {
+  margin: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.input-field,
+button {
+  margin-left: 1rem;
+  border-radius: 1rem;
+  font-size: 1.5rem;
+  padding: 0 1rem;
+  height: 4rem;
+  outline: none;
+}
+
+.input-field {
+  border: 0.2rem inset var(--secondary-color);
+  color: var(--input-text-color);
+}
+
+.input-field::placeholder {
+  font-style: italic;
+  color: var(--input-text-placeholder-color);
+}
+
+.input-field:focus {
+  border: 0.2rem inset var(--primary-color);
+}
+
+.new-message {
+  flex-grow: 1;
+}
+
+.button {
+  border: none;
+  box-shadow: 0.3rem 0.3rem 1rem var(--secondary-color);
+  color: var(--chat-window-color);
+  background-color: var(--primary-color);
+  min-width: 5rem;
+}
+
+.button:hover {
+  background: var(--button-hover-color);
+}
+
+.button:active {
+  background: var(--button-active-color);
+  transform: translateX(0.2rem) translateY(0.2rem);
+  box-shadow: 0.3rem 0.3rem 0.8rem var(--secondary-color);
+}
+
+.chatroom {
+  flex-grow: 1;
+}
+
+.messages {
+  background-color: var(--main-background-color);
+  height: 100%;
+  width: 100%;
+  border-radius: 1rem;
+}
