@@ -7,6 +7,7 @@
   --input-text-color: rgba(0, 0, 0, 0.8);
   --input-text-placeholder-color: rgba(0, 0, 0, 0.4);
   --chat-window-color: snow;
+  --alternate-messages-color: lightgray;
 }
 
 * {
@@ -30,7 +31,6 @@ html {
   max-width: 1024px;
   height: calc(100vh - 2rem);
   margin: 1rem auto;
-  /*border: 3px double var(--main-text-color);*/
   box-shadow: 0.3rem 0.3rem 1rem var(--primary-color);
   background-color: var(--chat-window-color);
   padding: 1rem;
@@ -109,6 +109,21 @@ button {
 
 .chatroom {
   flex-grow: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.status {
+  position: absolute;
+  right: 0;
+  top: 0;
+  border-bottom-left-radius: 1rem;
+  box-shadow: 0.3rem 0.3rem 1rem var(--secondary-color);
+  font-style: italic;
+  font-size: 1.3rem;
+  padding-left: 1rem;
+  color: var(--input-text-placeholder-color);
+  background-color: var(--main-background-color);
 }
 
 .messages {
@@ -116,4 +131,10 @@ button {
   height: 100%;
   width: 100%;
   border-radius: 1rem;
+  font-size: 1.5rem;
+  overflow: auto;
+}
+
+.messages > div:nth-child(2n) {
+  background-color: var(--alternate-messages-color);
 }
