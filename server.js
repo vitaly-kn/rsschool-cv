@@ -8,13 +8,12 @@ app.use(express.static("public"));
 app.get("/", (req, res) => {
   res.render("index");
 });
+
 server = app.listen("3000", () => console.log("Server is running..."));
 
 const io = require("socket.io")(server);
 
 io.on("connection", (socket) => {
-  console.log("New user connected");
-
   socket.username = "Anonymous";
 
   socket.on("change_username", (data) => {
@@ -22,10 +21,14 @@ io.on("connection", (socket) => {
   });
 
   socket.on("new_message", (data) => {
-    io.sockets.emit("add_mess", { message: data.message, username: socket.username });
+    io.sockets.emit("add_mess", { message: data.message, username: socket.username, usercolor: data.usercolor });
   });
 
   socket.on("typing", (data) => {
     socket.broadcast.emit("typing", { username: socket.username });
+  });
+
+  socket.on("change_usercolor", (data) => {
+    socket.usercolor = data.usercolor;
   });
 });
