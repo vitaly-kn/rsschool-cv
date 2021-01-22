@@ -1,0 +1,48 @@
+@font-face {
+  font-family: Montserrat;
+  src: url(assets/fonts/079ca05d3ded9bc107ab8a8da013be22.ttf);
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: Montserrat;
+  src: url(assets/fonts/fa8441f345d83a0bc4ec345a6948dbb0.ttf);
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: Montserrat;
+  src: url(assets/fonts/3cd786652b8a2e9d41f210cb1a527ff6.ttf);
+  font-weight: 400;
+}
+
+:root {
+  --max-application-width: 720;
+  --main-background-color: linear-gradient(180deg, rgba(8, 15, 26, 0.59) 0%, rgba(17, 17, 46, 0.46) 100%);
+  --primary-text-color: #ffffff;
+  --control-active-color: rgba(174, 181, 185, 0.5);
+  --control-standard-color: rgba(76, 82, 85, 0.4);
+  --secondary-text-color: rgba(255, 255, 255, 0.4);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Montserrat, sans-serif;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: calc(10 * 100vmin / var(--max-application-width));
+  color: var(--primary-text-color);
+  height: 100%;
+}
+
+.main {
+  /*background-color: var(--main-background-color);*/
+  background: linear-gradient(180deg, rgba(8, 15, 26, 0.59) 0%, rgba(17, 17, 46, 0.46) 100%);
+  max-width: calc(var(--max-application-width) * 1rem / 10);
+  margin: auto;
+}
+

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fancy Weather</title>
+<link rel="icon" href="favicon.png"><link href="main.b67bd050b2d5753a85c2.css" rel="stylesheet"></head>
+
+<body class="main">
+    <header class="header">
+        <div class="controls-group">
+            <div class="control">
+                <button>R</button>
+            </div>
+            <div class="control">
+                <select name="lang" id="lang">
+                    <option value="en">EN</option>
+                    <option value="ru">RU</option>
+                </select>
+            </div>
+            <div class="control">
+                <div class="radio-control"><input value="F" type="radio" name="temperature-unit" checked /><label
+                        class="radio-label" for="F">F</label></div>
+                <div class="radio-control"><input value="C" type="radio" name="temperature-unit" /><label
+                        class="radio-label" for="C">C</label></div>
+            </div>
+        </div>
+        <div class="controls-group">
+            <div class="control">
+                <input class="input-field" id="search-text" type="text" placeholder="Search city or ZIP" />
+                <button id="mic">M</button>
+                <button id="search">SEARCH</button>
+            </div>
+        </div>
+    </header>
+    <section class="content">
+        <div class="weather-block">
+            <div class="location">
+                <div class="area">Minsk, Belarus</div>
+                <div class="date"><span id="date">Sat 23 Jan 2021</span> <span id="time">01:43</span></div>
+            </div>
+            <div class="weather" id="weather">
+                <div class="temperature"><span id="temprature">10</span>&#176;</div>
+                <div class="weather-description">
+                    <div class="weather-icon">Clouds</div>
+                    <div class="weather-details">
+                        <p><span id="description">Overcast</span></p>
+                        <p><span id="feels-like-tag">Feels like</span>: <span id="feels-like">7</span>&#176;</p>
+                        <p><span id="wind-tag">Wind</span>: <span id="wind">2</span><span id="wind-units">m/s</span></p>
+                        <p><span id="humidity-tag">Humidity</span>: <span id="humidity">83</span>%</p>
+                    </div>
+                </div>
+            </div>
+            <div class="forecast">
+                <div class="upcoming-day">
+                    <div class="day-of-week">Tuesday</div>
+                    <div class="upcomig-weather">
+                        <div class="upcoming-temperature"><span class="upcoming-temperature-amount">7</span>&#176;</div>
+                        <div class="upcoming-weather-icon">Clouds</div>
+                    </div>
+                </div>
+                <div class="upcoming-day">
+                    <div class="day-of-week">Wednesday</div>
+                    <div class="upcomig-weather">
+                        <div class="upcoming-temperature"><span class="upcoming-temperature-amount">6</span>&#176;</div>
+                        <div class="upcoming-weather-icon">Rain</div>
+                    </div>
+                </div>
+                <div class="upcoming-day">
+                    <div class="day-of-week">Thursday</div>
+                    <div class="upcomig-weather">
+                        <div class="upcoming-temperature"><span class="upcoming-temperature-amount">3</span>&#176;</div>
+                        <div class="upcoming-weather-icon">Sun</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="navigation-block">
+            <div class="map">Map</div>
+            <div class="coordinates">
+                <p><span id="latitude-tag">Latitude</span>: <span id="latitude">53&#176;54'</span></p>
+                <p><span id="longitude-tag">Longitude</span>: <span id="longitude">27&#176;34'</span></p>
+            </div>
+        </div>
+    </section>
+<script src="main.a1fd28ab1c5b0565e5c7.js"></script></body>
+
+</html>
