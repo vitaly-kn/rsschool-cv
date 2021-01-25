@@ -1,4 +1,5 @@
 const path = require("path");
+const { SourceMapDevToolPlugin } = require("webpack");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
@@ -33,6 +34,9 @@ module.exports = {
     }),*/
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash].css",
+    }),
+    new SourceMapDevToolPlugin({
+      filename: "[file].map",
     }),
   ],
   module: {
@@ -81,6 +85,11 @@ module.exports = {
             },
           },
         ],
+      },
+      {
+        test: /\.js$/,
+        enforce: "pre",
+        use: ["source-map-loader"],
       },
     ],
   },

@@ -45,3 +45,8 @@ html {
   max-width: calc(var(--max-application-width) * 1rem / 10);
   margin: auto;
 }
+
+.map {
+  width: 335px;
+  height: 335px;
+}
