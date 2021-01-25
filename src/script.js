@@ -1,5 +1,6 @@
 import "./style.css";
-import "./owfont-regular.css";
+import "./components/css/owfont-regular.css";
+import lang from "./components/js/lang";
 import "ol/ol.css";
 import { Map, View } from "ol";
 import { transform } from "ol/proj";
@@ -7,17 +8,18 @@ import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
 
 const appParams = {
-  idSearch: "search",
+  idSearchText: "search-text",
   idMic: "mic",
   idMap: "map",
 };
 
 const MAP_START_ZOOM = 11;
+let currentLang = "en-US";
 
 const micButton = document.getElementById(appParams.idMic);
-const searchField = document.getElementById(appParams.idSearch);
+const searchTextField = document.getElementById(appParams.idSearchText);
 
-micButton.addEventListener("click", onMicButtonclick);
+micButton.addEventListener("click", onMicButtonClick);
 
 const map = new Map({
   target: appParams.idMap,
@@ -32,7 +34,7 @@ const map = new Map({
   }),
 });
 
-function onMicButtonclick(event) {
+function onMicButtonClick(event) {
   if ("webkitSpeechRecognition" in window) {
     speechRecognize();
   }
@@ -40,9 +42,18 @@ function onMicButtonclick(event) {
 
 function speechRecognize() {
   let recognition = new webkitSpeechRecognition();
+  recognition.lang = currentLang;
+  recognition.start();
+  searchTextField.value = "";
+  searchTextField.placeholder = lang[currentLang].searchPlaceholderMicOn;
+  recognition.onend = function () {
+    //console.log(`recognition session ended!`);
+    searchTextField.placeholder = lang[currentLang].searchPlaceholderInitial;
+  };
   recognition.onresult = function (event) {
+    //console.log(`recognized: ${event.results.length}`);
     if (event.results.length > 0) {
-      searchField.value = event.results[0][0].transcript;
+      searchTextField.value = event.results[0][0].transcript;
       /*searchField.form.submit();*/
     }
   };

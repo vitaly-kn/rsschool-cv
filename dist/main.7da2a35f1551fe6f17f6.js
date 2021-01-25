@@ -20,14 +20,14 @@ eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extr
 
 /***/ }),
 
-/***/ "./owfont-regular.css":
-/*!****************************!*\
-  !*** ./owfont-regular.css ***!
-  \****************************/
+/***/ "./components/css/owfont-regular.css":
+/*!*******************************************!*\
+  !*** ./components/css/owfont-regular.css ***!
+  \*******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extract-plugin\n\n\n//# sourceURL=webpack:///./owfont-regular.css?");
+eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extract-plugin\n\n\n//# sourceURL=webpack:///./components/css/owfont-regular.css?");
 
 /***/ }),
 
@@ -2263,6 +2263,17 @@ eval("!function(t,i){ true?module.exports=i():0}(this,function(){\"use strict\";
 
 /***/ }),
 
+/***/ "./components/js/lang.js":
+/*!*******************************!*\
+  !*** ./components/js/lang.js ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => __WEBPACK_DEFAULT_EXPORT__\n/* harmony export */ });\nconst lang = {\r\n  \"en-US\": {\r\n    searchPlaceholderInitial: \"Search city or ZIP\",\r\n    searchPlaceholderMicOn: \"Spell location to the mic...\",\r\n  },\r\n};\r\n\r\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (lang);\r\n\n\n//# sourceURL=webpack:///./components/js/lang.js?");
+
+/***/ }),
+
 /***/ "./script.js":
 /*!*******************!*\
   !*** ./script.js ***!
@@ -2270,7 +2281,7 @@ eval("!function(t,i){ true?module.exports=i():0}(this,function(){\"use strict\";
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.css */ \"./style.css\");\n/* harmony import */ var _owfont_regular_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./owfont-regular.css */ \"./owfont-regular.css\");\n/* harmony import */ var ol_ol_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ol/ol.css */ \"../node_modules/ol/ol.css\");\n/* harmony import */ var ol__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ol */ \"../node_modules/ol/Map.js\");\n/* harmony import */ var ol__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ol */ \"../node_modules/ol/View.js\");\n/* harmony import */ var ol_proj__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ol/proj */ \"../node_modules/ol/proj.js\");\n/* harmony import */ var ol_layer_Tile__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ol/layer/Tile */ \"../node_modules/ol/layer/Tile.js\");\n/* harmony import */ var ol_source_OSM__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ol/source/OSM */ \"../node_modules/ol/source/OSM.js\");\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nconst appParams = {\r\n  idSearch: \"search\",\r\n  idMic: \"mic\",\r\n  idMap: \"map\",\r\n};\r\n\r\nconst MAP_START_ZOOM = 11;\r\n\r\nconst micButton = document.getElementById(appParams.idMic);\r\nconst searchField = document.getElementById(appParams.idSearch);\r\n\r\nmicButton.addEventListener(\"click\", onMicButtonclick);\r\n\r\nconst map = new ol__WEBPACK_IMPORTED_MODULE_4__.default({\r\n  target: appParams.idMap,\r\n  layers: [\r\n    new ol_layer_Tile__WEBPACK_IMPORTED_MODULE_5__.default({\r\n      source: new ol_source_OSM__WEBPACK_IMPORTED_MODULE_6__.default(),\r\n    }),\r\n  ],\r\n  view: new ol__WEBPACK_IMPORTED_MODULE_7__.default({\r\n    center: (0,ol_proj__WEBPACK_IMPORTED_MODULE_3__.transform)([27.57, 53.9], \"EPSG:4326\", \"EPSG:3857\"),\r\n    zoom: MAP_START_ZOOM,\r\n  }),\r\n});\r\n\r\nfunction onMicButtonclick(event) {\r\n  if (\"webkitSpeechRecognition\" in window) {\r\n    speechRecognize();\r\n  }\r\n}\r\n\r\nfunction speechRecognize() {\r\n  let recognition = new webkitSpeechRecognition();\r\n  recognition.onresult = function (event) {\r\n    if (event.results.length > 0) {\r\n      searchField.value = event.results[0][0].transcript;\r\n      /*searchField.form.submit();*/\r\n    }\r\n  };\r\n}\r\n\n\n//# sourceURL=webpack:///./script.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.css */ \"./style.css\");\n/* harmony import */ var _components_css_owfont_regular_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/css/owfont-regular.css */ \"./components/css/owfont-regular.css\");\n/* harmony import */ var _components_js_lang__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/js/lang */ \"./components/js/lang.js\");\n/* harmony import */ var ol_ol_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ol/ol.css */ \"../node_modules/ol/ol.css\");\n/* harmony import */ var ol__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ol */ \"../node_modules/ol/Map.js\");\n/* harmony import */ var ol__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ol */ \"../node_modules/ol/View.js\");\n/* harmony import */ var ol_proj__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ol/proj */ \"../node_modules/ol/proj.js\");\n/* harmony import */ var ol_layer_Tile__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ol/layer/Tile */ \"../node_modules/ol/layer/Tile.js\");\n/* harmony import */ var ol_source_OSM__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ol/source/OSM */ \"../node_modules/ol/source/OSM.js\");\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nconst appParams = {\r\n  idSearchText: \"search-text\",\r\n  idMic: \"mic\",\r\n  idMap: \"map\",\r\n};\r\n\r\nconst MAP_START_ZOOM = 11;\r\nlet currentLang = \"en-US\";\r\n\r\nconst micButton = document.getElementById(appParams.idMic);\r\nconst searchTextField = document.getElementById(appParams.idSearchText);\r\n\r\nmicButton.addEventListener(\"click\", onMicButtonClick);\r\n\r\nconst map = new ol__WEBPACK_IMPORTED_MODULE_5__.default({\r\n  target: appParams.idMap,\r\n  layers: [\r\n    new ol_layer_Tile__WEBPACK_IMPORTED_MODULE_6__.default({\r\n      source: new ol_source_OSM__WEBPACK_IMPORTED_MODULE_7__.default(),\r\n    }),\r\n  ],\r\n  view: new ol__WEBPACK_IMPORTED_MODULE_8__.default({\r\n    center: (0,ol_proj__WEBPACK_IMPORTED_MODULE_4__.transform)([27.57, 53.9], \"EPSG:4326\", \"EPSG:3857\"),\r\n    zoom: MAP_START_ZOOM,\r\n  }),\r\n});\r\n\r\nfunction onMicButtonClick(event) {\r\n  if (\"webkitSpeechRecognition\" in window) {\r\n    speechRecognize();\r\n  }\r\n}\r\n\r\nfunction speechRecognize() {\r\n  let recognition = new webkitSpeechRecognition();\r\n  recognition.lang = currentLang;\r\n  recognition.start();\r\n  searchTextField.value = \"\";\r\n  searchTextField.placeholder = _components_js_lang__WEBPACK_IMPORTED_MODULE_2__.default[currentLang].searchPlaceholderMicOn;\r\n  recognition.onend = function () {\r\n    //console.log(`recognition session ended!`);\r\n    searchTextField.placeholder = _components_js_lang__WEBPACK_IMPORTED_MODULE_2__.default[currentLang].searchPlaceholderInitial;\r\n  };\r\n  recognition.onresult = function (event) {\r\n    //console.log(`recognized: ${event.results.length}`);\r\n    if (event.results.length > 0) {\r\n      searchTextField.value = event.results[0][0].transcript;\r\n      /*searchField.form.submit();*/\r\n    }\r\n  };\r\n}\r\n\n\n//# sourceURL=webpack:///./script.js?");
 
 /***/ })
 
@@ -2347,4 +2358,4 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _sty
 /******/ 	// This entry module used 'exports' so it can't be inlined
 /******/ })()
 ;
-//# sourceMappingURL=main.d08ad9e294cb89334a62.js.map
+//# sourceMappingURL=main.7da2a35f1551fe6f17f6.js.map
