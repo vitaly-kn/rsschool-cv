@@ -21,9 +21,9 @@
                 </select>
             </div>
             <div class="control">
-                <div class="radio-control"><input value="F" type="radio" name="temperature-unit" checked /><label
+                <div class="radio-control"><input value="imperial" type="radio" name="units" /><label
                         class="radio-label" for="F">&#176;F</label></div>
-                <div class="radio-control"><input value="C" type="radio" name="temperature-unit" /><label
+                <div class="radio-control"><input value="metric" type="radio" name="units" checked /><label
                         class="radio-label" for="C">&#176;C</label></div>
             </div>
         </div>
@@ -42,13 +42,14 @@
                 <div class="date"><span id="date">Sat 23 Jan 2021</span> <span id="time">01:43</span></div>
             </div>
             <div class="weather" id="weather">
-                <div class="temperature"><span id="temprature">10</span>&#176;</div>
+                <div class="temperature"><span id="temperature">10</span>&#176;</div>
                 <div class="weather-description">
-                    <div class="weather-icon"><i class="owf owf-804"></i></div>
+                    <div class="weather-icon"><i class="owf owf-804" id="weather-icon"></i></div>
                     <div class="weather-details">
                         <p><span id="description">Overcast</span></p>
                         <p><span id="feels-like-tag">Feels like</span>: <span id="feels-like">7</span>&#176;</p>
-                        <p><span id="wind-tag">Wind</span>: <span id="wind">2</span><span id="wind-units">m/s</span></p>
+                        <p><span id="wind-tag">Wind</span>: <span id="wind">2</span> <span id="wind-units">m/s</span>
+                        </p>
                         <p><span id="humidity-tag">Humidity</span>: <span id="humidity">83</span>%</p>
                     </div>
                 </div>
@@ -57,22 +58,25 @@
                 <div class="upcoming-day">
                     <div class="day-of-week">Tuesday</div>
                     <div class="upcomig-weather">
-                        <div class="upcoming-temperature"><span class="upcoming-temperature-amount">7</span>&#176;</div>
-                        <div class="upcoming-weather-icon"><i class="owf owf-310"></i></div>
+                        <div class="upcoming-temperature"><span name="upcoming-temperature">7</span>&#176;</div>
+                        <div class="upcoming-weather-icon"><i name="upcoming-weather-icon" class="owf owf-310"></i>
+                        </div>
                     </div>
                 </div>
                 <div class="upcoming-day">
                     <div class="day-of-week">Wednesday</div>
                     <div class="upcomig-weather">
-                        <div class="upcoming-temperature"><span class="upcoming-temperature-amount">6</span>&#176;</div>
-                        <div class="upcoming-weather-icon"><i class="owf owf-502"></i></div>
+                        <div class="upcoming-temperature"><span name="upcoming-temperature">6</span>&#176;</div>
+                        <div class="upcoming-weather-icon"><i name="upcoming-weather-icon" class="owf owf-502"></i>
+                        </div>
                     </div>
                 </div>
                 <div class="upcoming-day">
                     <div class="day-of-week">Thursday</div>
                     <div class="upcomig-weather">
-                        <div class="upcoming-temperature"><span class="upcoming-temperature-amount">3</span>&#176;</div>
-                        <div class="upcoming-weather-icon"><i class="owf owf-800-d"></i></div>
+                        <div class="upcoming-temperature"><span name="upcoming-temperature">3</span>&#176;</div>
+                        <div class="upcoming-weather-icon"><i name="upcoming-weather-icon" class="owf owf-800-d"></i>
+                        </div>
                     </div>
                 </div>
             </div>
