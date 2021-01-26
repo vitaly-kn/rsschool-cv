@@ -12,33 +12,31 @@
     <header class="header">
         <div class="controls-group">
             <div class="control">
-                <button><i class="material-icons">refresh</i></button>
+                <button id="refresh"><i class="material-icons">refresh</i></button>
             </div>
             <div class="control">
                 <select name="lang" id="lang">
-                    <option value="en">EN</option>
-                    <option value="ru">RU</option>
+                    <option value="en-US">EN</option>
+                    <option value="ru-RU">RU</option>
                 </select>
             </div>
             <div class="control">
-                <div class="radio-control"><input value="imperial" type="radio" name="units" /><label
-                        class="radio-label" for="F">&#176;F</label></div>
-                <div class="radio-control"><input value="metric" type="radio" name="units" checked /><label
-                        class="radio-label" for="C">&#176;C</label></div>
+                <div class="radio-control"><input value="imperial" type="radio" name="units" /><label class="radio-label" for="F">&#176;F</label></div>
+                <div class="radio-control"><input value="metric" type="radio" name="units" checked /><label class="radio-label" for="C">&#176;C</label></div>
             </div>
         </div>
         <div class="controls-group">
             <div class="control">
                 <input class="input-field" id="search-text" type="text" placeholder="Search city or ZIP" />
                 <button id="mic"><i class="material-icons">mic</i></button>
-                <button id="search">SEARCH</button>
+                <button class="translatable" id="search">Search</button>
             </div>
         </div>
     </header>
     <section class="content">
         <div class="weather-block">
             <div class="location">
-                <div class="area">Minsk, Belarus</div>
+                <div class="area" id="area">Minsk, Belarus</div>
                 <div class="date"><span id="date">Sat 23 Jan 2021</span> <span id="time">01:43</span></div>
             </div>
             <div class="weather" id="weather">
@@ -47,10 +45,11 @@
                     <div class="weather-icon"><i class="owf owf-804" id="weather-icon"></i></div>
                     <div class="weather-details">
                         <p><span id="description">Overcast</span></p>
-                        <p><span id="feels-like-tag">Feels like</span>: <span id="feels-like">7</span>&#176;</p>
-                        <p><span id="wind-tag">Wind</span>: <span id="wind">2</span> <span id="wind-units">m/s</span>
+                        <p><span class="translatable" id="feels-like-tag">Feels like</span>: <span id="feels-like">7</span>&#176;</p>
+                        <p><span class="translatable" id="wind-tag">Wind</span>: <span id="wind">2</span> <span id="wind-units">m/s</span>
                         </p>
-                        <p><span id="humidity-tag">Humidity</span>: <span id="humidity">83</span>%</p>
+                        <p><span class="translatable" id="humidity-tag">Humidity</span>: <span id="humidity">83</span>%
+                        </p>
                     </div>
                 </div>
             </div>
@@ -84,8 +83,9 @@
         <div class="navigation-block">
             <div class="map" id="map"></div>
             <div class="coordinates">
-                <p><span id="latitude-tag">Latitude</span>: <span id="latitude">53&#176;54'</span></p>
-                <p><span id="longitude-tag">Longitude</span>: <span id="longitude">27&#176;34'</span></p>
+                <p><span class="translatable" id="latitude-tag">Latitude</span>: <span id="latitude">53&#176;54'</span>
+                </p>
+                <p><span class="translatable" id="longitude-tag">Longitude</span>: <span id="longitude">27&#176;34'</span></p>
             </div>
         </div>
     </section>

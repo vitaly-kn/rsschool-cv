@@ -3,7 +3,7 @@ import "./components/css/owfont-regular.css";
 import lang from "./components/js/lang";
 import "ol/ol.css";
 import { Map, View } from "ol";
-import { fromLonLat, transform } from "ol/proj";
+import { fromLonLat, toLonLat, transform } from "ol/proj";
 import { toStringHDMS } from "ol/coordinate";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
@@ -12,6 +12,10 @@ const appParams = {
   nameUnits: "units",
   nameUpcomingTemperature: "upcoming-temperature",
   nameUpcomingWeatherIcon: "upcoming-weather-icon",
+  classTranslatable: "translatable",
+  idRefresh: "refresh",
+  idLang: "lang",
+  idArea: "area",
   idTemperature: "temperature",
   idWeatherIcon: "weather-icon",
   idDescription: "description",
@@ -19,6 +23,7 @@ const appParams = {
   idWind: "wind",
   idHumidity: "humidity",
   idSearchText: "search-text",
+  idSearch: "search",
   idMic: "mic",
   idMap: "map",
   idWindUnits: "wind-units",
@@ -28,10 +33,14 @@ const appParams = {
 
 const OWM_API = "46a8d7bc7f3c4adccd8efc07bf1a0431";
 const MAP_START_ZOOM = 10;
-let currentLang = "en-US";
-let coords = [-0.1277, 51.5073];
+const NOTIFICATION_DELAY = 2000;
+let coords = [0.1277, 51.5073];
 
+const staticTranslatableLabels = document.getElementsByClassName(appParams.classTranslatable);
+const refreshButton = document.getElementById(appParams.idRefresh);
+const langSelect = document.getElementById(appParams.idLang);
 const unitsRadioButtons = document.getElementsByName(appParams.nameUnits);
+const areaField = document.getElementById(appParams.idArea);
 const temperatureField = document.getElementById(appParams.idTemperature);
 const weatherIconField = document.getElementById(appParams.idWeatherIcon);
 const descriptionField = document.getElementById(appParams.idDescription);
@@ -41,14 +50,19 @@ const humidityField = document.getElementById(appParams.idHumidity);
 const windUnitsField = document.getElementById(appParams.idWindUnits);
 const upcomingTemperatureFields = document.getElementsByName(appParams.nameUpcomingTemperature);
 const upcomingWeatherIconFields = document.getElementsByName(appParams.nameUpcomingWeatherIcon);
+const searchButton = document.getElementById(appParams.idSearch);
 const micButton = document.getElementById(appParams.idMic);
 const searchTextInput = document.getElementById(appParams.idSearchText);
 const latField = document.getElementById(appParams.idLatitude);
 const longField = document.getElementById(appParams.idLongitude);
 
 window.addEventListener("load", onWindowLoad);
+refreshButton.addEventListener("click", refreshContent);
+langSelect.addEventListener("change", onLanguageChange);
 unitsRadioButtons.forEach((radioButton) => radioButton.addEventListener("change", onUnitsRadioButtonChecked));
+searchTextInput.addEventListener("keypress", onSearchTextInputKeypress);
 micButton.addEventListener("click", onMicButtonClick);
+searchButton.addEventListener("click", onSearchButtonClick);
 
 const view = new View({
   center: fromLonLat(coords),
@@ -68,31 +82,43 @@ const map = new Map({
 function onWindowLoad(event) {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
-      //getWeather();
       coords[0] = position.coords.longitude;
       coords[1] = position.coords.latitude;
       //console.log(`coordinates : ${coords}; fromLonLat: ${fromLonLat(coords)}; hdms : ${toStringHDMS(coords)}`);
-      displayCoords(coords);
       view.setCenter(fromLonLat(coords));
-      getWeather();
+      translateStaticLabels();
+      refreshContent();
     });
   }
-  //getWeather();
-}
-
-function displayCoords(coordsArray) {
-  const coords = toStringHDMS(coordsArray);
-  const parsedCoords = coords.match(/\b\d+(\u00b0|\u2032)/g);
-  latField.textContent = `${parsedCoords[0]} ${parsedCoords[1]}`;
-  longField.textContent = `${parsedCoords[2]} ${parsedCoords[3]}`;
-  const parsedLat = coords.match(/(N|S)/g);
-  const parsedLong = coords.match(/(E|W)/g);
-  parsedLat && (latField.textContent += ` ${lang[currentLang].hemi[parsedLat[0]]}`);
-  parsedLong && (longField.textContent += ` ${lang[currentLang].hemi[parsedLong[0]]}`);
 }
 
 function onUnitsRadioButtonChecked() {
   getWeather();
+}
+
+function refreshContent() {
+  displayCoords();
+  getLocation();
+  getWeather();
+}
+
+function onLanguageChange() {
+  translateStaticLabels();
+  refreshContent();
+}
+
+function translateStaticLabels() {
+  searchTextInput.placeholder = lang[langSelect.value].searchPlaceholderInitial;
+  for (let label of staticTranslatableLabels) {
+    label.textContent = lang[langSelect.value][label.id];
+  }
+}
+
+function onSearchTextInputKeypress(event) {
+  if (event.keyCode === 13) {
+    searchTextInput.blur();
+    searchButton.click();
+  }
 }
 
 function onMicButtonClick(event) {
@@ -101,49 +127,111 @@ function onMicButtonClick(event) {
   }
 }
 
-function getWeather() {
-  const units = document.querySelector(`input[name="${appParams.nameUnits}"]:checked`).value;
-  const api = `http://api.openweathermap.org/data/2.5/onecall?lat=${coords[1]}&lon=${
-    coords[0]
-  }&exclude=hourly,minutely&units=${units}&appid=${OWM_API}&lang=${currentLang.substring(0, 2)}`;
+map.on("singleclick", (event) => {
+  coords = toLonLat(event.coordinate).slice();
+  refreshContent();
+});
+
+function onSearchButtonClick() {
+  const api = `https://nominatim.openstreetmap.org/search?q=${encodeURI(searchTextInput.value)}&format=json&limit=1`;
+  searchTextInput.placeholder = `${lang[langSelect.value].searching} "${searchTextInput.value}"...`;
+  searchTextInput.value = "";
   fetch(api)
     .then((response) => {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
+      //console.log(data);
+      if (data.length) {
+        searchTextInput.placeholder = lang[langSelect.value].searchPlaceholderInitial;
+        coords[0] = +data[0].lon;
+        coords[1] = +data[0].lat;
+        view.setCenter(fromLonLat(coords));
+        refreshContent();
+      } else {
+        searchTextInput.placeholder = lang[langSelect.value].searchFail;
+        setTimeout(() => {
+          searchTextInput.placeholder = lang[langSelect.value].searchPlaceholderInitial;
+        }, NOTIFICATION_DELAY);
+      }
+    });
+}
+
+function displayCoords() {
+  const coordsHDMS = toStringHDMS(coords);
+  const parsedCoords = coordsHDMS.match(/\b\d+(\u00b0|\u2032)/g);
+  latField.textContent = `${parsedCoords[0]} ${parsedCoords[1]}`;
+  longField.textContent = `${parsedCoords[2]} ${parsedCoords[3]}`;
+  const parsedLat = coordsHDMS.match(/(N|S)/g);
+  const parsedLong = coordsHDMS.match(/(E|W)/g);
+  parsedLat && (latField.textContent += ` ${lang[langSelect.value].hemi[parsedLat[0]]}`);
+  parsedLong && (longField.textContent += ` ${lang[langSelect.value].hemi[parsedLong[0]]}`);
+}
+
+function getWeather() {
+  const units = document.querySelector(`input[name="${appParams.nameUnits}"]:checked`).value;
+  const api = `http://api.openweathermap.org/data/2.5/onecall?lat=${coords[1]}&lon=${
+    coords[0]
+  }&exclude=hourly,minutely&units=${units}&appid=${OWM_API}&lang=${langSelect.value.substring(0, 2)}`;
+  fetch(api)
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      //console.log(data); //weather data
       temperatureField.textContent = Math.round(data.current.temp);
       weatherIconField.classList.remove(...weatherIconField.classList);
       weatherIconField.classList.add("owf", `owf-${data.current.weather[0].id}`);
       descriptionField.textContent = data.current.weather[0].description;
       feelsLikeField.textContent = Math.round(data.current.feels_like);
       windField.textContent = data.current.wind_speed;
-      windUnitsField.textContent = lang[currentLang].units[units].wind;
+      windUnitsField.textContent = lang[langSelect.value].units[units].wind;
       humidityField.textContent = data.current.humidity;
       for (let i = 0; i < upcomingTemperatureFields.length; i++) {
         upcomingTemperatureFields[i].textContent = Math.round(data.daily[i].temp.day);
         upcomingWeatherIconFields[i].classList.remove(...upcomingWeatherIconFields[i].classList);
         upcomingWeatherIconFields[i].classList.add("owf", `owf-${data.daily[i].weather[0].id}`);
       }
-      console.log(`${data.city}`);
+    });
+}
+
+function getLocation() {
+  const api = `https://nominatim.openstreetmap.org/reverse?lat=${coords[1]}&lon=${coords[0]}&format=json&zoom=10&accept-language=${langSelect.value.substring(0, 2)}`;
+  fetch(api)
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      let area = "";
+      if (data.address) {
+        const keys = ["city", "county", "state"];
+        for (let i = 0; i < keys.length; i++) {
+          if (data.address[keys[i]]) {
+            area += `${data.address[keys[i]]}, `;
+            break;
+          }
+        }
+        area += data.address.country;
+      } else {
+        area = lang[langSelect.value].unknown;
+      }
+      areaField.textContent = area;
     });
 }
 
 function speechRecognize() {
   let recognition = new webkitSpeechRecognition();
-  recognition.lang = currentLang;
+  recognition.lang = langSelect.value;
   recognition.start();
   searchTextInput.value = "";
-  searchTextInput.placeholder = lang[currentLang].searchPlaceholderMicOn;
+  searchTextInput.placeholder = lang[langSelect.value].searchPlaceholderMicOn;
   recognition.onend = function () {
-    //console.log(`recognition session ended!`);
-    searchTextInput.placeholder = lang[currentLang].searchPlaceholderInitial;
+    searchTextInput.placeholder = lang[langSelect.value].searchPlaceholderInitial;
   };
   recognition.onresult = function (event) {
-    //console.log(`recognized: ${event.results.length}`);
     if (event.results.length > 0) {
       searchTextInput.value = event.results[0][0].transcript;
-      /*searchField.form.submit();*/
+      searchButton.click();
     }
   };
 }
