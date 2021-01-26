@@ -28,6 +28,10 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("typing", { username: socket.username });
   });
 
+  socket.on("stop_typing", (data) => {
+    socket.broadcast.emit("stop_typing", { username: socket.username });
+  });
+
   socket.on("change_usercolor", (data) => {
     socket.usercolor = data.usercolor;
   });

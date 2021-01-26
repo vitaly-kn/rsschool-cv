@@ -1,6 +1,6 @@
 appParams = {
   server: "http://localhost:3000",
-  idUsername: "username",
+  idUserName: "username",
   idUserColor: "user-color",
   idChangeUsername: "change-username",
   idStatus: "status",
@@ -10,16 +10,19 @@ appParams = {
 };
 
 const socket = io.connect(appParams.server);
-const message = document.getElementById(appParams.idNewMessage);
-const username = document.getElementById(appParams.idUsername);
+const messageField = document.getElementById(appParams.idNewMessage);
+const userNameField = document.getElementById(appParams.idUserName);
 const setUserColorButton = document.getElementById(appParams.idUserColor);
 const changeUsernameButton = document.getElementById(appParams.idChangeUsername);
 const sendMessageButton = document.getElementById(appParams.idSendMessage);
-const status = document.getElementById(appParams.idStatus);
-const messages = document.getElementById(appParams.idMessages);
+const statusField = document.getElementById(appParams.idStatus);
+const messagesBox = document.getElementById(appParams.idMessages);
 
-username.addEventListener("keypress", onChangeUsernameKeypress);
-message.addEventListener("keypress", onNewMessageKeypress);
+const TYPING_MAX_DELAY = 3000;
+let typingDelayHandler;
+
+userNameField.addEventListener("keypress", onChangeUsernameKeypress);
+messageField.addEventListener("keypress", onNewMessageKeypress);
 changeUsernameButton.addEventListener("click", onChangeUsernameClick);
 setUserColorButton.addEventListener("change", onUserColorChange);
 sendMessageButton.addEventListener("click", onSendMessageButtonClick);
@@ -33,14 +36,16 @@ function onChangeUsernameKeypress(event) {
 
 function onNewMessageKeypress(event) {
   socket.emit("typing");
+  clearTimeout(typingDelayHandler);
+  typingDelayHandler = setTimeout(function () {
+    socket.emit("stop_typing");
+  }, TYPING_MAX_DELAY);
   if (event.keyCode === 13) {
     sendMessageButton.click();
   }
 }
 
 socket.on("add_mess", (data) => {
-  status.textContent = "";
-  message.value = "";
   messages.insertAdjacentHTML(
     "beforeend",
     `<div style="color:${data.usercolor}"><b style="color:${data.usercolor}">${data.username}</b>: ${data.message}</div>`
@@ -49,18 +54,25 @@ socket.on("add_mess", (data) => {
 });
 
 socket.on("typing", (data) => {
-  status.textContent = `${data.username} is typing...`;
+  statusField.textContent = `${data.username} is typing...`;
+});
+
+socket.on("stop_typing", () => {
+  statusField.textContent = "";
 });
 
 function onChangeUsernameClick() {
-  socket.emit("change_username", { username: username.value });
+  socket.emit("change_username", { username: userNameField.value });
 }
 
 function onSendMessageButtonClick() {
+  clearTimeout(typingDelayHandler);
+  socket.emit("stop_typing");
   socket.emit("new_message", {
-    message: message.value,
+    message: messageField.value,
     usercolor: setUserColorButton.value,
   });
+  messageField.value = "";
 }
 
 function onUserColorChange() {
