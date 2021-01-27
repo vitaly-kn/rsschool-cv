@@ -1,6 +1,7 @@
 import "./style.css";
 import "./components/css/owfont-regular.css";
 import lang from "./components/js/lang";
+import Cadencer from "./components/js/Cadencer";
 import "ol/ol.css";
 import { Map, View } from "ol";
 import { fromLonLat, toLonLat, transform } from "ol/proj";
@@ -10,12 +11,14 @@ import OSM from "ol/source/OSM";
 
 const appParams = {
   nameUnits: "units",
+  nameDayOfWeek: "day-of-week",
   nameUpcomingTemperature: "upcoming-temperature",
   nameUpcomingWeatherIcon: "upcoming-weather-icon",
   classTranslatable: "translatable",
   idRefresh: "refresh",
   idLang: "lang",
   idArea: "area",
+  idDate: "date",
   idTemperature: "temperature",
   idWeatherIcon: "weather-icon",
   idDescription: "description",
@@ -34,13 +37,16 @@ const appParams = {
 const OWM_API = "46a8d7bc7f3c4adccd8efc07bf1a0431";
 const MAP_START_ZOOM = 10;
 const NOTIFICATION_DELAY = 2000;
+let currentTimeZone = "";
 let coords = [0.1277, 51.5073];
+let cadencer = new Cadencer(getDate);
 
 const staticTranslatableLabels = document.getElementsByClassName(appParams.classTranslatable);
 const refreshButton = document.getElementById(appParams.idRefresh);
 const langSelect = document.getElementById(appParams.idLang);
 const unitsRadioButtons = document.getElementsByName(appParams.nameUnits);
 const areaField = document.getElementById(appParams.idArea);
+const dateField = document.getElementById(appParams.idDate);
 const temperatureField = document.getElementById(appParams.idTemperature);
 const weatherIconField = document.getElementById(appParams.idWeatherIcon);
 const descriptionField = document.getElementById(appParams.idDescription);
@@ -48,6 +54,7 @@ const feelsLikeField = document.getElementById(appParams.idFeelsLike);
 const windField = document.getElementById(appParams.idWind);
 const humidityField = document.getElementById(appParams.idHumidity);
 const windUnitsField = document.getElementById(appParams.idWindUnits);
+const dayOfWeekFields = document.getElementsByName(appParams.nameDayOfWeek);
 const upcomingTemperatureFields = document.getElementsByName(appParams.nameUpcomingTemperature);
 const upcomingWeatherIconFields = document.getElementsByName(appParams.nameUpcomingWeatherIcon);
 const searchButton = document.getElementById(appParams.idSearch);
@@ -84,7 +91,6 @@ function onWindowLoad(event) {
     navigator.geolocation.getCurrentPosition((position) => {
       coords[0] = position.coords.longitude;
       coords[1] = position.coords.latitude;
-      //console.log(`coordinates : ${coords}; fromLonLat: ${fromLonLat(coords)}; hdms : ${toStringHDMS(coords)}`);
       view.setCenter(fromLonLat(coords));
       translateStaticLabels();
       refreshContent();
@@ -147,6 +153,7 @@ function onSearchButtonClick() {
         coords[0] = +data[0].lon;
         coords[1] = +data[0].lat;
         view.setCenter(fromLonLat(coords));
+        view.setZoom(MAP_START_ZOOM);
         refreshContent();
       } else {
         searchTextInput.placeholder = lang[langSelect.value].searchFail;
@@ -178,7 +185,9 @@ function getWeather() {
       return response.json();
     })
     .then((data) => {
-      //console.log(data); //weather data
+      console.log(data); //weather data
+      currentTimeZone = data.timezone;
+      cadencer.start();
       temperatureField.textContent = Math.round(data.current.temp);
       weatherIconField.classList.remove(...weatherIconField.classList);
       weatherIconField.classList.add("owf", `owf-${data.current.weather[0].id}`);
@@ -217,6 +226,24 @@ function getLocation() {
       }
       areaField.textContent = area;
     });
+}
+
+function getDate() {
+  const date = new Date();
+  const options = {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    timeZone: currentTimeZone,
+  };
+  dateField.textContent = date.toLocaleString(langSelect.value, options).replaceAll(/(,|\.)/g, "");
+  for (let i = 0; i < dayOfWeekFields.length; i++) {
+    date.setDate(date.getDate() + 1);
+    dayOfWeekFields[i].textContent = date.toLocaleString(langSelect.value, { weekday: "long", timeZone: currentTimeZone });
+  }
 }
 
 function speechRecognize() {
