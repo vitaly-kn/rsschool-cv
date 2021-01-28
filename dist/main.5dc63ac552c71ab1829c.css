@@ -23,7 +23,9 @@
   --drop-bonus-text-color: ivory;
   --controls-background-color: antiquewhite;
   --score-amount-color: yellow;
+  --tries-amount-color: cyan;
   --keypad-border-color: tan;
+  --keypad-border-mistake-color: darkorange;
   --screen-background-color: #eeeeee;
   --screen-text-color: firebrick;
   --keys-border-color: lightgray;
@@ -102,9 +104,6 @@ html {
   width: 100%;
   height: 90%;
   transition: var(--flood-transition-duration) ease-out;
-  /*height: 80%;*/
-  /*height: 70%;*/
-  /*height: 20%;*/
 }
 
 .sea-level1 {
@@ -314,8 +313,9 @@ html {
 .score {
   width: 75%;
   background: rgba(0, 0, 0, 0.4);
-  height: 8%;
+  height: 10%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   border-bottom-left-radius: 1rem;
@@ -327,6 +327,10 @@ html {
   color: var(--score-amount-color);
 }
 
+.tries-amount {
+  color: var(--tries-amount-color);
+}
+
 .keypad {
   width: 90%;
   height: 60%;
@@ -336,6 +340,23 @@ html {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.mistake {
+  border-color: var(--keypad-border-mistake-color);
+  animation: mistake-tremble 0.3s linear;
+}
+
+@keyframes mistake-tremble {
+  0% {
+    transform: translateX(-5%);
+  }
+  50% {
+    transform: translateX(5%);
+  }
+  100% {
+    transform: translateX(-5%);
+  }
 }
 
 .keypad > div {
@@ -409,7 +430,7 @@ html {
 
 .buttons {
   width: 90%;
-  height: 10%;
+  height: 18%;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
@@ -419,7 +440,7 @@ html {
 
 .control-button {
   flex-basis: 30%;
-  height: 40%;
+  height: 27%;
   display: flex;
   justify-content: center;
   align-items: center;

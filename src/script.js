@@ -13,7 +13,10 @@ const appParams = {
   animationDropFall: "drop-fall",
   classBang: "bang",
   classScoreSelector: ".score-amount",
+  classTriesSelector: ".tries-amount",
   classScreenSelector: ".screen",
+  classKeypadSelector: ".keypad",
+  classMistake: "mistake",
   classKeySelector: ".key",
   classKeyActive: "key-active",
   classModalSelector: ".modal-container",
@@ -39,6 +42,7 @@ const appParams = {
   idFullscreen: "fullscreen",
   idStart: "start",
   idPause: "pause",
+  idEnd: "end",
   idSettings: "settings",
   idSound: "sound",
   idHowTo: "howto",
@@ -72,16 +76,19 @@ let maxOperand = 99;
 let isKeyBoardLocked = true;
 let isAIMode = false;
 let cadencer = new Cadencer(onCadence, BASIC_CADENCE);
-let aiCadencer = new Cadencer(onAICadence, AI_CADENCE);
+let aiCadencer;
 
 const applicationDiv = document.querySelector(appParams.classApplicationSelector);
 const dropContainer = document.querySelector(appParams.classDropContainerSelector);
 const score = document.querySelector(appParams.classScoreSelector);
+const tries = document.querySelector(appParams.classTriesSelector);
 const screen = document.querySelector(appParams.classScreenSelector);
+const keypad = document.querySelector(appParams.classKeypadSelector);
 const keypadKeys = document.querySelectorAll(appParams.classKeySelector);
 const fullscreenButton = document.getElementById(appParams.idFullscreen);
 const startButton = document.getElementById(appParams.idStart);
 const pauseButton = document.getElementById(appParams.idPause);
+const endButton = document.getElementById(appParams.idEnd);
 const settingsButton = document.getElementById(appParams.idSettings);
 const soundButton = document.getElementById(appParams.idSound);
 const howToButton = document.getElementById(appParams.idHowTo);
@@ -102,8 +109,10 @@ dropContainer.addEventListener(appParams.eventResult, onResultReceived);
 dropContainer.addEventListener(appParams.eventPause, onPauseGame);
 dropContainer.addEventListener(appParams.eventResume, onResumeGame);
 dropContainer.addEventListener(appParams.eventRiseSeaLevel, onRiseSeaLevel);
-dropContainer.addEventListener("animationend", resetGame);
+dropContainer.addEventListener("animationend", restartGame);
 dropContainer.addEventListener("transitionend", onRiseSeaLevelEnd);
+
+keypad.addEventListener("animationend", onMistakeAnimationEnd);
 
 keypadKeys.forEach((key) => key.addEventListener("click", onKeyEntered));
 
@@ -112,6 +121,7 @@ window.addEventListener("keyup", onKeyUp);
 
 startButton.addEventListener("click", onStartButtonClick);
 pauseButton.addEventListener("click", onPauseButtonClick);
+endButton.addEventListener("click", endGame);
 fullscreenButton.addEventListener("click", toggleFullscreen);
 settingsButton.addEventListener("click", onSettingsClick);
 soundButton.addEventListener("click", onSoundClick);
@@ -155,9 +165,10 @@ const soundTheme = document.getElementById(appSounds.idSoundTheme);
 
 let level = {
   upgrade() {
-    this.difficulty = Math.max(BASIC_DIFFICULTY_LEVEL - Math.trunc(+score.textContent / NEXT_LEVEL_SCORE_STEP), MAX_DIFFICULTY_LEVEL);
-    cadencer.setCadence(Math.max(BASIC_CADENCE - Math.trunc(+score.textContent / NEXT_LEVEL_SCORE_STEP) * NEXT_LEVEL_CADENCE_STEP, MIN_CADENCE));
-    //console.log(`level : ${level.difficulty}, cadence ${cadencer.getCadence()}`);
+    let estimatedDifficultyLevel = BASIC_DIFFICULTY_LEVEL - Math.trunc(+score.textContent / NEXT_LEVEL_SCORE_STEP);
+    this.difficulty = Math.max(estimatedDifficultyLevel, MAX_DIFFICULTY_LEVEL);
+    let estimatedCadence = BASIC_CADENCE - Math.trunc(+score.textContent / NEXT_LEVEL_SCORE_STEP) * NEXT_LEVEL_CADENCE_STEP;
+    cadencer.setCadence(Math.max(estimatedCadence, MIN_CADENCE));
   },
   reset() {
     this.difficulty = BASIC_DIFFICULTY_LEVEL;
@@ -167,10 +178,17 @@ let level = {
 
 let statistics = {
   accuracy() {
-    return this.resolvedDrops ? `${Math.round((this.resolvedDrops / (this.resolvedDrops + this.mistakes)) * 100)}%` : "0%";
+    let accuracy;
+    if (this.resolvedDrops) {
+      accuracy = `${Math.round((this.resolvedDrops / (this.resolvedDrops + this.mistakes)) * 100)}%`;
+    } else {
+      accuracy = "0%";
+    }
+    return accuracy;
   },
   resolutionRate() {
-    return this.resolvedDrops ? `${Math.round((this.resolvedDrops / this.totalDrops) * 100)}%` : "0%";
+    let resolutionRate = `${Math.round((this.resolvedDrops / this.totalDrops) * 100)}%`;
+    return resolutionRate;
   },
   reset() {
     this.mistakes = 0;
@@ -216,24 +234,24 @@ function onKeyEntered(event) {
   }
 }
 
-function getActiveKeypadKey(event) {
-  let key = document.querySelector(`${appParams.classKeySelector}[data-${appParams.attrKey}="${event.keyCode}"]`);
-  return key ? key : document.querySelector(`${appParams.classKeySelector}[data-${appParams.attrKeyNumpad}="${event.keyCode}"]`);
+function getActiveKeypadButton(event) {
+  let button = document.querySelector(`${appParams.classKeySelector}[data-${appParams.attrKey}="${event.keyCode}"]`);
+  return button ? button : document.querySelector(`${appParams.classKeySelector}[data-${appParams.attrKeyNumpad}="${event.keyCode}"]`);
 }
 
 function onKeyDown(event) {
   if (isKeyBoardLocked) return;
-  let key = getActiveKeypadKey(event);
-  if (key) {
-    key.classList.add(appParams.classKeyActive);
-    key.click();
+  let button = getActiveKeypadButton(event);
+  if (button) {
+    button.classList.add(appParams.classKeyActive);
+    button.click();
   }
 }
 
 function onKeyUp(event) {
   if (isKeyBoardLocked) return;
-  let key = getActiveKeypadKey(event);
-  if (key) key.classList.remove(appParams.classKeyActive);
+  let button = getActiveKeypadButton(event);
+  if (button) button.classList.remove(appParams.classKeyActive);
 }
 
 function onResultReceived(event) {
@@ -255,8 +273,13 @@ function onResultReceived(event) {
   if (!isCorrectAnswer) {
     chainBonus = 0;
     statistics.mistakes++;
+    keypad.classList.add(appParams.classMistake);
     soundMistake.playGameSfx();
   }
+}
+
+function onMistakeAnimationEnd() {
+  keypad.classList.remove(appParams.classMistake);
 }
 
 function createRandomDrop() {
@@ -278,6 +301,8 @@ function createRandomDrop() {
       event.stopPropagation();
       if (event.animationName === appParams.animationDropFall) {
         soundDropFall.playGameSfx();
+        seaLevel++;
+        tries.textContent--;
         dropContainer.dispatchEvent(new CustomEvent(appParams.eventRiseSeaLevel));
       }
       event.currentTarget.parentNode?.removeChild(event.currentTarget);
@@ -306,7 +331,6 @@ function onCadence() {
   dropContainer.appendChild(drop);
   statistics.totalDrops++;
   soundDropStart.playGameSfx();
-  //console.log(`tick! drop.result = ${drop.result}`);
 }
 
 function onPauseButtonClick(event) {
@@ -330,7 +354,6 @@ function onResumeGame(event) {
 }
 
 function onRiseSeaLevel(event) {
-  seaLevel++;
   event.currentTarget.classList.add(appParams.classListSeaLevels[seaLevel]);
   soundSeaRise.playGameSfx();
   resetBonus();
@@ -394,6 +417,7 @@ function resetGame() {
   screen.textContent = "";
   isGameInProgress = false;
   seaLevel = -1;
+  tries.textContent = appParams.classListSeaLevels.length;
   dropContainer.classList.remove(appParams.classRestart);
   resetBonus();
   startButton.textContent = "Start";
@@ -401,6 +425,18 @@ function resetGame() {
   resumeGameInterface();
   isKeyBoardLocked = true;
   cadencer.stop();
+}
+
+function restartGame() {
+  resetGame();
+  startGame();
+}
+
+function endGame() {
+  if (isGameInProgress) {
+    seaLevel = appParams.classListSeaLevels.length - 1;
+    dropContainer.dispatchEvent(new CustomEvent(appParams.eventRiseSeaLevel));
+  }
 }
 
 function showStatistics() {
@@ -486,6 +522,7 @@ function onSoundClick(event) {
 function onHowToClick() {
   if (isGameInProgress) return;
   isAIMode = true;
+  aiCadencer = new Cadencer(onAICadence, AI_CADENCE);
   modalContainer.classList.add(appParams.classShowModal);
   modalContainer.classList.add(appParams.classShowHowto);
   level.reset();
@@ -497,6 +534,7 @@ function onHowToClick() {
 
 function onAIQuit(event) {
   aiCadencer.stop();
+  aiCadencer = null;
   cadencer.stop();
   isAIMode = false;
   destroyAllDrops();
@@ -528,10 +566,10 @@ function enterResult(result) {
       prevKey.classList.remove(appParams.classKeyActive);
     }
     if (i < resultArray.length) {
-      let key = document.querySelector(`${appParams.classKeySelector}[${appParams.attrValue}="${resultArray[i]}"]`);
-      key.classList.add(appParams.classKeyActive);
+      let button = document.querySelector(`${appParams.classKeySelector}[${appParams.attrValue}="${resultArray[i]}"]`);
+      button.classList.add(appParams.classKeyActive);
       i++;
-      key.click();
+      button.click();
       setTimeout(sendKeys, AI_INPUT_DELAY);
     }
   })();

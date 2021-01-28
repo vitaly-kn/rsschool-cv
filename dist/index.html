@@ -1,1 +1,120 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Raindrops</title><link rel="icon" href="favicon.png"><link href="main.2b6f8a2dd11e3090cdeb.css" rel="stylesheet"></head><body class="main"><audio id="sound-key" src="./assets/sound/key.wav"></audio><audio id="sound-bonus" src="./assets/sound/bonus.wav"></audio><audio id="sound-drop-start" src="./assets/sound/drop_start.wav"></audio><audio id="sound-drop-fall" src="./assets/sound/drop_fall.wav"></audio><audio id="sound-drop-bang" src="./assets/sound/drop_bang.wav"></audio><audio id="sound-game-over" src="./assets/sound/game_over.mp3"></audio><audio id="sound-mistake" src="./assets/sound/mistake.wav"></audio><audio id="sound-sea-rise" src="./assets/sound/sea_rise.wav"></audio><audio id="sound-theme" src="./assets/sound/theme.mp3" loop></audio><h1 class="header">Raindrops</h1><div class="application"><div class="game"><div class="drop-container"></div><div class="water"><div class="waves"><div class="wave wave-top"></div><div class="wave wave-middle"></div><div class="wave wave-bottom"></div></div><div class="deep-water"></div></div></div><div class="controls"><div class="score">Your score :&nbsp;<span class="score-amount">12345</span></div><div class="keypad"><div class="screen"></div><div class="keys"><div class="left-block"><button class="key" data-value="7" data-key="55" data-key-numpad="103">7</button> <button class="key" data-value="8" data-key="56" data-key-numpad="104">8</button> <button class="key" data-value="9" data-key="57" data-key-numpad="105">9</button> <button class="key" data-value="4" data-key="52" data-key-numpad="100">4</button> <button class="key" data-value="5" data-key="53" data-key-numpad="101">5</button> <button class="key" data-value="6" data-key="54" data-key-numpad="102">6</button> <button class="key" data-value="1" data-key="49" data-key-numpad="97">1</button> <button class="key" data-value="2" data-key="50" data-key-numpad="98">2</button> <button class="key" data-value="3" data-key="51" data-key-numpad="99">3</button> <button class="key key_wide" data-value="0" data-key="48" data-key-numpad="96">0</button> <button class="key key_text" data-value="delete" data-key="8" data-key-numpad="110">Delete</button></div><div class="right-block"><button class="key key_text" data-value="clear" data-key="46" data-key-numpad="107">Clear</button> <button class="key key_text" data-value="enter" data-key="13">Enter</button></div></div></div><div class="buttons"><button class="control-button" id="fullscreen">Fullscreen</button> <button class="control-button" id="sound">Sound : On</button> <button class="control-button" id="settings">Settings</button> <button class="control-button" id="start">Start</button> <button class="control-button" id="pause">Pause</button> <button class="control-button" id="howto">How To Play</button></div></div><div class="modal-container"><div class="game-over"><h2 class="game-over-header">GAME OVER</h2><p>Statistics</p><p>Total drops : <span id="total-drops">0</span></p><p>Expressions resolved : <span id="resolved-drops">9999</span> (<span id="resolution-rate">99%</span>)</p><p>Mistakes made : <span id="mistakes">9999</span> (accuracy : <span id="accuracy">99%</span>)</p><button class="control-button modal-button" id="close-gameover">Ok</button></div><div class="settings"><div class="blur"></div><div class="settings-window"><h3 class="settings-header">Settings</h3><p>Choose available operations:</p><div class="operations"><div><input type="checkbox" id="add-checkbox" name="add-checkbox" value="add" checked="checked"> <label for="add-checkbox">(+) Addition</label></div><div><input type="checkbox" id="sub-checkbox" name="sub-checkbox" value="sub" checked="checked"> <label for="sub-checkbox">(-) Subtraction</label></div><div><input type="checkbox" id="mul-checkbox" name="mul-checkbox" value="mul" checked="checked"> <label for="mul-checkbox">(x) Multiplication</label></div><div><input type="checkbox" id="div-checkbox" name="div-checkbox" value="div" checked="checked"> <label for="div-checkbox">(÷) Division</label></div></div><p>Choose max range of operands:</p><div><input class="max-operand" id="max-operand" type="number" step="1" name="max-operand" min="1" max="99" value="99"/></div><button class="control-button modal-button" id="close-settings">Ok</button></div></div><div class="howto">Click to stop the demo</div></div></div><script src="main.ebb8a627b4b3e3a7b1c8.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raindrops</title>
+<link rel="icon" href="favicon.png"><link href="main.5dc63ac552c71ab1829c.css" rel="stylesheet"></head>
+
+<body class="main">
+  <audio id="sound-key" src="./assets/sound/key.wav"></audio>
+  <audio id="sound-bonus" src="./assets/sound/bonus.wav"></audio>
+  <audio id="sound-drop-start" src="./assets/sound/drop_start.wav"></audio>
+  <audio id="sound-drop-fall" src="./assets/sound/drop_fall.wav"></audio>
+  <audio id="sound-drop-bang" src="./assets/sound/drop_bang.wav"></audio>
+  <audio id="sound-game-over" src="./assets/sound/game_over.mp3"></audio>
+  <audio id="sound-mistake" src="./assets/sound/mistake.wav"></audio>
+  <audio id="sound-sea-rise" src="./assets/sound/sea_rise.wav"></audio>
+  <audio id="sound-theme" src="./assets/sound/theme.mp3" loop></audio>
+  <h1 class="header">Raindrops</h1>
+  <div class="application">
+    <div class="game">
+      <div class="drop-container">
+      </div>
+      <div class="water">
+        <div class="waves">
+          <div class="wave wave-top"></div>
+          <div class="wave wave-middle"></div>
+          <div class="wave wave-bottom"></div>
+        </div>
+        <div class="deep-water"></div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="score">
+        <p>
+          Your score :&nbsp;<span class="score-amount">0</span>
+        </p>
+        <p>Tries left :&nbsp;<span class="tries-amount">3</span></p>
+      </div>
+      <div class="keypad">
+        <div class="screen"></div>
+        <div class="keys">
+          <div class="left-block">
+            <button class="key" data-value="7" data-key="55" data-key-numpad="103">7</button>
+            <button class="key" data-value="8" data-key="56" data-key-numpad="104">8</button>
+            <button class="key" data-value="9" data-key="57" data-key-numpad="105">9</button>
+            <button class="key" data-value="4" data-key="52" data-key-numpad="100">4</button>
+            <button class="key" data-value="5" data-key="53" data-key-numpad="101">5</button>
+            <button class="key" data-value="6" data-key="54" data-key-numpad="102">6</button>
+            <button class="key" data-value="1" data-key="49" data-key-numpad="97">1</button>
+            <button class="key" data-value="2" data-key="50" data-key-numpad="98">2</button>
+            <button class="key" data-value="3" data-key="51" data-key-numpad="99">3</button>
+            <button class="key key_wide" data-value="0" data-key="48" data-key-numpad="96">0</button>
+            <button class="key key_text" data-value="delete" data-key="8" data-key-numpad="110">Delete</button>
+          </div>
+          <div class="right-block">
+            <button class="key key_text" data-value="clear" data-key="46" data-key-numpad="107">Clear</button>
+            <button class="key key_text" data-value="enter" data-key="13">Enter</button>
+          </div>
+        </div>
+      </div>
+      <div class="buttons">
+        <button class="control-button" id="fullscreen">Fullscreen</button>
+        <button class="control-button" id="sound">Sound : On</button>
+        <button class="control-button" id="settings">Settings</button>
+        <button class="control-button" id="start">Start</button>
+        <button class="control-button" id="pause">Pause</button>
+        <button class="control-button" id="end">End</button>
+        <button class="control-button" id="howto">How To Play</button>
+      </div>
+    </div>
+    <div class="modal-container">
+      <div class="game-over">
+        <h2 class="game-over-header">GAME OVER</h2>
+        <p>Statistics</p>
+        <p>Total drops : <span id="total-drops">0</span></p>
+        <p>Expressions resolved : <span id="resolved-drops">9999</span> (<span id="resolution-rate">99%</span>)</p>
+        <p>Mistakes made : <span id="mistakes">9999</span> (accuracy : <span id="accuracy">99%</span>)</p>
+        <button class="control-button modal-button" id="close-gameover">Ok</button>
+      </div>
+      <div class="settings">
+        <div class="blur"></div>
+        <div class="settings-window">
+          <h3 class="settings-header">Settings</h3>
+          <p>Choose available operations:</p>
+          <div class="operations">
+            <div>
+              <input type="checkbox" id="add-checkbox" name="add-checkbox" value="add" checked>
+              <label for="add-checkbox">(+) Addition</label>
+            </div>
+            <div>
+              <input type="checkbox" id="sub-checkbox" name="sub-checkbox" value="sub" checked>
+              <label for="sub-checkbox">(-) Subtraction</label>
+            </div>
+            <div>
+              <input type="checkbox" id="mul-checkbox" name="mul-checkbox" value="mul" checked>
+              <label for="mul-checkbox">(x) Multiplication</label>
+            </div>
+            <div>
+              <input type="checkbox" id="div-checkbox" name="div-checkbox" value="div" checked>
+              <label for="div-checkbox">(÷) Division</label>
+            </div>
+          </div>
+          <p>Choose max range of operands:</p>
+          <div>
+            <input class="max-operand" id="max-operand" type="number" step="1" name="max-operand" min="1" max="99" value="99" />
+          </div>
+          <button class="control-button modal-button" id="close-settings">Ok</button>
+        </div>
+      </div>
+      <div class="howto">
+        Click to stop the demo
+      </div>
+    </div>
+  </div>
+  </div>
+<script src="main.84bc67459259140ee027.js"></script></body>
+
+</html>

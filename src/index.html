@@ -32,7 +32,12 @@
       </div>
     </div>
     <div class="controls">
-      <div class="score">Your score :&nbsp;<span class="score-amount">12345</span></div>
+      <div class="score">
+        <p>
+          Your score :&nbsp;<span class="score-amount">0</span>
+        </p>
+        <p>Tries left :&nbsp;<span class="tries-amount">3</span></p>
+      </div>
       <div class="keypad">
         <div class="screen"></div>
         <div class="keys">
@@ -61,6 +66,7 @@
         <button class="control-button" id="settings">Settings</button>
         <button class="control-button" id="start">Start</button>
         <button class="control-button" id="pause">Pause</button>
+        <button class="control-button" id="end">End</button>
         <button class="control-button" id="howto">How To Play</button>
       </div>
     </div>
@@ -98,8 +104,7 @@
           </div>
           <p>Choose max range of operands:</p>
           <div>
-            <input class="max-operand" id="max-operand" type="number" step="1" name="max-operand" min="1" max="99"
-              value="99" />
+            <input class="max-operand" id="max-operand" type="number" step="1" name="max-operand" min="1" max="99" value="99" />
           </div>
           <button class="control-button modal-button" id="close-settings">Ok</button>
         </div>
