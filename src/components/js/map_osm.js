@@ -1,6 +1,7 @@
 import "ol/ol.css";
 import { Map, View } from "ol";
-import { fromLonLat } from "ol/proj";
+import { fromLonLat, toLonLat } from "ol/proj";
+import { toStringHDMS } from "ol/coordinate";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
 
@@ -31,7 +32,21 @@ export default class MapContainer {
     this.view.setZoom(zoom);
   }
 
-  on(event, callback) {
-    this.map.on(event, callback);
+  onPointSelect(callback) {
+    this.map.on("singleclick", (event) => {
+      callback(toLonLat(event.coordinate).slice());
+    });
+  }
+
+  static convertToHDMS(coords) {
+    const coordsHDMS = toStringHDMS(coords);
+    const parsedCoords = coordsHDMS.match(/\b\d+(\u00b0|\u2032)/g);
+    const latitude = `${parsedCoords[0]} ${parsedCoords[1]}`;
+    const parsedLat = coordsHDMS.match(/(N|S)/g);
+    const latitudeHemi = parsedLat ? parsedLat[0] : "";
+    const longitude = `${parsedCoords[2]} ${parsedCoords[3]}`;
+    const parsedLong = coordsHDMS.match(/(E|W)/g);
+    const longitudeHemi = parsedLong ? parsedLong[0] : "";
+    return { latitude, latitudeHemi, longitude, longitudeHemi };
   }
 }

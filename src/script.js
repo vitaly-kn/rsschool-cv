@@ -4,12 +4,9 @@ import lang from "./components/js/lang";
 import * as ui from "./components/js/ui";
 import Cadencer from "./components/js/Cadencer";
 import { getWeather } from "./components/js/weather_osm";
-import { toLonLat } from "ol/proj";
-import MapContainer from "./components/js/map_osm";
 
 let coords = [0.1277, 51.5073];
 let cadencer = new Cadencer(ui.displayTime);
-const map = new MapContainer(ui.appParams.idMap);
 
 window.addEventListener("load", onWindowLoad);
 ui.refreshButton.addEventListener("click", refreshContent);
@@ -18,13 +15,14 @@ ui.unitsRadioButtons.forEach((radioButton) => radioButton.addEventListener("chan
 ui.searchTextInput.addEventListener("keypress", onSearchTextInputKeypress);
 ui.micButton.addEventListener("click", onMicButtonClick);
 ui.searchButton.addEventListener("click", onSearchButtonClick);
+ui.map.onPointSelect(onMapPointSelect);
 
 function onWindowLoad(event) {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
       coords[0] = position.coords.longitude;
       coords[1] = position.coords.latitude;
-      map.setCenter(coords);
+      ui.map.setCenter(coords);
       ui.translateStaticLabels();
       refreshContent();
     });
@@ -62,17 +60,17 @@ function onMicButtonClick(event) {
   }
 }
 
-map.on("singleclick", (event) => {
-  coords = toLonLat(event.coordinate).slice();
+function onMapPointSelect(newCoords) {
+  coords = newCoords;
   refreshContent();
-});
+}
 
 async function onSearchButtonClick() {
   let newCoords = await ui.findLocation(ui.searchTextInput.value);
   if (newCoords) {
     //console.log(newCoords);
     coords = newCoords;
-    map.setCenter(coords);
+    ui.map.setCenter(coords);
     refreshContent();
   }
 }

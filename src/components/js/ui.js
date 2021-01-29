@@ -2,7 +2,7 @@ import lang from "./lang";
 import getTime from "./time";
 import { searchLocation, getLocation } from "./geodata_osm";
 import { currentTimeZone } from "./weather_osm";
-import { toStringHDMS } from "ol/coordinate";
+import MapContainer from "./map_osm";
 
 export const appParams = {
   nameUnits: "units",
@@ -50,6 +50,7 @@ export const upcomingWeatherIconFields = document.getElementsByName(appParams.na
 export const searchButton = document.getElementById(appParams.idSearch);
 export const micButton = document.getElementById(appParams.idMic);
 export const searchTextInput = document.getElementById(appParams.idSearchText);
+export const map = new MapContainer(appParams.idMap);
 export const latField = document.getElementById(appParams.idLatitude);
 export const longField = document.getElementById(appParams.idLongitude);
 
@@ -84,14 +85,11 @@ export function displayWeather({ weather, language, units }) {
 }
 
 export function displayCoords(coords) {
-  const coordsHDMS = toStringHDMS(coords);
-  const parsedCoords = coordsHDMS.match(/\b\d+(\u00b0|\u2032)/g);
-  latField.textContent = `${parsedCoords[0]} ${parsedCoords[1]}`;
-  longField.textContent = `${parsedCoords[2]} ${parsedCoords[3]}`;
-  const parsedLat = coordsHDMS.match(/(N|S)/g);
-  const parsedLong = coordsHDMS.match(/(E|W)/g);
-  parsedLat && (latField.textContent += ` ${lang[langSelect.value].hemi[parsedLat[0]]}`);
-  parsedLong && (longField.textContent += ` ${lang[langSelect.value].hemi[parsedLong[0]]}`);
+  const coordsHDMS = MapContainer.convertToHDMS(coords);
+  latField.textContent = coordsHDMS.latitude;
+  longField.textContent = coordsHDMS.longitude;
+  coordsHDMS.latitudeHemi && (latField.textContent += ` ${lang[langSelect.value].hemi[coordsHDMS.latitudeHemi]}`);
+  coordsHDMS.longitudeHemi && (longField.textContent += ` ${lang[langSelect.value].hemi[coordsHDMS.longitudeHemi]}`);
 }
 
 export function displayTime() {
