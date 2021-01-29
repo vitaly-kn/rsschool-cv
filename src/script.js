@@ -165,9 +165,9 @@ const soundTheme = document.getElementById(appSounds.idSoundTheme);
 
 let level = {
   upgrade() {
-    let estimatedDifficultyLevel = BASIC_DIFFICULTY_LEVEL - Math.trunc(+score.textContent / NEXT_LEVEL_SCORE_STEP);
+    let estimatedDifficultyLevel = BASIC_DIFFICULTY_LEVEL - Math.trunc(Number(score.textContent) / NEXT_LEVEL_SCORE_STEP);
     this.difficulty = Math.max(estimatedDifficultyLevel, MAX_DIFFICULTY_LEVEL);
-    let estimatedCadence = BASIC_CADENCE - Math.trunc(+score.textContent / NEXT_LEVEL_SCORE_STEP) * NEXT_LEVEL_CADENCE_STEP;
+    let estimatedCadence = BASIC_CADENCE - Math.trunc(Number(score.textContent) / NEXT_LEVEL_SCORE_STEP) * NEXT_LEVEL_CADENCE_STEP;
     cadencer.setCadence(Math.max(estimatedCadence, MIN_CADENCE));
   },
   reset() {
@@ -178,11 +178,9 @@ let level = {
 
 let statistics = {
   accuracy() {
-    let accuracy;
+    let accuracy = "0%";
     if (this.resolvedDrops) {
       accuracy = `${Math.round((this.resolvedDrops / (this.resolvedDrops + this.mistakes)) * 100)}%`;
-    } else {
-      accuracy = "0%";
     }
     return accuracy;
   },
@@ -207,13 +205,8 @@ function toggleFullscreen(event) {
 }
 
 function toggleFullscreenButton() {
-  if (!isFullscreen) {
-    isFullscreen = true;
-    fullscreenButton.textContent = "Window";
-  } else {
-    isFullscreen = false;
-    fullscreenButton.textContent = "Fullscreen";
-  }
+  isFullscreen = !isFullscreen;
+  fullscreenButton.textContent = isFullscreen ? "Window" : "Fullscreen";
 }
 
 function onKeyEntered(event) {
@@ -236,7 +229,10 @@ function onKeyEntered(event) {
 
 function getActiveKeypadButton(event) {
   let button = document.querySelector(`${appParams.classKeySelector}[data-${appParams.attrKey}="${event.keyCode}"]`);
-  return button ? button : document.querySelector(`${appParams.classKeySelector}[data-${appParams.attrKeyNumpad}="${event.keyCode}"]`);
+  if (!button) {
+    button = document.querySelector(`${appParams.classKeySelector}[data-${appParams.attrKeyNumpad}="${event.keyCode}"]`);
+  }
+  return button;
 }
 
 function onKeyDown(event) {

@@ -41,7 +41,7 @@ export function getRandomExpression(difficulty = 1, maxOperand = MAX_OPERAND_VAL
 
 function getOperands(operator, difficulty, maxOperand) {
   let operand1 = getRandomInt(0, Math.round(maxOperand / difficulty));
-  let operand2;
+  let operand2 = getRandomInt(1, Math.round(maxOperand / difficulty));
   if (operators[operator].operation === "+" || operators[operator].operation === "*") {
     operand2 = getRandomInt(0, Math.round(maxOperand / difficulty));
   } else if (operators[operator].operation === "-") {
@@ -50,7 +50,7 @@ function getOperands(operator, difficulty, maxOperand) {
   } else if (operand1) {
     let divisors = getDivisors(operand1);
     operand2 = divisors[getRandomInt(0, divisors.length - 1)];
-  } else operand2 = getRandomInt(1, Math.round(maxOperand / difficulty));
+  }
   return [operand1, operand2];
 }
 
