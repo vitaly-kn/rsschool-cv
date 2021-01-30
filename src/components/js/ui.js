@@ -70,8 +70,7 @@ export function translateStaticLabels() {
 export function displayWeather({ weather, language, units }) {
   //console.log(weather);
   temperatureField.textContent = weather.temperature;
-  weatherIconField.classList.remove(...weatherIconField.classList);
-  weatherIconField.classList.add("owf", `owf-${weather.id}`);
+  setWeatherIcon(weatherIconField, weather.id);
   descriptionField.textContent = weather.description;
   feelsLikeField.textContent = weather.feelsLike;
   windField.textContent = weather.wind;
@@ -79,9 +78,13 @@ export function displayWeather({ weather, language, units }) {
   humidityField.textContent = weather.humidity;
   for (let i = 0; i < maxForecastDays; i++) {
     upcomingTemperatureFields[i].textContent = weather.forecast[i].temperature;
-    upcomingWeatherIconFields[i].classList.remove(...upcomingWeatherIconFields[i].classList);
-    upcomingWeatherIconFields[i].classList.add("owf", `owf-${weather.forecast[i].id}`);
+    setWeatherIcon(upcomingWeatherIconFields[i], weather.forecast[i].id);
   }
+}
+
+function setWeatherIcon(field, id) {
+  field.classList.remove(...field.classList);
+  if (id !== "-") field.classList.add("owf", `owf-${id}`);
 }
 
 export function displayCoords(coords) {
@@ -119,9 +122,5 @@ export function findLocation(location) {
 
 export async function displayLocation(coords) {
   let area = await getLocation(coords, langSelect.value);
-  if (area) {
-    areaField.textContent = area;
-  } else {
-    areaField.textContent = lang[langSelect.value].unknown;
-  }
+  areaField.textContent = area ? area : lang[langSelect.value].unknown;
 }

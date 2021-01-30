@@ -10,6 +10,10 @@ export function searchLocation(location) {
       } else {
         return false;
       }
+    })
+    .catch((err) => {
+      //console.log(`searchLocation() catch! - ${err}`);
+      return false;
     });
 }
 
@@ -34,5 +38,9 @@ export function getLocation(coords, language) {
       } else {
         return false;
       }
+    })
+    .catch((err) => {
+      //console.log(`getLocation() catch! - ${err}`);
+      return false;
     });
 }

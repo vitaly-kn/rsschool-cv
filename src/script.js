@@ -5,7 +5,7 @@ import * as ui from "./components/js/ui";
 import Cadencer from "./components/js/Cadencer";
 import { getWeather } from "./components/js/weather_osm";
 
-let coords = [0.1277, 51.5073];
+let coords = [0, 0];
 let cadencer = new Cadencer(ui.displayTime);
 
 window.addEventListener("load", onWindowLoad);
@@ -22,6 +22,7 @@ function onWindowLoad(event) {
     navigator.geolocation.getCurrentPosition((position) => {
       coords[0] = position.coords.longitude;
       coords[1] = position.coords.latitude;
+      //coords = [0, 0];
       ui.map.setCenter(coords);
       ui.translateStaticLabels();
       refreshContent();
@@ -68,7 +69,6 @@ function onMapPointSelect(newCoords) {
 async function onSearchButtonClick() {
   let newCoords = await ui.findLocation(ui.searchTextInput.value);
   if (newCoords) {
-    //console.log(newCoords);
     coords = newCoords;
     ui.map.setCenter(coords);
     refreshContent();
