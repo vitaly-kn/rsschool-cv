@@ -77,7 +77,7 @@ async function onSearchButtonClick() {
 
 function speechRecognize() {
   let recognition = new webkitSpeechRecognition();
-  recognition.lang = langSelect.value;
+  recognition.lang = ui.langSelect.value;
   recognition.start();
   ui.searchTextInput.value = "";
   ui.searchTextInput.placeholder = lang[ui.langSelect.value].searchPlaceholderMicOn;
