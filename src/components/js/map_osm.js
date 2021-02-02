@@ -25,6 +25,15 @@ export default class MapContainer {
       ],
       view: this.view,
     });
+
+    let zoomPanel = document.getElementById(this.container).querySelector(".ol-zoom");
+    zoomPanel.style.top = "1.5em";
+    zoomPanel.style.left = "1.5em";
+
+    let contributionPanel = document.getElementById(this.container).querySelector(".ol-attribution");
+    contributionPanel.style.bottom = "2.5em";
+    contributionPanel.style.left = "1em";
+    contributionPanel.style.right = "unset";
   }
 
   setCenter(coords, zoom = MAP_START_ZOOM) {

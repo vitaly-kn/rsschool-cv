@@ -269,24 +269,27 @@ html {
 .navigation-block {
   top: 9.9rem;
   left: 97.5rem;
-  width: 33.5rem;
+  width: 37.5rem;
+}
+
+.map-wrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+}
+
+.map-wrap::before {
+  content: "";
+  display: block;
+  padding-top: 106%;
 }
 
 .map {
-  width: 33.5rem;
-  height: 33.5rem;
-  /*
   width: 100%;
-  padding-top: 100%;
-  */
+  overflow: hidden;
+  clip-path: url(#map-mask);
 }
-/*
-.map::before {
-  content: "";
-  float: left;
-  padding-top: 100%;
-}
-*/
+
 .coordinates {
   font-size: 2rem;
   line-height: 3rem;
