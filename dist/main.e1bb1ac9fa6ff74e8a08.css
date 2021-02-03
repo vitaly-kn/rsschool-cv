@@ -36,6 +36,7 @@
 
 html {
   font-size: calc(1vw * var(--basic-font-size) * 100 / var(--basic-application-width));
+  line-height: 1.2;
   color: var(--primary-text-color);
   height: 100%;
 }
@@ -67,7 +68,6 @@ html {
   height: 4.4rem;
   width: 4.4rem;
   font-size: 1.4rem;
-  line-height: 1.7rem;
   border: none;
   display: flex;
   justify-content: center;
@@ -180,38 +180,26 @@ html {
 
 .content {
   position: relative;
-}
-
-.draggable {
-  position: absolute;
-}
-
-.location {
-  top: 1.7rem;
-  left: 9rem;
+  display: flex;
+  padding: 1.7rem 9rem;
 }
 
 .area {
   font-size: 4.4rem;
-  line-height: 5.4rem;
   text-transform: uppercase;
 }
 
 .date {
   font-size: 2.4rem;
-  line-height: 2.9rem;
   font-weight: 600;
 }
 
 .weather {
-  top: 9.9rem;
-  left: 9rem;
   display: flex;
 }
 
 .temperature {
   font-size: 30.6rem;
-  line-height: 37.3rem;
   min-width: 40rem;
 }
 
@@ -232,7 +220,6 @@ html {
 
 .weather-details {
   font-size: 2.2rem;
-  line-height: 3.7rem;
   text-transform: uppercase;
 }
 
@@ -241,13 +228,11 @@ html {
 }
 
 .forecast {
-  top: 47.2rem;
-  left: 9rem;
   display: flex;
 }
 
 .upcoming-day {
-  margin-right: 5rem;
+  margin-right: 2.5rem;
   display: flex;
   flex-direction: column;
 }
@@ -258,29 +243,31 @@ html {
 
 .day-of-week {
   font-size: 2.2rem;
-  line-height: 2.7rem;
   text-transform: uppercase;
 }
 
 .upcoming-weather {
-  margin-top: 1.5rem;
   display: flex;
 }
 
 .upcoming-temperature {
   font-size: 8rem;
-  line-height: 9.8rem;
   font-weight: 600;
 }
 
 .upcoming-weather-icon {
+  margin-left: -3rem;
   width: 10rem;
+  z-index: -1;
 }
 
 .navigation-block {
-  top: 9.9rem;
-  left: 97.5rem;
+  margin-left: auto;
   width: 37.5rem;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .map-wrap {
@@ -303,7 +290,6 @@ html {
 
 .coordinates {
   font-size: 2rem;
-  line-height: 3rem;
   font-weight: 600;
   text-align: right;
 }
@@ -657,4 +643,4 @@ html {
 }
 
 
-/*# sourceMappingURL=main.4d9aa070799aff5c7e82.css.map*/
+/*# sourceMappingURL=main.e1bb1ac9fa6ff74e8a08.css.map*/
