@@ -19,6 +19,8 @@
 :root {
   --basic-application-width: 1440;
   --basic-font-size: 10;
+  --basic-application-width-medium: 660;
+  --basic-font-size-medium: 7;
   --main-background-color: linear-gradient(180deg, rgba(8, 15, 26, 0.59) 0%, rgba(17, 17, 46, 0.46) 100%);
   --primary-text-color: #ffffff;
   --control-standard-color: rgba(174, 181, 185, 0.5);
@@ -111,6 +113,7 @@ html {
   height: 0.6rem;
   background-image: url(assets/img/3846824869d686f1f81b3edfe928a3c9.svg);
   background-size: contain;
+  background-repeat: no-repeat;
   pointer-events: none;
 }
 
@@ -292,6 +295,23 @@ html {
   font-size: 2rem;
   font-weight: 600;
   text-align: right;
+}
+
+@media (max-width: 659px) {
+  html {
+    font-size: calc(1vw * var(--basic-font-size-medium) * 100 / var(--basic-application-width-medium));
+  }
+
+  .content {
+    flex-direction: column;
+  }
+  .weather-block {
+    margin: 0 auto;
+  }
+  .navigation-block {
+    margin-right: auto;
+    width: 100%;
+  }
 }
 
 .wi {
@@ -643,4 +663,4 @@ html {
 }
 
 
-/*# sourceMappingURL=main.e1bb1ac9fa6ff74e8a08.css.map*/
+/*# sourceMappingURL=main.323ab64c4d62dea0b7d4.css.map*/
