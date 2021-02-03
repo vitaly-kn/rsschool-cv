@@ -17,12 +17,13 @@ export function getWeather(coords, language, units) {
       currentTimeZone = data.timezone;
       let forecast = [];
       for (let i = 0; i < maxForecastDays; i++) {
-        forecast.push({ temperature: Math.round(data.daily[i].temp.day), id: data.daily[i].weather[0].id });
+        forecast.push({ temperature: Math.round(data.daily[i].temp.day), id: data.daily[i].weather[0].id, icon: data.daily[i].weather[0].icon });
       }
       return {
         weather: {
           temperature: Math.round(data.current.temp),
           id: data.current.weather[0].id,
+          icon: data.current.weather[0].icon,
           description: data.current.weather[0].description,
           feelsLike: Math.round(data.current.feels_like),
           wind: data.current.wind_speed,
@@ -37,12 +38,13 @@ export function getWeather(coords, language, units) {
       //console.log(`getWeather() catch! - ${err}`);
       let forecast = [];
       for (let i = 0; i < maxForecastDays; i++) {
-        forecast.push({ temperature: "-", id: "-" });
+        forecast.push({ temperature: "-", id: "-", icon: "-" });
       }
       return {
         weather: {
           temperature: "-",
           id: "-",
+          icon: "-",
           description: "-",
           feelsLike: "-",
           wind: "-",

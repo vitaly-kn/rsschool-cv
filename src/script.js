@@ -1,5 +1,5 @@
 import "./style.css";
-import "./components/css/owfont-regular.css";
+import "./components/css/weather-icons.css";
 import lang from "./components/js/lang";
 import * as ui from "./components/js/ui";
 import Cadencer from "./components/js/Cadencer";

@@ -68,9 +68,9 @@ export function translateStaticLabels() {
 }
 
 export function displayWeather({ weather, language, units }) {
-  //console.log(weather);
+  console.log(weather);
   temperatureField.textContent = weather.temperature;
-  setWeatherIcon(weatherIconField, weather.id);
+  setWeatherIconSVG(weatherIconField, weather.icon);
   descriptionField.textContent = weather.description;
   feelsLikeField.textContent = weather.feelsLike;
   windField.textContent = weather.wind;
@@ -78,13 +78,13 @@ export function displayWeather({ weather, language, units }) {
   humidityField.textContent = weather.humidity;
   for (let i = 0; i < maxForecastDays; i++) {
     upcomingTemperatureFields[i].textContent = weather.forecast[i].temperature;
-    setWeatherIcon(upcomingWeatherIconFields[i], weather.forecast[i].id);
+    setWeatherIconSVG(upcomingWeatherIconFields[i], weather.forecast[i].icon);
   }
 }
 
-function setWeatherIcon(field, id) {
+function setWeatherIconSVG(field, icon) {
   field.classList.remove(...field.classList);
-  if (id !== "-") field.classList.add("owf", `owf-${id}`);
+  if (icon !== "-") field.classList.add("wi", `wi-${icon}`);
 }
 
 export function displayCoords(coords) {

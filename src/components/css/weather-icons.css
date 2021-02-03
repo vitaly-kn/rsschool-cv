@@ -1,0 +1,72 @@
+.wi {
+  position: relative;
+  width: 100%;
+  display: flex;
+  background-size: contain;
+}
+
+.wi::before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+
+.wi-01d {
+  background-image: url(../../assets/img/weather/01d.svg);
+}
+
+.wi-01n {
+  background-image: url(../../assets/img/weather/01n.svg);
+}
+
+.wi-02d {
+  background-image: url(../../assets/img/weather/02d.svg);
+}
+
+.wi-02n {
+  background-image: url(../../assets/img/weather/02n.svg);
+}
+
+.wi-03d {
+  background-image: url(../../assets/img/weather/03d.svg);
+}
+
+.wi-03n {
+  background-image: url(../../assets/img/weather/03n.svg);
+}
+
+.wi-04d,
+.wi-04n {
+  background-image: url(../../assets/img/weather/04.svg);
+}
+
+.wi-09d,
+.wi-09n {
+  background-image: url(../../assets/img/weather/09.svg);
+}
+
+.wi-10d {
+  background-image: url(../../assets/img/weather/10d.svg);
+}
+
+.wi-10n {
+  background-image: url(../../assets/img/weather/10n.svg);
+}
+
+.wi-11d,
+.wi-11n {
+  background-image: url(../../assets/img/weather/11.svg);
+}
+
+.wi-13d {
+  background-image: url(../../assets/img/weather/13d.svg);
+}
+
+.wi-13n {
+  background-image: url(../../assets/img/weather/13n.svg);
+}
+
+.wi-50d,
+.wi-50n {
+  background-image: url(../../assets/img/weather/50.svg);
+}
