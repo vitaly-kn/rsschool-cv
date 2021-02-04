@@ -17,6 +17,7 @@ export const appParams = {
   idArea: "area",
   idDate: "date",
   idTemperature: "temperature",
+  idWeatherIconContainer: "weather-icon-container",
   idWeatherIcon: "weather-icon",
   idDescription: "description",
   idFeelsLike: "feels-like",
@@ -29,6 +30,11 @@ export const appParams = {
   idWindUnits: "wind-units",
   idLatitude: "latitude",
   idLongitude: "longitude",
+  animationRotateInFrames: "rotate-in-frames",
+  animationRotateOutFrames: "rotate-out-frames",
+  classLanding: "landing",
+  classRotateIn: "rotate-in",
+  classRotateOut: "rotate-out",
 };
 
 const NOTIFICATION_DELAY = 2000;
@@ -41,6 +47,7 @@ export const areaField = document.getElementById(appParams.idArea);
 export const dateField = document.getElementById(appParams.idDate);
 //export const wallpaperContainer = document.getElementById(appParams.idWallpaper);
 export const temperatureField = document.getElementById(appParams.idTemperature);
+export const weatherIconContainer = document.getElementById(appParams.idWeatherIconContainer);
 export const weatherIconField = document.getElementById(appParams.idWeatherIcon);
 export const descriptionField = document.getElementById(appParams.idDescription);
 export const feelsLikeField = document.getElementById(appParams.idFeelsLike);
@@ -58,6 +65,8 @@ export const latField = document.getElementById(appParams.idLatitude);
 export const longField = document.getElementById(appParams.idLongitude);
 
 export const maxForecastDays = upcomingTemperatureFields.length;
+
+weatherIconContainer.addEventListener("animationend", onWeatherIconContainerAnimationEnd);
 
 export function getUnits() {
   return document.querySelector(`input[name="${appParams.nameUnits}"]:checked`).value;
@@ -77,21 +86,46 @@ export function translateStaticLabels() {
 export function displayWeather({ weather, language, units }) {
   //console.log(weather);
   temperatureField.textContent = weather.temperature;
-  setWeatherIconSVG(weatherIconField, weather.icon);
+  setMainWeatherIcon(weather.icon);
   descriptionField.textContent = weather.description;
   feelsLikeField.textContent = weather.feelsLike;
   windField.textContent = weather.wind;
   windUnitsField.textContent = lang[language].units[units].wind;
   humidityField.textContent = weather.humidity;
-  for (let i = 0; i < maxForecastDays; i++) {
-    upcomingTemperatureFields[i].textContent = weather.forecast[i].temperature;
-    setWeatherIconSVG(upcomingWeatherIconFields[i], weather.forecast[i].icon);
+  updateUpcomingWeatherInformation(weather.forecast);
+}
+
+function setMainWeatherIcon(icon) {
+  weatherIconField.classList.remove(...weatherIconField.classList);
+  if (icon !== "-") {
+    weatherIconContainer.classList.add(appParams.classLanding);
+    weatherIconField.classList.add("wi", `wi-${icon}`);
   }
 }
 
-function setWeatherIconSVG(field, icon) {
-  field.classList.remove(...field.classList);
-  if (icon !== "-") field.classList.add("wi", `wi-${icon}`);
+function onWeatherIconContainerAnimationEnd(event) {
+  event.currentTarget.classList.remove(appParams.classLanding);
+}
+
+function updateUpcomingWeatherInformation(forecast) {
+  let i = 0;
+  (function loop() {
+    if (i < maxForecastDays) {
+      upcomingWeatherIconFields[i].classList.add("wi", `wi-${forecast.icon}`, appParams.classRotateIn);
+      upcomingTemperatureFields[i].textContent = forecast[i].temperature;
+      upcomingWeatherIconFields[i].addEventListener("animationend", function onUpcomingAnimationEnd(event) {
+        if (event.animationName === appParams.animationRotateInFrames) {
+          event.currentTarget.classList.remove(...event.currentTarget.classList);
+          if (forecast.icon !== "-") event.currentTarget.classList.add("wi", `wi-${forecast[i].icon}`, appParams.classRotateOut);
+        } else {
+          event.currentTarget.removeEventListener("animationend", onUpcomingAnimationEnd);
+          event.currentTarget.classList.remove(appParams.classRotateOut);
+          i++;
+          loop();
+        }
+      });
+    }
+  })();
 }
 
 export function displayCoords(coords) {
