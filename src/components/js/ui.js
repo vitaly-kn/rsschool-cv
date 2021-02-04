@@ -13,7 +13,7 @@ export const appParams = {
   classTranslatable: "translatable",
   idRefresh: "refresh",
   idLang: "lang",
-  //idWallpaper: "wallpaper",
+  idWallpaper: "wallpaper",
   idArea: "area",
   idDate: "date",
   idTemperature: "temperature",
@@ -35,6 +35,10 @@ export const appParams = {
   classLanding: "landing",
   classRotateIn: "rotate-in",
   classRotateOut: "rotate-out",
+  animationFadeInFrames: "fade-in-frames",
+  animationFadeOutFrames: "fade-out-frames",
+  classFadeIn: "fade-in",
+  classFadeOut: "fade-out",
 };
 
 const NOTIFICATION_DELAY = 2000;
@@ -45,7 +49,7 @@ export const langSelect = document.getElementById(appParams.idLang);
 export const unitsRadioButtons = document.getElementsByName(appParams.nameUnits);
 export const areaField = document.getElementById(appParams.idArea);
 export const dateField = document.getElementById(appParams.idDate);
-//export const wallpaperContainer = document.getElementById(appParams.idWallpaper);
+export const wallpaperContainer = document.getElementById(appParams.idWallpaper);
 export const temperatureField = document.getElementById(appParams.idTemperature);
 export const weatherIconContainer = document.getElementById(appParams.idWeatherIconContainer);
 export const weatherIconField = document.getElementById(appParams.idWeatherIcon);
@@ -66,6 +70,7 @@ export const longField = document.getElementById(appParams.idLongitude);
 
 export const maxForecastDays = upcomingTemperatureFields.length;
 
+wallpaperContainer.addEventListener("animationend", onWallpaperContainerAnimationEnd);
 weatherIconContainer.addEventListener("animationend", onWeatherIconContainerAnimationEnd);
 
 export function getUnits() {
@@ -169,6 +174,18 @@ export async function displayLocation(coords) {
 
 export async function displayImage() {
   let image = await getImage(areaField.textContent);
-  //console.log(`image : ${image}`);
-  if (image) document.body.style.backgroundImage = `url(${image})`;
+  if (image) {
+    wallpaperContainer.nextImage = `url(${image})`;
+    wallpaperContainer.classList.add(appParams.classFadeIn);
+  }
+}
+
+function onWallpaperContainerAnimationEnd(event) {
+  if (event.animationName === appParams.animationFadeInFrames) {
+    event.currentTarget.classList.remove(appParams.classFadeIn);
+    event.currentTarget.classList.add(appParams.classFadeOut);
+    event.currentTarget.style.backgroundImage = event.currentTarget.nextImage;
+  } else {
+    event.currentTarget.classList.remove(appParams.classFadeOut);
+  }
 }

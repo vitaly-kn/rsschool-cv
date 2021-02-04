@@ -5,7 +5,7 @@ import * as ui from "./components/js/ui";
 import Cadencer from "./components/js/Cadencer";
 import { getWeather } from "./components/js/weather_osm";
 
-let coords = [0, 0];
+let coords = [0, 51.51]; //London as default
 let cadencer = new Cadencer(ui.displayTime);
 
 window.addEventListener("load", onWindowLoad);
@@ -21,19 +21,23 @@ function onWindowLoad(event) {
   if (localStorage.getItem(ui.appParams.idLang)) {
     ui.langSelect.value = localStorage.getItem(ui.appParams.idLang);
   }
+
   if (localStorage.getItem(ui.appParams.nameUnits)) {
     ui.setUnits(localStorage.getItem(ui.appParams.nameUnits));
   }
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition((position) => {
-      coords[0] = position.coords.longitude;
-      coords[1] = position.coords.latitude;
-      //coords = [0, 0];
-      ui.map.setCenter(coords);
-      ui.translateStaticLabels();
-      refreshContent();
-    });
-  }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        coords[0] = position.coords.longitude;
+        coords[1] = position.coords.latitude;
+        initContent();
+      },
+      (error) => {
+        initContent();
+      },
+      { timeout: 1000 }
+    );
+  } else initContent();
 }
 
 function onUnitsRadioButtonChecked() {
@@ -48,6 +52,12 @@ function refreshContent() {
     ui.displayWeather(data);
   });
   ui.displayLocation(coords);
+}
+
+function initContent() {
+  ui.translateStaticLabels();
+  ui.map.setCenter(coords);
+  refreshContent();
 }
 
 function onLanguageChange() {
