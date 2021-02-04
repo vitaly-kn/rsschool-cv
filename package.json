@@ -36,6 +36,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "ol": "^6.5.0"
+    "ol": "^6.5.0",
+    "unsplash-js": "^7.0.4"
   }
 }

@@ -18,6 +18,12 @@ ui.searchButton.addEventListener("click", onSearchButtonClick);
 ui.map.onPointSelect(onMapPointSelect);
 
 function onWindowLoad(event) {
+  if (localStorage.getItem(ui.appParams.idLang)) {
+    ui.langSelect.value = localStorage.getItem(ui.appParams.idLang);
+  }
+  if (localStorage.getItem(ui.appParams.nameUnits)) {
+    ui.setUnits(localStorage.getItem(ui.appParams.nameUnits));
+  }
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
       coords[0] = position.coords.longitude;
@@ -31,6 +37,7 @@ function onWindowLoad(event) {
 }
 
 function onUnitsRadioButtonChecked() {
+  localStorage.setItem(ui.appParams.nameUnits, ui.getUnits());
   getWeather(coords, ui.langSelect.value, ui.getUnits()).then((data) => ui.displayWeather(data));
 }
 
@@ -44,6 +51,7 @@ function refreshContent() {
 }
 
 function onLanguageChange() {
+  localStorage.setItem(ui.appParams.idLang, ui.langSelect.value);
   ui.translateStaticLabels();
   refreshContent();
 }

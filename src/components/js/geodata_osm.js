@@ -12,7 +12,6 @@ export function searchLocation(location) {
       }
     })
     .catch((err) => {
-      //console.log(`searchLocation() catch! - ${err}`);
       return false;
     });
 }
@@ -40,7 +39,6 @@ export function getLocation(coords, language) {
       }
     })
     .catch((err) => {
-      //console.log(`getLocation() catch! - ${err}`);
       return false;
     });
 }

@@ -3,6 +3,7 @@ import getTime from "./time";
 import { searchLocation, getLocation } from "./geodata_osm";
 import { currentTimeZone } from "./weather_osm";
 import MapContainer from "./map_osm";
+import { getImage } from "./image_unsplash";
 
 export const appParams = {
   nameUnits: "units",
@@ -12,6 +13,7 @@ export const appParams = {
   classTranslatable: "translatable",
   idRefresh: "refresh",
   idLang: "lang",
+  //idWallpaper: "wallpaper",
   idArea: "area",
   idDate: "date",
   idTemperature: "temperature",
@@ -37,6 +39,7 @@ export const langSelect = document.getElementById(appParams.idLang);
 export const unitsRadioButtons = document.getElementsByName(appParams.nameUnits);
 export const areaField = document.getElementById(appParams.idArea);
 export const dateField = document.getElementById(appParams.idDate);
+//export const wallpaperContainer = document.getElementById(appParams.idWallpaper);
 export const temperatureField = document.getElementById(appParams.idTemperature);
 export const weatherIconField = document.getElementById(appParams.idWeatherIcon);
 export const descriptionField = document.getElementById(appParams.idDescription);
@@ -60,6 +63,10 @@ export function getUnits() {
   return document.querySelector(`input[name="${appParams.nameUnits}"]:checked`).value;
 }
 
+export function setUnits(value) {
+  document.querySelector(`input[name="${appParams.nameUnits}"][value="${value}"]`).checked = true;
+}
+
 export function translateStaticLabels() {
   searchTextInput.placeholder = lang[langSelect.value].searchPlaceholderInitial;
   for (let label of staticTranslatableLabels) {
@@ -68,7 +75,7 @@ export function translateStaticLabels() {
 }
 
 export function displayWeather({ weather, language, units }) {
-  console.log(weather);
+  //console.log(weather);
   temperatureField.textContent = weather.temperature;
   setWeatherIconSVG(weatherIconField, weather.icon);
   descriptionField.textContent = weather.description;
@@ -123,4 +130,11 @@ export function findLocation(location) {
 export async function displayLocation(coords) {
   let area = await getLocation(coords, langSelect.value);
   areaField.textContent = area ? area : lang[langSelect.value].unknown;
+  displayImage();
+}
+
+export async function displayImage() {
+  let image = await getImage(areaField.textContent);
+  //console.log(`image : ${image}`);
+  if (image) document.body.style.backgroundImage = `url(${image})`;
 }

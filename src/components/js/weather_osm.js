@@ -17,7 +17,8 @@ export function getWeather(coords, language, units) {
       currentTimeZone = data.timezone;
       let forecast = [];
       for (let i = 0; i < maxForecastDays; i++) {
-        forecast.push({ temperature: Math.round(data.daily[i].temp.day), id: data.daily[i].weather[0].id, icon: data.daily[i].weather[0].icon });
+        const avgTemp = Math.round((data.daily[i].temp.min + data.daily[i].temp.max) / 2);
+        forecast.push({ temperature: avgTemp, id: data.daily[i].weather[0].id, icon: data.daily[i].weather[0].icon });
       }
       return {
         weather: {
