@@ -13,7 +13,7 @@ export default class MapContainer {
 
     this.view = new View({
       center: fromLonLat([0, 0]),
-      zoom: MAP_START_ZOOM,
+      zoom: zoom,
     });
 
     this.map = new Map({

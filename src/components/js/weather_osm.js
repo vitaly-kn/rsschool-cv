@@ -35,7 +35,7 @@ export function getWeather(coords, language, units) {
         units,
       };
     })
-    .catch((err) => {
+    .catch(() => {
       //console.log(`getWeather() catch! - ${err}`);
       let forecast = [];
       for (let i = 0; i < maxForecastDays; i++) {

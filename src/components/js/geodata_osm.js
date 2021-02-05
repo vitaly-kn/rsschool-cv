@@ -11,7 +11,7 @@ export function searchLocation(location) {
         return false;
       }
     })
-    .catch((err) => {
+    .catch(() => {
       return false;
     });
 }
@@ -38,7 +38,7 @@ export function getLocation(coords, language) {
         return false;
       }
     })
-    .catch((err) => {
+    .catch(() => {
       return false;
     });
 }

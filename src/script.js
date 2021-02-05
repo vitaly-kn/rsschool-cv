@@ -17,7 +17,7 @@ ui.micButton.addEventListener("click", onMicButtonClick);
 ui.searchButton.addEventListener("click", onSearchButtonClick);
 ui.map.onPointSelect(onMapPointSelect);
 
-function onWindowLoad(event) {
+function onWindowLoad() {
   if (localStorage.getItem(ui.appParams.idLang)) {
     ui.langSelect.value = localStorage.getItem(ui.appParams.idLang);
   }
@@ -32,7 +32,7 @@ function onWindowLoad(event) {
         coords[1] = position.coords.latitude;
         initContent();
       },
-      (error) => {
+      (/*error*/) => {
         initContent();
       },
       { timeout: 1000 }
@@ -73,7 +73,7 @@ function onSearchTextInputKeypress(event) {
   }
 }
 
-function onMicButtonClick(event) {
+function onMicButtonClick() {
   if ("webkitSpeechRecognition" in window) {
     speechRecognize();
   }
@@ -94,6 +94,7 @@ async function onSearchButtonClick() {
 }
 
 function speechRecognize() {
+  /*global webkitSpeechRecognition*/
   let recognition = new webkitSpeechRecognition();
   recognition.lang = ui.langSelect.value;
   recognition.start();
