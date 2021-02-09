@@ -99,7 +99,7 @@ function searchLocation(location) {
     return response.json();
   }).then(function (data) {
     if (data.length) {
-      return [+data[0].lon, +data[0].lat];
+      return [Number(data[0].lon), Number(data[0].lat)];
     } else {
       return false;
     }
@@ -1138,4 +1138,4 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 	__webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.ed9495824230cc5e1e87.js.map
+//# sourceMappingURL=main.85b9ffd81faaa1051876.js.map

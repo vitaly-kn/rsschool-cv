@@ -6,7 +6,7 @@ export function searchLocation(location) {
     })
     .then((data) => {
       if (data.length) {
-        return [+data[0].lon, +data[0].lat];
+        return [Number(data[0].lon), Number(data[0].lat)];
       } else {
         return false;
       }
