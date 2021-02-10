@@ -11,7 +11,7 @@ const lang = {
     searchPlaceholderInitial: "Search city or ZIP",
     searchPlaceholderMicOn: "Speak into the microphone...",
     searching: "Searching",
-    searchFail: "Not found!",
+    "search-fail": "Not found!",
     hemi: {
       N: "N",
       E: "E",
@@ -39,7 +39,7 @@ const lang = {
     searchPlaceholderInitial: "Найти город или ZIP-код",
     searchPlaceholderMicOn: "Говорите в микрофон...",
     searching: "Поиск",
-    searchFail: "Не найдено!",
+    "search-fail": "Не найдено!",
     hemi: {
       N: "с.ш.",
       E: "в.д.",

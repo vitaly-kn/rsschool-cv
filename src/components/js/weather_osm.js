@@ -1,4 +1,4 @@
-import { maxForecastDays } from "./ui";
+import { maxForecastDays } from "./uielements";
 const OWM_API = "46a8d7bc7f3c4adccd8efc07bf1a0431";
 
 export let currentTimeZone = "UTC";
@@ -13,7 +13,6 @@ export function getWeather(coords, language, units) {
       return response.json();
     })
     .then((data) => {
-      //console.log(data); //weather data
       currentTimeZone = data.timezone;
       let forecast = [];
       for (let i = 0; i < maxForecastDays; i++) {
@@ -36,7 +35,6 @@ export function getWeather(coords, language, units) {
       };
     })
     .catch(() => {
-      //console.log(`getWeather() catch! - ${err}`);
       let forecast = [];
       for (let i = 0; i < maxForecastDays; i++) {
         forecast.push({ temperature: "-", id: "-", icon: "-" });

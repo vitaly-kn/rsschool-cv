@@ -7,9 +7,8 @@ export function searchLocation(location) {
     .then((data) => {
       if (data.length) {
         return [Number(data[0].lon), Number(data[0].lat)];
-      } else {
-        return false;
       }
+      return false;
     })
     .catch(() => {
       return false;
@@ -24,19 +23,13 @@ export function getLocation(coords, language) {
     })
     .then((data) => {
       if (data.address) {
-        let area = "";
         const keys = ["city", "county", "state"];
-        for (let i = 0; i < keys.length; i++) {
-          if (data.address[keys[i]]) {
-            area += `${data.address[keys[i]]}, `;
-            break;
-          }
-        }
+        const locality = keys.find((key) => data.address[key]);
+        let area = locality ? `${data.address[locality]}, ` : "";
         area += data.address.country;
         return area;
-      } else {
-        return false;
       }
+      return false;
     })
     .catch(() => {
       return false;

@@ -1,31 +1,41 @@
 import "./style.css";
 import "./components/css/weather-icons.css";
 import lang from "./components/js/lang";
-import * as ui from "./components/js/ui";
+import * as uiElement from "./components/js/uielements";
+import * as uiUtil from "./components/js/uiutils";
 import Cadencer from "./components/js/Cadencer";
 import { getWeather } from "./components/js/weather_osm";
 
 let coords = [0, 51.51]; //London as default
-let cadencer = new Cadencer(ui.displayTime);
+const coordsStorageName = "coords";
+let cadencer = new Cadencer(uiUtil.displayTime);
 
 window.addEventListener("load", onWindowLoad);
-ui.refreshButton.addEventListener("click", refreshContent);
-ui.langSelect.addEventListener("change", onLanguageChange);
-ui.unitsRadioButtons.forEach((radioButton) => radioButton.addEventListener("change", onUnitsRadioButtonChecked));
-ui.searchTextInput.addEventListener("keypress", onSearchTextInputKeypress);
-ui.micButton.addEventListener("click", onMicButtonClick);
-ui.searchButton.addEventListener("click", onSearchButtonClick);
-ui.map.onPointSelect(onMapPointSelect);
+uiElement.refreshButton.addEventListener("click", refreshContent);
+uiElement.langSelect.addEventListener("change", onLanguageChange);
+uiElement.unitsRadioButtons.forEach((radioButton) => radioButton.addEventListener("change", onUnitsRadioButtonChecked));
+uiElement.locationsList.addEventListener("change", onLocationSelect);
+uiElement.searchTextInput.addEventListener("keypress", onSearchTextInputKeypress);
+uiElement.micButton.addEventListener("click", onMicButtonClick);
+uiElement.searchButton.addEventListener("click", onSearchButtonClick);
+uiElement.map.onPointSelect(onMapPointSelect);
 
 function onWindowLoad() {
-  if (localStorage.getItem(ui.appParams.idLang)) {
-    ui.langSelect.value = localStorage.getItem(ui.appParams.idLang);
+  if (localStorage.getItem(uiElement.appParams.idLang)) {
+    uiElement.langSelect.value = localStorage.getItem(uiElement.appParams.idLang);
   }
 
-  if (localStorage.getItem(ui.appParams.nameUnits)) {
-    ui.setUnits(localStorage.getItem(ui.appParams.nameUnits));
+  if (localStorage.getItem(uiElement.appParams.nameUnits)) {
+    uiUtil.setUnits(localStorage.getItem(uiElement.appParams.nameUnits));
   }
-  if (navigator.geolocation) {
+
+  if (localStorage.getItem(coordsStorageName)) {
+    coords = localStorage
+      .getItem(coordsStorageName)
+      .split(",")
+      .map((x) => Number(x));
+    initContent();
+  } else if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         coords[0] = position.coords.longitude;
@@ -41,35 +51,43 @@ function onWindowLoad() {
 }
 
 function onUnitsRadioButtonChecked() {
-  localStorage.setItem(ui.appParams.nameUnits, ui.getUnits());
-  getWeather(coords, ui.langSelect.value, ui.getUnits()).then((data) => ui.displayWeather(data));
+  localStorage.setItem(uiElement.appParams.nameUnits, uiUtil.getUnits());
+  getWeather(coords, uiElement.langSelect.value, uiUtil.getUnits()).then((data) => uiUtil.displayWeather(data));
 }
 
 function refreshContent() {
-  ui.displayCoords(coords);
-  getWeather(coords, ui.langSelect.value, ui.getUnits()).then((data) => {
+  uiUtil.displayCoords(coords);
+  getWeather(coords, uiElement.langSelect.value, uiUtil.getUnits()).then((data) => {
     cadencer.start();
-    ui.displayWeather(data);
+    uiUtil.displayWeather(data);
   });
-  ui.displayLocation(coords);
+  uiUtil.displayLocation(coords);
 }
 
 function initContent() {
-  ui.translateStaticLabels();
-  ui.map.setCenter(coords);
+  uiUtil.translateStaticLabels();
+  uiElement.map.setCenter(coords);
   refreshContent();
 }
 
 function onLanguageChange() {
-  localStorage.setItem(ui.appParams.idLang, ui.langSelect.value);
-  ui.translateStaticLabels();
+  localStorage.setItem(uiElement.appParams.idLang, uiElement.langSelect.value);
+  uiUtil.translateStaticLabels();
+  refreshContent();
+}
+
+function onLocationSelect() {
+  coords = uiElement.locationsList.value.split(",").map((x) => Number(x));
+  uiElement.locationsList.value = "";
+  localStorage.setItem(coordsStorageName, coords);
+  uiElement.map.setCenter(coords);
   refreshContent();
 }
 
 function onSearchTextInputKeypress(event) {
   if (event.keyCode === 13) {
-    ui.searchTextInput.blur();
-    ui.searchButton.click();
+    uiElement.searchTextInput.blur();
+    uiElement.searchButton.click();
   }
 }
 
@@ -81,32 +99,36 @@ function onMicButtonClick() {
 
 function onMapPointSelect(newCoords) {
   coords = newCoords;
+  localStorage.setItem(coordsStorageName, coords);
   refreshContent();
 }
 
 async function onSearchButtonClick() {
-  let newCoords = await ui.findLocation(ui.searchTextInput.value);
+  document.body.classList.add(uiElement.appParams.classSearchWaiting);
+  let newCoords = await uiUtil.findLocation(uiElement.searchTextInput.value);
   if (newCoords) {
     coords = newCoords;
-    ui.map.setCenter(coords);
+    localStorage.setItem(coordsStorageName, coords);
+    uiElement.map.setCenter(coords);
     refreshContent();
   }
+  document.body.classList.remove(uiElement.appParams.classSearchWaiting);
 }
 
 function speechRecognize() {
   /*global webkitSpeechRecognition*/
   let recognition = new webkitSpeechRecognition();
-  recognition.lang = ui.langSelect.value;
+  recognition.lang = uiElement.langSelect.value;
   recognition.start();
-  ui.searchTextInput.value = "";
-  ui.searchTextInput.placeholder = lang[ui.langSelect.value].searchPlaceholderMicOn;
+  uiElement.searchTextInput.value = "";
+  uiElement.searchTextInput.placeholder = lang[uiElement.langSelect.value].searchPlaceholderMicOn;
   recognition.onend = function () {
-    ui.searchTextInput.placeholder = lang[ui.langSelect.value].searchPlaceholderInitial;
+    uiElement.searchTextInput.placeholder = lang[uiElement.langSelect.value].searchPlaceholderInitial;
   };
   recognition.onresult = function (event) {
     if (event.results.length > 0) {
-      ui.searchTextInput.value = event.results[0][0].transcript;
-      ui.searchButton.click();
+      uiElement.searchTextInput.value = event.results[0][0].transcript;
+      uiElement.searchButton.click();
     }
   };
 }

@@ -10,13 +10,12 @@ export function getImage(request) {
       orientation: "landscape",
     })
     .then((result) => {
-      if (result.errors) {
-        return false;
-      } else {
+      let returnImage;
+      if (!result.errors) {
         const returnImageIndex = getRandomInt(0, result.response.results.length);
-        const returnImage = result.response.results[returnImageIndex]?.urls.regular;
-        return returnImage ? returnImage : false;
+        returnImage = result.response.results[returnImageIndex]?.urls.regular;
       }
+      return returnImage ? returnImage : false;
     });
 }
 
