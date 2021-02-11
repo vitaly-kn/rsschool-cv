@@ -24,8 +24,8 @@ export function getLocation(coords, language) {
     .then((data) => {
       if (data.address) {
         const keys = ["city", "county", "state"];
-        const locality = keys.find((key) => data.address[key]);
-        let area = locality ? `${data.address[locality]}, ` : "";
+        const localityType = keys.find((key) => data.address[key]);
+        let area = localityType ? `${data.address[localityType]}, ` : "";
         area += data.address.country;
         return area;
       }
