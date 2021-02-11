@@ -291,7 +291,7 @@ html {
   opacity: 0.5;
   background-image: url(assets/img/e9762a344bd7669c8ccfc758ce764199.png);
   background-size: 50% 100%;
-  animation: move-wave 3s;
+  animation: move-wave 3s linear infinite;
   animation-delay: 1s;
 }
 
